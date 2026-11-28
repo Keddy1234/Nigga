@@ -3,38 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Posada del Roble — Portal de Reservaciones para Huéspedes</title>
+  <title>Posada del Roble — Hotel Boutique &amp; Portal Seguro de Reservaciones</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg-alabastro: #f7f4ee;
-      --bg-crema: #fbf9f5;
-      --nogal-oscuro: #231811;
-      --nogal-medio: #352419;
+      --bg-lino: #f5f0e6;
+      --bg-arena: #ece3d2;
+      --bg-crema: #faf7f1;
+      --nogal-profundo: #1d1510;
+      --nogal-medio: #2b1e16;
       --roble: #4b3120;
       --roble-suave: #6c4a32;
-      --dorado: #c59b48;
-      --dorado-claro: #e7c87e;
-      --dorado-tenue: #f9f3e4;
+      --bosque: #24402b;
+      --bosque-hover: #1b3121;
+      --bosque-claro: #2f5238;
+      --arcilla: #8a432b;
+      --laton: #b98d3b;
+      --laton-claro: #e2c278;
+      --laton-tenue: #f8f1e1;
       --blanco: #ffffff;
-      --borde: #e4dccd;
-      --borde-fuerte: #cfc2ac;
-      --texto: #231811;
-      --texto-suave: #66584b;
-      --verde: #2e5a36;
-      --verde-hover: #24472b;
-      --verde-bg: #eaf4ec;
-      --verde-borde: #9ec9a6;
-      --vino: #8b2d26;
+      --borde: #e1d7c4;
+      --borde-fuerte: #c8bba3;
+      --texto: #1d1510;
+      --texto-suave: #5e5044;
+      --verde: #24402b;
+      --verde-bg: #eaf3ec;
+      --verde-borde: #9ec3a6;
+      --vino: #8a2d25;
       --vino-bg: #fcecea;
-      --vino-borde: #e0a7a2;
-      --ambar: #8a5a14;
-      --ambar-bg: #fdf4e3;
-      --ambar-borde: #e7ca91;
-      --sombra-sm: 0 4px 14px rgba(35, 24, 17, 0.06);
-      --sombra-md: 0 14px 36px rgba(35, 24, 17, 0.10);
+      --vino-borde: #dfa59f;
+      --ambar: #875814;
+      --ambar-bg: #fdf3df;
+      --ambar-borde: #e4c68c;
+      --sombra-sm: 0 4px 16px rgba(29, 21, 16, 0.06);
+      --sombra-md: 0 18px 42px rgba(29, 21, 16, 0.12);
       --radio-md: 10px;
       --radio-lg: 16px;
     }
@@ -43,85 +47,130 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       background:
-        radial-gradient(circle at top right, rgba(197, 155, 72, 0.10), transparent 36%),
-        radial-gradient(circle at bottom left, rgba(75, 49, 32, 0.06), transparent 40%),
-        var(--bg-alabastro);
+        repeating-linear-gradient(90deg, rgba(185, 141, 59, 0.025) 0, rgba(185, 141, 59, 0.025) 1px, transparent 1px, transparent 36px),
+        radial-gradient(circle at top right, rgba(185, 141, 59, 0.11), transparent 38%),
+        radial-gradient(circle at bottom left, rgba(36, 64, 43, 0.07), transparent 44%),
+        var(--bg-lino);
       color: var(--texto);
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      line-height: 1.5;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
     }
 
-    h1, h2, h3, .font-serif {
+    h1, h2, h3, h4, .font-serif {
       font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
       letter-spacing: 0.01em;
     }
 
-    /* Header */
+    /* Sticky Header Editorial */
     header {
-      background: linear-gradient(135deg, var(--nogal-oscuro) 0%, var(--nogal-medio) 100%);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+      background: linear-gradient(135deg, rgba(29, 21, 16, 0.98) 0%, rgba(43, 30, 22, 0.97) 100%);
+      backdrop-filter: blur(8px);
       color: var(--blanco);
-      border-bottom: 2px solid var(--dorado);
-      padding: 14px 32px;
-      box-shadow: 0 4px 20px rgba(35, 24, 17, 0.18);
+      border-bottom: 2px solid var(--laton);
+      padding: 12px 28px;
+      box-shadow: 0 6px 24px rgba(20, 14, 10, 0.22);
     }
 
     .header-inner {
-      max-width: 1140px;
+      max-width: 1180px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 13px;
+      text-decoration: none;
+      color: inherit;
     }
 
     .brand-mark {
       width: 44px;
       height: 44px;
       border-radius: 10px;
-      background: rgba(197, 155, 72, 0.14);
-      border: 1px solid rgba(231, 200, 126, 0.45);
+      background: rgba(185, 141, 59, 0.14);
+      border: 1px solid rgba(226, 194, 120, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--dorado-claro);
+      color: var(--laton-claro);
       flex-shrink: 0;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 1.65rem;
+      font-size: 1.55rem;
       font-weight: 700;
-      color: var(--dorado-claro);
-      line-height: 1.1;
-      letter-spacing: 0.06em;
+      color: var(--laton-claro);
+      line-height: 1.05;
+      letter-spacing: 0.08em;
     }
 
     .brand p {
       margin: 2px 0 0;
-      font-size: 0.80rem;
+      font-size: 0.74rem;
       color: #dfd2bc;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: #eadfc9;
+      text-decoration: none;
+      font-size: 0.84rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--laton-claro);
     }
 
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
+    }
+
+    .security-pill-nav {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(47, 82, 56, 0.45);
+      border: 1px solid rgba(158, 195, 166, 0.45);
+      color: #d7ecd9;
+      font-size: 0.74rem;
+      font-weight: 600;
+      padding: 5px 10px;
+      border-radius: 999px;
     }
 
     .user-chip {
@@ -129,19 +178,19 @@
       align-items: center;
       gap: 10px;
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(231, 200, 126, 0.35);
+      border: 1px solid rgba(226, 194, 120, 0.35);
       border-radius: 999px;
-      padding: 5px 14px 5px 6px;
+      padding: 4px 14px 4px 5px;
     }
 
     .user-avatar {
       width: 30px;
       height: 30px;
       border-radius: 50%;
-      background: var(--dorado);
-      color: var(--nogal-oscuro);
+      background: var(--laton);
+      color: var(--nogal-profundo);
       font-weight: 700;
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -151,27 +200,18 @@
     .user-meta {
       display: flex;
       flex-direction: column;
-      line-height: 1.2;
+      line-height: 1.18;
     }
 
     .user-name {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       font-weight: 600;
       color: var(--blanco);
     }
 
     .user-email {
-      font-size: 0.72rem;
+      font-size: 0.70rem;
       color: #dfd2bc;
-    }
-
-    /* Main Layout */
-    .container {
-      max-width: 1140px;
-      width: 100%;
-      margin: 28px auto 40px;
-      padding: 0 20px;
-      flex: 1;
     }
 
     /* Buttons */
@@ -185,16 +225,17 @@
       border: 1px solid transparent;
       padding: 11px 20px;
       font-family: inherit;
-      font-size: 0.92rem;
+      font-size: 0.90rem;
       font-weight: 600;
       cursor: pointer;
       border-radius: 8px;
+      text-decoration: none;
       transition: background-color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
     }
 
     .btn:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(35, 24, 17, 0.16);
+      box-shadow: 0 8px 18px rgba(29, 21, 16, 0.18);
     }
 
     .btn:active:not(:disabled) {
@@ -207,19 +248,41 @@
     }
 
     .btn-verde {
-      background-color: var(--verde);
+      background-color: var(--bosque);
       color: var(--blanco);
     }
 
     .btn-verde:hover:not(:disabled) {
-      background-color: var(--verde-hover);
+      background-color: var(--bosque-hover);
+    }
+
+    .btn-laton {
+      background-color: var(--laton);
+      color: var(--nogal-profundo);
+      font-weight: 700;
+      padding: 8px 16px;
+      font-size: 0.84rem;
+    }
+
+    .btn-laton:hover:not(:disabled) {
+      background-color: var(--laton-claro);
+    }
+
+    .btn-outline-claro {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--laton-claro);
+      border: 1px solid rgba(226, 194, 120, 0.55);
+    }
+
+    .btn-outline-claro:hover:not(:disabled) {
+      background: rgba(226, 194, 120, 0.16);
     }
 
     .btn-rojo {
-      background-color: rgba(139, 45, 38, 0.92);
+      background-color: rgba(138, 45, 37, 0.92);
       border-color: rgba(255, 255, 255, 0.18);
-      padding: 8px 15px;
-      font-size: 0.84rem;
+      padding: 8px 14px;
+      font-size: 0.82rem;
     }
 
     .btn-rojo:hover:not(:disabled) {
@@ -235,14 +298,14 @@
     }
 
     .btn-secundario:hover:not(:disabled) {
-      background-color: var(--dorado-tenue);
-      border-color: var(--dorado);
+      background-color: var(--laton-tenue);
+      border-color: var(--laton);
     }
 
     .btn-factura-row {
       background-color: var(--roble);
-      color: var(--dorado-claro);
-      border: 1px solid rgba(197, 155, 72, 0.5);
+      color: var(--laton-claro);
+      border: 1px solid rgba(185, 141, 59, 0.5);
       padding: 6px 12px;
       font-size: 0.78rem;
       border-radius: 6px;
@@ -250,7 +313,7 @@
     }
 
     .btn-factura-row:hover:not(:disabled) {
-      background-color: var(--nogal-oscuro);
+      background-color: var(--nogal-profundo);
     }
 
     .link-btn {
@@ -266,7 +329,139 @@
     }
 
     .link-btn:hover {
-      color: var(--verde);
+      color: var(--bosque);
+    }
+
+    /* Container & Sections */
+    .container {
+      max-width: 1180px;
+      width: 100%;
+      margin: 24px auto 48px;
+      padding: 0 20px;
+      flex: 1;
+    }
+
+    /* Rustic Boutique Hero (sin imágenes IA/paisajes — arquitectura tipográfica y textura cálida) */
+    .hero-rustico {
+      background:
+        radial-gradient(circle at 82% 20%, rgba(185, 141, 59, 0.24), transparent 44%),
+        radial-gradient(circle at 12% 88%, rgba(47, 82, 56, 0.35), transparent 48%),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.018) 0, rgba(255, 255, 255, 0.018) 2px, transparent 2px, transparent 14px),
+        linear-gradient(145deg, var(--nogal-profundo) 0%, #2a1d14 54%, #1e3324 100%);
+      color: var(--blanco);
+      border: 1px solid rgba(185, 141, 59, 0.45);
+      border-radius: 20px;
+      padding: 44px 40px 34px;
+      margin-bottom: 26px;
+      box-shadow: var(--sombra-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-top-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.71rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--laton-claro);
+      background: rgba(185, 141, 59, 0.14);
+      border: 1px solid rgba(226, 194, 120, 0.36);
+      padding: 5px 12px;
+      border-radius: 999px;
+    }
+
+    .hero-rustico h2 {
+      margin: 16px 0 12px;
+      font-size: 2.75rem;
+      line-height: 1.07;
+      color: var(--blanco);
+      font-weight: 700;
+    }
+
+    .hero-rustico .hero-sub {
+      margin: 0 0 24px;
+      font-size: 0.96rem;
+      color: #e4d8c4;
+      max-width: 620px;
+      line-height: 1.65;
+    }
+
+    .hero-ctas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .hero-manifesto-card {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(226, 194, 120, 0.30);
+      border-radius: 14px;
+      padding: 22px;
+    }
+
+    .hero-manifesto-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.35rem;
+      color: var(--laton-claro);
+    }
+
+    .hero-manifesto-card p {
+      margin: 0 0 14px;
+      font-size: 0.83rem;
+      color: #ddd0ba;
+      line-height: 1.55;
+    }
+
+    .hero-check-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 0.81rem;
+      color: #f0e6d5;
+    }
+
+    .hero-check-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .hero-check-list svg {
+      color: var(--laton-claro);
+      flex-shrink: 0;
+    }
+
+    .hero-metrics {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(226, 194, 120, 0.24);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .metric-box strong {
+      display: block;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.48rem;
+      color: var(--laton-claro);
+      line-height: 1.15;
+    }
+
+    .metric-box span {
+      font-size: 0.76rem;
+      color: #d6c8b2;
     }
 
     /* Alerts */
@@ -318,55 +513,41 @@
 
     /* Auth Split Card */
     .auth-shell {
-      max-width: 1020px;
-      margin: 12px auto 0;
       display: grid;
-      grid-template-columns: 1.06fr 1.14fr;
+      grid-template-columns: 1.04fr 1.16fr;
       background-color: var(--blanco);
       border: 1px solid var(--borde);
       border-radius: var(--radio-lg);
       overflow: hidden;
       box-shadow: var(--sombra-md);
+      margin-bottom: 34px;
     }
 
     .auth-editorial {
       background:
-        radial-gradient(circle at 85% 15%, rgba(197, 155, 72, 0.20), transparent 45%),
-        radial-gradient(circle at 15% 90%, rgba(197, 155, 72, 0.12), transparent 50%),
-        linear-gradient(160deg, var(--nogal-oscuro) 0%, #2d1e14 55%, #3d281a 100%);
+        radial-gradient(circle at 85% 15%, rgba(185, 141, 59, 0.20), transparent 45%),
+        radial-gradient(circle at 15% 90%, rgba(36, 64, 43, 0.24), transparent 50%),
+        linear-gradient(160deg, var(--nogal-profundo) 0%, #2d1e14 55%, #372519 100%);
       color: var(--blanco);
       padding: 34px 30px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
       gap: 20px;
-      border-right: 1px solid rgba(197, 155, 72, 0.35);
-    }
-
-    .eyebrow {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--dorado-claro);
-      background: rgba(197, 155, 72, 0.14);
-      border: 1px solid rgba(231, 200, 126, 0.35);
-      padding: 5px 11px;
-      border-radius: 999px;
+      border-right: 1px solid rgba(185, 141, 59, 0.35);
     }
 
     .auth-editorial h2 {
       margin: 14px 0 10px;
-      font-size: 2.05rem;
+      font-size: 2.0rem;
       line-height: 1.12;
       color: var(--blanco);
       font-weight: 700;
     }
 
     .auth-editorial-lead {
-      margin: 0 0 20px;
-      font-size: 0.90rem;
+      margin: 0 0 18px;
+      font-size: 0.89rem;
       color: #e4d8c5;
       line-height: 1.55;
     }
@@ -387,9 +568,9 @@
       width: 32px;
       height: 32px;
       border-radius: 8px;
-      background: rgba(197, 155, 72, 0.15);
-      border: 1px solid rgba(231, 200, 126, 0.32);
-      color: var(--dorado-claro);
+      background: rgba(185, 141, 59, 0.15);
+      border: 1px solid rgba(226, 194, 120, 0.32);
+      color: var(--laton-claro);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -399,25 +580,24 @@
 
     .feature-item strong {
       display: block;
-      font-size: 0.87rem;
-      color: var(--dorado-claro);
+      font-size: 0.86rem;
+      color: var(--laton-claro);
       margin-bottom: 1px;
     }
 
     .feature-item span {
       display: block;
-      font-size: 0.80rem;
+      font-size: 0.79rem;
       color: #d6c8b2;
       line-height: 1.42;
     }
 
-    /* Bloque ampliado Sobre Posada del Roble */
     .hotel-info-box {
       margin-top: 18px;
       padding: 16px;
       border-radius: 12px;
       background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(231, 200, 126, 0.25);
+      border: 1px solid rgba(226, 194, 120, 0.25);
     }
 
     .hotel-info-title {
@@ -425,7 +605,7 @@
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--dorado-claro);
+      color: var(--laton-claro);
       margin: 0 0 6px;
     }
 
@@ -447,28 +627,28 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
-      background: rgba(35, 24, 17, 0.42);
-      border: 1px solid rgba(231, 200, 126, 0.18);
+      background: rgba(29, 21, 16, 0.42);
+      border: 1px solid rgba(226, 194, 120, 0.18);
       border-radius: 8px;
       padding: 8px 9px;
     }
 
     .amenity-item svg {
       flex-shrink: 0;
-      color: var(--dorado-claro);
+      color: var(--laton-claro);
       margin-top: 2px;
     }
 
     .amenity-item strong {
       display: block;
-      font-size: 0.75rem;
+      font-size: 0.74rem;
       color: var(--blanco);
       line-height: 1.25;
     }
 
     .amenity-item small {
       display: block;
-      font-size: 0.70rem;
+      font-size: 0.69rem;
       color: #cabaa2;
       line-height: 1.3;
       margin-top: 1px;
@@ -481,19 +661,13 @@
       font-size: 0.74rem;
       color: #e4d8c5;
       padding-top: 10px;
-      border-top: 1px solid rgba(231, 200, 126, 0.16);
-    }
-
-    .hotel-contacto span {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      border-top: 1px solid rgba(226, 194, 120, 0.16);
     }
 
     .editorial-foot {
       padding-top: 14px;
-      border-top: 1px solid rgba(231, 200, 126, 0.24);
-      font-size: 0.77rem;
+      border-top: 1px solid rgba(226, 194, 120, 0.24);
+      font-size: 0.76rem;
       color: #cfc0a8;
       display: flex;
       flex-wrap: wrap;
@@ -509,18 +683,18 @@
     }
 
     .auth-panel-header {
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
 
     .auth-panel-header h3 {
       margin: 0 0 4px;
-      font-size: 1.75rem;
-      color: var(--nogal-oscuro);
+      font-size: 1.8rem;
+      color: var(--nogal-profundo);
     }
 
     .auth-panel-header p {
       margin: 0;
-      font-size: 0.88rem;
+      font-size: 0.87rem;
       color: var(--texto-suave);
     }
 
@@ -530,10 +704,10 @@
       grid-template-columns: 1fr 1fr;
       gap: 6px;
       padding: 5px;
-      background-color: var(--bg-alabastro);
+      background-color: var(--bg-lino);
       border: 1px solid var(--borde);
       border-radius: 10px;
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
     .tab-btn {
@@ -543,7 +717,7 @@
       color: var(--texto-suave);
       font-family: inherit;
       font-weight: 600;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       cursor: pointer;
       border-radius: 7px;
       transition: all 0.16s ease;
@@ -551,14 +725,223 @@
 
     .tab-btn:hover:not(.active) {
       color: var(--texto);
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(255, 255, 255, 0.6);
     }
 
     .tab-btn.active {
       background-color: var(--blanco);
-      color: var(--nogal-oscuro);
-      box-shadow: 0 2px 8px rgba(35, 24, 17, 0.10);
+      color: var(--nogal-profundo);
+      box-shadow: 0 2px 8px rgba(29, 21, 16, 0.10);
       border: 1px solid var(--borde);
+    }
+
+    /* Editorial Showcase Sections (Referencia Hotel Belmar / El Silencio) */
+    .section-block {
+      margin-bottom: 34px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .section-kicker {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--arcilla);
+      margin-bottom: 4px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: 2.05rem;
+      color: var(--nogal-profundo);
+      line-height: 1.1;
+    }
+
+    .section-head p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--texto-suave);
+      max-width: 480px;
+    }
+
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .room-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: var(--sombra-sm);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .room-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--sombra-md);
+    }
+
+    .room-top-band {
+      background: linear-gradient(135deg, var(--nogal-profundo), #322319);
+      color: var(--laton-claro);
+      padding: 16px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--laton);
+    }
+
+    .room-top-band span {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e4d8c5;
+    }
+
+    .room-body {
+      padding: 18px;
+      flex: 1;
+    }
+
+    .room-body h3 {
+      margin: 0 0 6px;
+      font-size: 1.55rem;
+      color: var(--nogal-profundo);
+    }
+
+    .room-desc {
+      margin: 0 0 12px;
+      font-size: 0.84rem;
+      color: var(--texto-suave);
+      line-height: 1.48;
+    }
+
+    .room-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .room-tag {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--bosque);
+      background: var(--verde-bg);
+      border: 1px solid var(--verde-borde);
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .room-foot {
+      padding: 14px 18px;
+      background: var(--bg-crema);
+      border-top: 1px solid var(--borde);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .room-price strong {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--nogal-profundo);
+    }
+
+    .room-price small {
+      display: block;
+      font-size: 0.73rem;
+      color: var(--texto-suave);
+    }
+
+    .gastro-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+
+    .gastro-card {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-top: 3px solid var(--laton);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: var(--sombra-sm);
+    }
+
+    .gastro-cat {
+      font-size: 0.70rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--arcilla);
+    }
+
+    .gastro-card h3 {
+      margin: 4px 0 6px;
+      font-size: 1.32rem;
+      color: var(--nogal-profundo);
+    }
+
+    .gastro-card p {
+      margin: 0;
+      font-size: 0.81rem;
+      color: var(--texto-suave);
+      line-height: 1.45;
+    }
+
+    .sec-trust-card {
+      background: linear-gradient(135deg, #213627 0%, #1c291f 100%);
+      color: var(--blanco);
+      border: 1px solid rgba(226, 194, 120, 0.36);
+      border-radius: var(--radio-lg);
+      padding: 28px;
+      box-shadow: var(--sombra-md);
+    }
+
+    .sec-trust-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .trust-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(226, 194, 120, 0.24);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .trust-pill strong {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--laton-claro);
+      margin-bottom: 4px;
+    }
+
+    .trust-pill span {
+      font-size: 0.78rem;
+      color: #dae5dc;
+      line-height: 1.45;
+      display: block;
     }
 
     /* Info Notice */
@@ -566,12 +949,12 @@
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      background-color: var(--dorado-tenue);
+      background-color: var(--laton-tenue);
       border: 1px solid #e6d4a8;
       border-radius: 8px;
       padding: 11px 13px;
       margin-bottom: 18px;
-      font-size: 0.83rem;
+      font-size: 0.82rem;
       color: var(--roble);
       line-height: 1.45;
     }
@@ -585,7 +968,7 @@
     .aviso-primera-reserva {
       background-color: var(--ambar-bg);
       border: 1px solid var(--ambar-borde);
-      border-left: 4px solid var(--dorado);
+      border-left: 4px solid var(--laton);
       color: #5b3c0e;
       padding: 12px 16px;
       border-radius: var(--radio-md);
@@ -619,8 +1002,8 @@
 
     .card-header h2 {
       margin: 0;
-      font-size: 1.65rem;
-      color: var(--nogal-oscuro);
+      font-size: 1.7rem;
+      color: var(--nogal-profundo);
     }
 
     .card-subtitle {
@@ -634,7 +1017,7 @@
       justify-content: space-between;
       flex-wrap: wrap;
       gap: 12px 18px;
-      background-color: var(--dorado-tenue);
+      background-color: var(--laton-tenue);
       border: 1px solid #e6d4a8;
       border-radius: var(--radio-md);
       padding: 12px 16px;
@@ -651,17 +1034,17 @@
     .moneda-selector-wrap label {
       font-weight: 700;
       font-size: 0.85rem;
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
     }
 
     .moneda-selector-wrap select {
       background-color: var(--blanco);
-      border: 1.5px solid var(--dorado);
+      border: 1.5px solid var(--laton);
       padding: 7px 12px;
       font-family: inherit;
       font-size: 0.88rem;
       font-weight: 600;
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
       border-radius: 8px;
     }
 
@@ -698,7 +1081,7 @@
       font-weight: 600;
       margin-bottom: 6px;
       font-size: 0.84rem;
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
     }
 
     .req {
@@ -742,8 +1125,8 @@
     .campo textarea:focus {
       outline: none;
       background-color: var(--blanco);
-      border-color: var(--dorado);
-      box-shadow: 0 0 0 3px rgba(197, 155, 72, 0.22);
+      border-color: var(--laton);
+      box-shadow: 0 0 0 3px rgba(185, 141, 59, 0.22);
     }
 
     .campo input.is-invalid,
@@ -753,11 +1136,11 @@
     }
 
     .campo input.is-invalid:focus {
-      box-shadow: 0 0 0 3px rgba(139, 45, 38, 0.16);
+      box-shadow: 0 0 0 3px rgba(138, 45, 37, 0.16);
     }
 
     .campo input[readonly] {
-      background-color: #f3ede2;
+      background-color: #f2ece0;
       border-color: var(--borde);
       color: var(--roble);
       font-weight: 600;
@@ -803,7 +1186,7 @@
     .resumen-box h3 {
       margin: 0 0 14px;
       font-size: 1.32rem;
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
     }
 
     .resumen-linea {
@@ -822,7 +1205,7 @@
       padding: 14px 0 4px;
       font-size: 1.18rem;
       font-weight: 700;
-      color: var(--verde);
+      color: var(--bosque);
     }
 
     .resumen-equivalente {
@@ -831,7 +1214,7 @@
       align-items: center;
       margin-top: 6px;
       padding: 8px 11px;
-      background-color: var(--dorado-tenue);
+      background-color: var(--laton-tenue);
       border: 1px solid #e6d4a8;
       border-radius: 7px;
       font-size: 0.82rem;
@@ -846,7 +1229,7 @@
       border-radius: 8px;
       font-size: 0.87rem;
       font-weight: 600;
-      color: var(--verde);
+      color: var(--bosque);
       margin-bottom: 14px;
     }
 
@@ -874,8 +1257,8 @@
     }
 
     th {
-      background-color: var(--nogal-oscuro);
-      color: var(--dorado-claro);
+      background-color: var(--nogal-profundo);
+      color: var(--laton-claro);
       font-weight: 600;
       font-size: 0.78rem;
       letter-spacing: 0.03em;
@@ -907,7 +1290,7 @@
       white-space: nowrap;
     }
 
-    .estado-confirmada { background: var(--verde-bg); color: var(--verde); border: 1px solid var(--verde-borde); }
+    .estado-confirmada { background: var(--verde-bg); color: var(--bosque); border: 1px solid var(--verde-borde); }
     .estado-pendiente { background: var(--ambar-bg); color: var(--ambar); border: 1px solid var(--ambar-borde); }
     .estado-curso { background: #e8f1fb; color: #1f4d7a; border: 1px solid #b4d0ee; }
     .estado-completada { background: #f1eee8; color: var(--roble); border: 1px solid var(--borde-fuerte); }
@@ -917,7 +1300,7 @@
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(24, 16, 11, 0.65);
+      background: rgba(20, 14, 10, 0.68);
       backdrop-filter: blur(2px);
       display: flex;
       align-items: center;
@@ -928,7 +1311,7 @@
 
     .modal-card {
       background: var(--blanco);
-      border: 1px solid var(--dorado);
+      border: 1px solid var(--laton);
       border-radius: var(--radio-lg);
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
       max-width: 740px;
@@ -938,19 +1321,19 @@
     }
 
     .modal-header {
-      background: linear-gradient(135deg, var(--nogal-oscuro), var(--nogal-medio));
+      background: linear-gradient(135deg, var(--nogal-profundo), var(--nogal-medio));
       color: var(--blanco);
       padding: 18px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 2px solid var(--dorado);
+      border-bottom: 2px solid var(--laton);
     }
 
     .modal-header h3 {
       margin: 0;
       font-size: 1.55rem;
-      color: var(--dorado-claro);
+      color: var(--laton-claro);
     }
 
     .modal-header p {
@@ -998,7 +1381,7 @@
     }
 
     .factura-meta-grid strong {
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
     }
 
     .factura-conversion-dual {
@@ -1009,7 +1392,7 @@
     }
 
     .factura-moneda-card {
-      background: var(--dorado-tenue);
+      background: var(--laton-tenue);
       border: 1px solid #e6d4a8;
       border-radius: 10px;
       padding: 12px 14px;
@@ -1032,7 +1415,7 @@
     .factura-moneda-card .monto-grande {
       font-size: 1.2rem;
       font-weight: 700;
-      color: var(--nogal-oscuro);
+      color: var(--nogal-profundo);
       margin-bottom: 4px;
     }
 
@@ -1046,42 +1429,103 @@
       background: var(--bg-crema);
     }
 
-    /* Footer */
+    /* Footer Editorial Multi-columna */
     footer {
-      background-color: var(--nogal-oscuro);
+      background: linear-gradient(180deg, var(--nogal-medio) 0%, var(--nogal-profundo) 100%);
       color: #d8cbb6;
-      text-align: center;
-      padding: 16px 20px;
+      border-top: 2px solid var(--laton);
+      padding: 32px 24px 22px;
       font-size: 0.82rem;
-      border-top: 2px solid var(--dorado);
+    }
+
+    .footer-grid {
+      max-width: 1180px;
+      margin: 0 auto 20px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr;
+      gap: 24px;
+    }
+
+    .footer-grid h4 {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      color: var(--laton-claro);
+    }
+
+    .footer-grid p, .footer-grid li {
+      margin: 0 0 5px;
+      font-size: 0.80rem;
+      color: #d4c6b0;
+      line-height: 1.5;
+    }
+
+    .footer-grid ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .footer-grid a {
+      color: #e4d8c5;
+      text-decoration: none;
+    }
+
+    .footer-grid a:hover {
+      color: var(--laton-claro);
+      text-decoration: underline;
+    }
+
+    .footer-bottom {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding-top: 14px;
+      border-top: 1px solid rgba(226, 194, 120, 0.22);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.76rem;
+      color: #bfb09a;
     }
 
     .oculto {
       display: none !important;
     }
 
-    @media (max-width: 900px) {
-      .auth-shell {
+    @media (max-width: 980px) {
+      .hero-top-grid, .auth-shell {
         grid-template-columns: 1fr;
       }
       .auth-editorial {
         border-right: none;
-        border-bottom: 1px solid rgba(197, 155, 72, 0.35);
+        border-bottom: 1px solid rgba(185, 141, 59, 0.35);
         padding: 28px 24px;
       }
-      .auth-panel {
-        padding: 28px 24px;
+      .rooms-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .gastro-grid, .sec-trust-grid {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
     @media (max-width: 720px) {
       header {
-        padding: 14px 18px;
+        padding: 12px 16px;
       }
-      .grid-2, .grid-3, .amenities-grid, .factura-meta-grid, .factura-conversion-dual {
+      .nav-links {
+        display: none;
+      }
+      .hero-rustico {
+        padding: 28px 20px;
+      }
+      .hero-rustico h2 {
+        font-size: 2.05rem;
+      }
+      .hero-metrics, .grid-2, .grid-3, .amenities-grid, .rooms-grid, .gastro-grid, .sec-trust-grid, .factura-meta-grid, .factura-conversion-dual, .footer-grid {
         grid-template-columns: 1fr;
       }
-      .card {
+      .card, .auth-panel {
         padding: 20px 18px;
       }
     }
@@ -1107,7 +1551,7 @@
 
   <header>
     <div class="header-inner">
-      <div class="brand">
+      <a href="#heroLanding" class="brand">
         <div class="brand-mark" aria-hidden="true">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v18"></path>
@@ -1119,11 +1563,25 @@
         </div>
         <div>
           <h1>POSADA DEL ROBLE</h1>
-          <p>Hotel Boutique &amp; Portal de Reservaciones</p>
+          <p>Hotel Boutique &amp; Bosque Nuboso</p>
         </div>
-      </div>
+      </a>
+
+      <nav id="navPublica" class="nav-links" aria-label="Navegación principal">
+        <a href="#heroLanding">La Posada</a>
+        <a href="#secHabitaciones">Habitaciones</a>
+        <a href="#secGastronomia">Gastronomía</a>
+        <a href="#secSeguridad">Seguridad</a>
+        <a href="#seccionAuth" class="btn btn-laton">Reservar Ahora</a>
+      </nav>
 
       <div class="header-actions">
+        <span id="badgeSesionSegura" class="security-pill-nav oculto" title="Sesión firmada HMAC con expiración automática por inactividad">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          Sesión Protegida
+        </span>
         <div id="usuarioChip" class="user-chip oculto">
           <div id="lblUsuarioIniciales" class="user-avatar">HR</div>
           <div class="user-meta">
@@ -1141,6 +1599,67 @@
       <span id="textoAlerta"></span>
       <button type="button" class="alerta-cerrar" aria-label="Cerrar aviso" onclick="ocultarAlerta()">&times;</button>
     </div>
+
+    <!-- HERO EDITORIAL RÚSTICO (inspirado en lodges rústicos boutique de Costa Rica) -->
+    <section id="heroLanding" class="hero-rustico">
+      <div class="hero-top-grid">
+        <div>
+          <span class="eyebrow">Hospitalidad Rústica &amp; Sostenible &middot; Costa Rica</span>
+          <h2>Refugio en Madera de Roble, Serenidad y Naturaleza</h2>
+          <p class="hero-sub">
+            Inspirado en los refugios artesanales de montaña del país, Posada del Roble combina arquitectura cálida en madera noble, cocina de horno de leña y suites panorámicas con un portal de reservaciones encriptado en Colones (₡) y Dólares ($ USD).
+          </p>
+          <div class="hero-ctas">
+            <button type="button" class="btn btn-laton" style="padding:12px 22px; font-size:0.92rem;" onclick="irAFormularioAuth('registro')">
+              Crear Cuenta para Reservar
+            </button>
+            <button type="button" class="btn btn-outline-claro" onclick="irAFormularioAuth('login')">
+              Iniciar Sesión con mi Correo
+            </button>
+          </div>
+        </div>
+
+        <div class="hero-manifesto-card">
+          <h3>La Experiencia del Roble</h3>
+          <p>
+            Cuatro pisos diseñados para el descanso profundo: camas en madera curada, jacuzzis térmicos bajo brisa marina y gastronomía artesanal con ingredientes de granja.
+          </p>
+          <ul class="hero-check-list">
+            <li>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Reservación inmediata en CRC (₡) o USD ($)</span>
+            </li>
+            <li>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Facturación con conversión automática al instante</span>
+            </li>
+            <li>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <span>Acceso seguro exclusivo por correo con reserva previa</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="hero-metrics">
+        <div class="metric-box">
+          <strong>26 Habitaciones</strong>
+          <span>Suites, Familiares y Estándar</span>
+        </div>
+        <div class="metric-box">
+          <strong>4 Niveles</strong>
+          <span>Balcones y vistas panorámicas</span>
+        </div>
+        <div class="metric-box">
+          <strong>₡ CRC &amp; $ USD</strong>
+          <span>Conversión exacta al facturar</span>
+        </div>
+        <div class="metric-box">
+          <strong>HMAC-SHA256</strong>
+          <span>Sesiones firmadas y cierre automático</span>
+        </div>
+      </div>
+    </section>
 
     <!-- SECCIÓN 1: INICIAR SESIÓN O CREAR CUENTA -->
     <section id="seccionAuth" class="auth-shell">
@@ -1182,13 +1701,12 @@
             <div class="feature-item">
               <div class="feature-icon" aria-hidden="true">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M9 12l2 2 4-4"></path>
-                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 </svg>
               </div>
               <div>
-                <strong>Confirmación y Facturación Inmediata</strong>
-                <span>Reciba su código de reservación al instante y emita su factura detallada en Colones o Dólares.</span>
+                <strong>Privacidad y Sesión Protegida</strong>
+                <span>Tokens firmados por sesión, bloqueo contra intentos repetidos y cierre automático tras 15 minutos sin actividad.</span>
               </div>
             </div>
           </div>
@@ -1386,7 +1904,207 @@
       </div>
     </section>
 
-    <!-- SECCIÓN 2: PORTAL DE RESERVACIÓN DEL CLIENTE -->
+    <!-- SECCIÓN: GALERÍA DE HABITACIONES Y SUITES -->
+    <section id="secHabitaciones" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Alojamiento Boutique</span>
+          <h2>Habitaciones &amp; Suites en Madera de Roble</h2>
+        </div>
+        <p>Cinco categorías diseñadas con calidez artesanal y equipamiento moderno. Elija su favorita para iniciar la reservación en Colones o Dólares.</p>
+      </div>
+
+      <div class="rooms-grid">
+        <article class="room-card">
+          <div>
+            <div class="room-top-band">
+              <span>Categoría Estándar</span>
+              <span>1 Adulto</span>
+            </div>
+            <div class="room-body">
+              <h3>Habitación Simple</h3>
+              <p class="room-desc">Habitación individual rústica con cama Queen en madera noble, escritorio artesanal, Wi-Fi 6 y frigobar surtido.</p>
+              <div class="room-tags">
+                <span class="room-tag">Cama Queen</span>
+                <span class="room-tag">Wi-Fi 6</span>
+                <span class="room-tag">Frigobar</span>
+              </div>
+            </div>
+          </div>
+          <div class="room-foot">
+            <div class="room-price">
+              <strong>₡75,000.00 / noche</strong>
+              <small>Equiv. $145.63 USD aprox.</small>
+            </div>
+            <button type="button" class="btn btn-verde" style="padding:8px 14px; font-size:0.80rem;" onclick="elegirCategoriaDesdeGaleria(1)">Reservar</button>
+          </div>
+        </article>
+
+        <article class="room-card">
+          <div>
+            <div class="room-top-band">
+              <span>Preferida por Parejas</span>
+              <span>2 Adultos &middot; 1 Niño</span>
+            </div>
+            <div class="room-body">
+              <h3>Doble Estándar</h3>
+              <p class="room-desc">Dos camas matrimoniales en madera de roble, ventanales amplios con opciones de vista al mar, Wi-Fi 6 y frigobar.</p>
+              <div class="room-tags">
+                <span class="room-tag">2 Matrimoniales</span>
+                <span class="room-tag">Opción Vista al Mar</span>
+              </div>
+            </div>
+          </div>
+          <div class="room-foot">
+            <div class="room-price">
+              <strong>₡158,000.00 / noche</strong>
+              <small>Equiv. $306.80 USD aprox.</small>
+            </div>
+            <button type="button" class="btn btn-verde" style="padding:8px 14px; font-size:0.80rem;" onclick="elegirCategoriaDesdeGaleria(2)">Reservar</button>
+          </div>
+        </article>
+
+        <article class="room-card">
+          <div>
+            <div class="room-top-band">
+              <span>Confort Superior</span>
+              <span>2 Adultos &middot; 2 Niños</span>
+            </div>
+            <div class="room-body">
+              <h3>Suite Ejecutiva</h3>
+              <p class="room-desc">Cama King con dosel artesanal, balcón privado, jacuzzi térmico y vista panorámica al océano.</p>
+              <div class="room-tags">
+                <span class="room-tag">Cama King</span>
+                <span class="room-tag">Jacuzzi Térmico</span>
+                <span class="room-tag">Vista al Mar</span>
+              </div>
+            </div>
+          </div>
+          <div class="room-foot">
+            <div class="room-price">
+              <strong>₡310,000.00 / noche</strong>
+              <small>Equiv. $601.94 USD aprox.</small>
+            </div>
+            <button type="button" class="btn btn-verde" style="padding:8px 14px; font-size:0.80rem;" onclick="elegirCategoriaDesdeGaleria(3)">Reservar</button>
+          </div>
+        </article>
+
+        <article class="room-card">
+          <div>
+            <div class="room-top-band">
+              <span>Ideal para Grupos</span>
+              <span>4 Adultos &middot; 3 Niños</span>
+            </div>
+            <div class="room-body">
+              <h3>Suite Familiar</h3>
+              <p class="room-desc">Dos ambientes amplios conectados con mobiliario de roble, pensados para familias o estancias prolongadas.</p>
+              <div class="room-tags">
+                <span class="room-tag">2 Ambientes</span>
+                <span class="room-tag">Hasta 7 Huéspedes</span>
+              </div>
+            </div>
+          </div>
+          <div class="room-foot">
+            <div class="room-price">
+              <strong>₡376,000.00 / noche</strong>
+              <small>Equiv. $730.10 USD aprox.</small>
+            </div>
+            <button type="button" class="btn btn-verde" style="padding:8px 14px; font-size:0.80rem;" onclick="elegirCategoriaDesdeGaleria(5)">Reservar</button>
+          </div>
+        </article>
+
+        <article class="room-card">
+          <div>
+            <div class="room-top-band">
+              <span>Máxima Exclusividad</span>
+              <span>4 Adultos &middot; 2 Niños</span>
+            </div>
+            <div class="room-body">
+              <h3>Suite Presidencial</h3>
+              <p class="room-desc">Ubicada en los pisos más altos: sala privada con chimenea rústica, jacuzzi, terraza frente al mar y frigobar premium.</p>
+              <div class="room-tags">
+                <span class="room-tag">Chimenea Rústica</span>
+                <span class="room-tag">Jacuzzi</span>
+                <span class="room-tag">Piso Alto</span>
+              </div>
+            </div>
+          </div>
+          <div class="room-foot">
+            <div class="room-price">
+              <strong>₡700,000.00 / noche</strong>
+              <small>Equiv. $1,359.22 USD aprox.</small>
+            </div>
+            <button type="button" class="btn btn-verde" style="padding:8px 14px; font-size:0.80rem;" onclick="elegirCategoriaDesdeGaleria(4)">Reservar</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: GASTRONOMÍA DE HORNO DE LEÑA -->
+    <section id="secGastronomia" class="section-block">
+      <div class="section-head">
+        <div>
+          <span class="section-kicker">Cocina del Campo a la Mesa</span>
+          <h2>Gastronomía Rústica &amp; Room Service</h2>
+        </div>
+        <p>Nuestra cocina prepara desayunos típicos, cortes a las brasas y repostería en horno de leña con cargo directo a su reservación.</p>
+      </div>
+
+      <div class="gastro-grid">
+        <div class="gastro-card">
+          <span class="gastro-cat">Desayuno Típico</span>
+          <h3>Gallo Pinto &amp; Viajero</h3>
+          <p>Huevos de granja, pan artesanal recién horneado, natilla, plátano maduro y queso tierno desde ₡8,500.</p>
+        </div>
+        <div class="gastro-card">
+          <span class="gastro-cat">Brasas de Roble</span>
+          <h3>Asado del Roble</h3>
+          <p>Corte fino de lomito sellado a las brasas con papas rústicas aromatizadas y reducción de hierbas.</p>
+        </div>
+        <div class="gastro-card">
+          <span class="gastro-cat">Especialidad Marina</span>
+          <h3>Corvina y Salmón</h3>
+          <p>Filetes frescos al ajillo o mantequilla de finas hierbas acompañados con vegetales salteados.</p>
+        </div>
+        <div class="gastro-card">
+          <span class="gastro-cat">Horno de Leña &amp; Bar</span>
+          <h3>Tartas &amp; Coctelería</h3>
+          <p>Tarta rústica de manzana con miel y canela, frescos naturales de cas, cocteles tropicales y agua pura de cortesía.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN: SEGURIDAD Y CONFIANZA -->
+    <section id="secSeguridad" class="section-block">
+      <div class="sec-trust-card">
+        <span class="eyebrow">Seguridad del Portal y Privacidad</span>
+        <h2 style="color:var(--blanco); margin:12px 0 6px; font-size:2.0rem;">Protección de su Cuenta, Reservas y Facturas</h2>
+        <p style="margin:0; font-size:0.89rem; color:#d8e4db; max-width:740px;">
+          Posada del Roble aplica múltiples capas de defensa entre su navegador y nuestra API para resguardar su información personal y sus comprobantes.
+        </p>
+
+        <div class="sec-trust-grid">
+          <div class="trust-pill">
+            <strong>Acceso por Reserva Previa</strong>
+            <span>El inicio de sesión por correo solo autoriza huéspedes con historial o reservación registrada en el hotel.</span>
+          </div>
+          <div class="trust-pill">
+            <strong>Sesión HMAC-SHA256</strong>
+            <span>Cada sesión emite un token firmado temporal en memoria de pestaña con revocación inmediata al cerrar sesión.</span>
+          </div>
+          <div class="trust-pill">
+            <strong>Aislamiento Anti-IDOR</strong>
+            <span>Solo usted puede consultar sus propias reservaciones y facturas en Colones o Dólares según su token de huésped.</span>
+          </div>
+          <div class="trust-pill">
+            <strong>Cabeceras CSP &amp; Anti-Brute-Force</strong>
+            <span>Limitación automática de intentos fallidos, validación contra inyecciones HTML y políticas estrictas CSP y X-Frame-Options.</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2: PORTAL DE RESERVACIÓN DEL CLIENTE (AUTENTICADO) -->
     <section id="seccionReserva" class="oculto">
       <div id="avisoPrimeraReserva" class="aviso-primera-reserva oculto">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">
@@ -1614,7 +2332,34 @@
   </div>
 
   <footer>
-    Posada del Roble — Portal Oficial de Reservaciones &middot; Tarifas y Facturación en Colones Costarricenses (₡) y Dólares Estadounidenses ($ USD)
+    <div class="footer-grid">
+      <div>
+        <h4>Posada del Roble — Hotel Boutique</h4>
+        <p>Refugio de arquitectura rústica en madera de roble, hospitalidad personalizada y gastronomía de horno de leña en Costa Rica.</p>
+        <p>Tarifas y facturación disponibles en Colones Costarricenses (₡) y Dólares Estadounidenses ($ USD).</p>
+      </div>
+      <div>
+        <h4>Navegación</h4>
+        <ul>
+          <li><a href="#heroLanding">La Posada</a></li>
+          <li><a href="#secHabitaciones">Habitaciones &amp; Suites</a></li>
+          <li><a href="#secGastronomia">Gastronomía</a></li>
+          <li><a href="#secSeguridad">Seguridad al Huésped</a></li>
+          <li><a href="#seccionAuth">Acceso de Huéspedes</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto &amp; Horarios</h4>
+        <p>Costa Rica &middot; Montaña y Pacífico</p>
+        <p>Teléfono: +506 2645-8000</p>
+        <p>Correo: reservas@posadadelroble.cr</p>
+        <p>Check-In: 2:00 p.m. &middot; Check-Out: 11:00 a.m.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Posada del Roble &copy; 2026 — Portal Oficial de Reservaciones</span>
+      <span>Conexión protegida &middot; Sesiones firmadas por huésped</span>
+    </div>
   </footer>
 
   <script>
@@ -1643,6 +2388,10 @@
     const ES_EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const ES_PASAPORTE_VALIDO = /^[A-Za-z0-9\-]{5,20}$/;
     const ES_DIGITOS_DOC_VALIDO = /^\d{5,10}$/;
+    const STORAGE_KEY_TOKEN = "posada_token_huesped";
+    const INACTIVIDAD_MS = 15 * 60 * 1000;
+    const MAX_INTENTOS_FALLIDOS = 5;
+    const BLOQUEO_LOGIN_MS = 30 * 1000;
 
     let clienteActual = null;
     let tiposHabitacion = [];
@@ -1650,16 +2399,117 @@
     let ultimoTotalCrc = 0;
     let tipoCambioUsd = 515.00;
     let alertaTimer = null;
+    let inactividadTimer = null;
     let reservasMapa = {};
     let facturaReservaIdActual = null;
     let facturaMonedaActual = "CRC";
     let ultimaFacturaData = null;
+    let categoriaPreseleccionadaId = null;
+    let intentosFallidosLogin = 0;
+    let bloqueoLoginHasta = 0;
+    let bloqueoInterval = null;
+
+    // Limpiar cualquier token huérfano al iniciar la carga de la página
+    try { sessionStorage.removeItem(STORAGE_KEY_TOKEN); } catch (e) {}
 
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && !document.getElementById("modalFactura").classList.contains("oculto")) {
         cerrarModalFactura();
       }
+      reiniciarTemporizadorInactividad();
     });
+
+    ["click", "mousemove", "scroll"].forEach(evt => {
+      document.addEventListener(evt, () => {
+        if (clienteActual) reiniciarTemporizadorInactividad();
+      }, { passive: true });
+    });
+
+    document.getElementById("tablaMisReservas").addEventListener("click", function (e) {
+      const btn = e.target.closest("button[data-reserva-id]");
+      if (!btn) return;
+      const id = parseInt(btn.dataset.reservaId || "0", 10);
+      const moneda = btn.dataset.moneda === "USD" ? "USD" : "CRC";
+      if (id > 0) abrirModalFactura(id, moneda);
+    });
+
+    function guardarTokenSesion(token) {
+      try {
+        if (token) sessionStorage.setItem(STORAGE_KEY_TOKEN, token);
+      } catch (e) {}
+    }
+
+    function obtenerTokenSesion() {
+      try {
+        return sessionStorage.getItem(STORAGE_KEY_TOKEN) || "";
+      } catch (e) {
+        return "";
+      }
+    }
+
+    function limpiarTokenSesion() {
+      try { sessionStorage.removeItem(STORAGE_KEY_TOKEN); } catch (e) {}
+    }
+
+    function reiniciarTemporizadorInactividad() {
+      if (inactividadTimer) {
+        clearTimeout(inactividadTimer);
+        inactividadTimer = null;
+      }
+      if (!clienteActual) return;
+      inactividadTimer = setTimeout(() => {
+        if (clienteActual) {
+          cerrarSesion("Su sesión se cerró automáticamente tras 15 minutos de inactividad por seguridad.");
+        }
+      }, INACTIVIDAD_MS);
+    }
+
+    function activarBloqueoTemporalLogin(ms = BLOQUEO_LOGIN_MS) {
+      bloqueoLoginHasta = Date.now() + ms;
+      const btn = document.getElementById("btnLogin");
+      if (bloqueoInterval) clearInterval(bloqueoInterval);
+
+      const actualizarBtn = () => {
+        const restante = Math.ceil((bloqueoLoginHasta - Date.now()) / 1000);
+        if (restante <= 0) {
+          clearInterval(bloqueoInterval);
+          bloqueoInterval = null;
+          bloqueoLoginHasta = 0;
+          intentosFallidosLogin = 0;
+          btn.disabled = false;
+          btn.textContent = "Ingresar a Mis Reservaciones";
+          return;
+        }
+        btn.disabled = true;
+        btn.textContent = `Espere ${restante}s para reintentar`;
+      };
+
+      actualizarBtn();
+      bloqueoInterval = setInterval(actualizarBtn, 500);
+    }
+
+    function contieneCaracteresPeligrosos(texto) {
+      return /[<>]/.test(texto || "");
+    }
+
+    function irAFormularioAuth(modo) {
+      cambiarTabAuth(modo);
+      document.getElementById("seccionAuth").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function elegirCategoriaDesdeGaleria(tipoId) {
+      categoriaPreseleccionadaId = tipoId;
+      if (clienteActual) {
+        const cmb = document.getElementById("cmbTipoHab");
+        cmb.value = String(tipoId);
+        alCambiarTipoHab(true);
+        document.getElementById("seccionReserva").scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+      cambiarTabAuth("registro");
+      mostrarAlerta("Complete sus datos o inicie sesión con su correo para reservar la categoría seleccionada.");
+      document.getElementById("seccionAuth").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
 
     function redondear2(valor) {
       return Math.round((Number(valor || 0) + Number.EPSILON) * 100) / 100;
@@ -1796,7 +2646,18 @@
 
     async function llamarApi(url, options = {}) {
       try {
-        const resp = await fetch(url, options);
+        const headers = new Headers(options.headers || {});
+        const token = obtenerTokenSesion();
+        if (token && !headers.has("Authorization")) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+        const resp = await fetch(url, { ...options, headers });
+
+        const nuevoToken = resp.headers.get("X-Session-Token");
+        if (nuevoToken) {
+          guardarTokenSesion(nuevoToken);
+        }
+
         if (resp.status === 204) {
           return { apiDisponible: true, ok: true, status: 204, data: null };
         }
@@ -1927,13 +2788,18 @@
     }
 
     async function iniciarSesion() {
+      if (bloqueoLoginHasta > Date.now()) {
+        mostrarAlerta("Por seguridad, aguarde unos segundos antes de intentar iniciar sesión nuevamente.", true);
+        return;
+      }
+
       ocultarAlerta();
       limpiarErrorCampo("txtLoginEmail", "errLoginEmail");
 
       const emailInput = document.getElementById("txtLoginEmail");
       const correo = emailInput.value.trim().toLowerCase();
 
-      if (!correo || !ES_EMAIL_VALIDO.test(correo)) {
+      if (!correo || !ES_EMAIL_VALIDO.test(correo) || contieneCaracteresPeligrosos(correo)) {
         const msg = "Ingrese un correo electrónico válido.";
         mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
         mostrarAlerta(msg, true);
@@ -1944,6 +2810,7 @@
       const btn = document.getElementById("btnLogin");
       btn.disabled = true;
       btn.textContent = "Verificando acceso...";
+      let bloqueoActivado = false;
 
       try {
         const res = await llamarApi("/api/clientes/login", {
@@ -1953,36 +2820,50 @@
         });
 
         if (res.apiDisponible) {
+          if (res.status === 429) {
+            const msg = extraerMensajeApi(res.data, "Demasiados intentos en poco tiempo. Espere un minuto.");
+            mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
+            mostrarAlerta(msg, true);
+            activarBloqueoTemporalLogin();
+            bloqueoActivado = true;
+            return;
+          }
           if (!res.ok) {
             const msg = extraerMensajeApi(res.data, "No se pudo iniciar sesión con ese correo electrónico.");
             mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
             mostrarAlerta(msg, true);
             return;
           }
+          intentosFallidosLogin = 0;
           await entrarAlPortal(res.data, false);
           return;
         }
 
         const clientes = obtenerClientesStorage();
         const encontrado = clientes.find(c => (c.email || "").trim().toLowerCase() === correo);
-        if (!encontrado) {
-          const msg = "No existe una cuenta registrada con ese correo electrónico. Cree una cuenta para realizar su primera reservación.";
+        if (!encontrado || !clienteTieneReservacionesStorage(encontrado)) {
+          intentosFallidosLogin++;
+          const msg = !encontrado
+            ? "No existe una cuenta registrada con ese correo electrónico. Cree una cuenta para realizar su primera reservación."
+            : "Este correo aún no tiene ninguna reservación registrada. Solo pueden iniciar sesión clientes que ya hayan registrado una reservación.";
           mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
-          mostrarAlerta(msg, true);
+          if (intentosFallidosLogin >= MAX_INTENTOS_FALLIDOS) {
+            mostrarAlerta("Se superó el límite de intentos fallidos. Acceso pausado 30 segundos por seguridad.", true);
+            activarBloqueoTemporalLogin();
+            bloqueoActivado = true;
+          } else {
+            mostrarAlerta(msg, true);
+          }
           return;
         }
 
-        if (!clienteTieneReservacionesStorage(encontrado)) {
-          const msg = "Este correo aún no tiene ninguna reservación registrada. Solo pueden iniciar sesión clientes que ya hayan registrado una reservación.";
-          mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
-          mostrarAlerta(msg, true);
-          return;
-        }
-
+        intentosFallidosLogin = 0;
         await entrarAlPortal(encontrado, false);
       } finally {
-        btn.disabled = false;
-        btn.textContent = "Ingresar a Mis Reservaciones";
+        if (!bloqueoActivado && bloqueoLoginHasta <= Date.now()) {
+          btn.disabled = false;
+          btn.textContent = "Ingresar a Mis Reservaciones";
+        }
       }
     }
 
@@ -2014,13 +2895,13 @@
         valido = false;
       }
 
-      if (nombres.length < 2 || nombres.length > 100) {
-        mostrarErrorCampo("txtRegNombres", "errRegNombres", "Ingrese sus nombres (mínimo 2 caracteres).");
+      if (nombres.length < 2 || nombres.length > 100 || contieneCaracteresPeligrosos(nombres)) {
+        mostrarErrorCampo("txtRegNombres", "errRegNombres", "Ingrese sus nombres sin símbolos < ni > (mínimo 2 caracteres).");
         valido = false;
       }
 
-      if (apellidos.length < 2 || apellidos.length > 100) {
-        mostrarErrorCampo("txtRegApellidos", "errRegApellidos", "Ingrese sus apellidos (mínimo 2 caracteres).");
+      if (apellidos.length < 2 || apellidos.length > 100 || contieneCaracteresPeligrosos(apellidos)) {
+        mostrarErrorCampo("txtRegApellidos", "errRegApellidos", "Ingrese sus apellidos sin símbolos < ni > (mínimo 2 caracteres).");
         valido = false;
       }
 
@@ -2030,7 +2911,7 @@
         valido = false;
       }
 
-      if (!email || email.length > 150 || !ES_EMAIL_VALIDO.test(email)) {
+      if (!email || email.length > 150 || !ES_EMAIL_VALIDO.test(email) || contieneCaracteresPeligrosos(email)) {
         mostrarErrorCampo("txtRegEmail", "errRegEmail", "Ingrese un correo electrónico válido.");
         valido = false;
       }
@@ -2144,15 +3025,23 @@
         `Tipo de cambio: $1.00 USD = ${formatoColones(tipoCambioUsd)} CRC`;
     }
 
+    function alternarVistasPublicas(visible) {
+      ["heroLanding", "seccionAuth", "secHabitaciones", "secGastronomia", "secSeguridad", "navPublica"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.toggle("oculto", !visible);
+      });
+    }
+
     async function entrarAlPortal(cliente, recienRegistrado = false) {
       clienteActual = cliente;
-      document.getElementById("seccionAuth").classList.add("oculto");
+      alternarVistasPublicas(false);
       document.getElementById("seccionReserva").classList.remove("oculto");
 
       document.getElementById("lblUsuarioIniciales").textContent = obtenerIniciales(cliente.nombres, cliente.apellidos);
       document.getElementById("lblUsuarioActivo").textContent = `${cliente.nombres} ${cliente.apellidos}`.trim();
       document.getElementById("lblUsuarioEmail").textContent = cliente.email || `Doc: ${cliente.numeroDocumento}`;
       document.getElementById("usuarioChip").classList.remove("oculto");
+      document.getElementById("badgeSesionSegura").classList.remove("oculto");
       document.getElementById("btnCerrarSesion").classList.remove("oculto");
 
       const hoy = new Date();
@@ -2161,6 +3050,7 @@
       document.getElementById("dtpEntrada").value = manana.toISOString().split("T")[0];
       document.getElementById("dtpSalida").value = salida.toISOString().split("T")[0];
 
+      reiniciarTemporizadorInactividad();
       await cargarTipoCambio();
       await cargarTiposHabitacion();
       await cargarHabitacionesYCotizar();
@@ -2172,21 +3062,39 @@
           `Su perfil fue creado. Confirme su primera reservación a continuación para que el correo ${cliente.email} quede habilitado para futuros inicios de sesión.`;
         aviso.classList.remove("oculto");
       }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function cerrarSesion() {
+    async function cerrarSesion(motivo = "") {
+      const tokenActual = obtenerTokenSesion();
+      if (tokenActual) {
+        await llamarApi("/api/clientes/logout", { method: "POST" });
+      }
+      limpiarTokenSesion();
+
+      if (inactividadTimer) {
+        clearTimeout(inactividadTimer);
+        inactividadTimer = null;
+      }
+
       clienteActual = null;
       cerrarModalFactura();
       ocultarAlerta();
       limpiarErroresAuth();
       document.getElementById("seccionReserva").classList.add("oculto");
       document.getElementById("avisoPrimeraReserva").classList.add("oculto");
-      document.getElementById("seccionAuth").classList.remove("oculto");
+      alternarVistasPublicas(true);
       document.getElementById("usuarioChip").classList.add("oculto");
+      document.getElementById("badgeSesionSegura").classList.add("oculto");
       document.getElementById("btnCerrarSesion").classList.add("oculto");
       document.getElementById("txtLoginEmail").value = "";
       document.getElementById("cmbMonedaReserva").value = "CRC";
       cambiarTabAuth("login");
+
+      if (typeof motivo === "string" && motivo.trim()) {
+        mostrarAlerta(motivo, true);
+      }
     }
 
     function alCambiarMoneda() {
@@ -2214,6 +3122,12 @@
         opt.textContent = t.nombre;
         cmb.appendChild(opt);
       });
+
+      if (categoriaPreseleccionadaId) {
+        cmb.value = String(categoriaPreseleccionadaId);
+        categoriaPreseleccionadaId = null;
+      }
+
       alCambiarTipoHab(false);
     }
 
@@ -2364,10 +3278,15 @@
         return;
       }
 
+      const obsUsuario = document.getElementById("txtObservaciones").value.trim();
+      if (contieneCaracteresPeligrosos(obsUsuario)) {
+        mostrarAlerta("Las observaciones no pueden contener los caracteres < o >.", true);
+        return;
+      }
+
       const moneda = obtenerMonedaReserva();
       const adultos = parseInt(document.getElementById("cmbAdultos").value || "1", 10);
       const ninos = parseInt(document.getElementById("cmbNinos").value || "0", 10);
-      const obsUsuario = document.getElementById("txtObservaciones").value.trim();
       const plan = obtenerTextoModalidad();
       const observacionesBase = obsUsuario ? `${obsUsuario} | Modalidad: ${plan}` : `Modalidad: ${plan}`;
       const observacionesConMoneda = adjuntarEtiquetaMoneda(observacionesBase, moneda);
@@ -2397,6 +3316,10 @@
         });
 
         if (res.apiDisponible) {
+          if (res.status === 401) {
+            await cerrarSesion("Su sesión expiró. Ingrese nuevamente para continuar.");
+            return;
+          }
           if (!res.ok) {
             mostrarAlerta(extraerMensajeApi(res.data, "No se pudo confirmar la reservación."), true);
             return;
@@ -2457,9 +3380,15 @@
       if (!clienteActual) return;
       let lista = [];
 
-      const res = await llamarApi(`/api/reservaciones?clienteId=${encodeURIComponent(clienteActual.id)}`);
-      if (res.apiDisponible && res.ok && Array.isArray(res.data)) {
-        lista = res.data;
+      const res = await llamarApi("/api/reservaciones/mis-reservaciones");
+      if (res.apiDisponible) {
+        if (res.status === 401) {
+          await cerrarSesion("Su sesión ha expirado. Ingrese nuevamente.");
+          return;
+        }
+        if (res.ok && Array.isArray(res.data)) {
+          lista = res.data;
+        }
       } else {
         const todas = obtenerReservacionesStorage();
         const correo = (clienteActual.email || "").trim().toLowerCase();
@@ -2476,7 +3405,7 @@
 
       const aviso = document.getElementById("avisoPrimeraReserva");
       if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#66584b;">Aún no tiene reservaciones registradas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#5e5044;">Aún no tiene reservaciones registradas.</td></tr>`;
         document.getElementById("textoPrimeraReserva").textContent =
           `Su perfil está listo. Confirme una reservación arriba para que su correo (${clienteActual.email}) quede habilitado en futuros inicios de sesión.`;
         aviso.classList.remove("oculto");
@@ -2511,7 +3440,7 @@
             <span class="total-sub">Equiv: ${escaparHtml(montoEquiv)} ${escaparHtml(monedaAlt)}</span>
           </td>
           <td>
-            <button type="button" class="btn btn-factura-row" onclick="abrirModalFactura(${Number(r.id)}, '${escaparHtml(monedaRes)}')">Ver Factura</button>
+            <button type="button" class="btn btn-factura-row" data-reserva-id="${Number(r.id)}" data-moneda="${escaparHtml(monedaRes)}">Ver Factura</button>
           </td>
         `;
         tbody.appendChild(tr);
@@ -2610,14 +3539,22 @@
 
       let factura = null;
       const res = await llamarApi(`/api/reservaciones/${encodeURIComponent(facturaReservaIdActual)}/factura?moneda=${encodeURIComponent(facturaMonedaActual)}`);
-      if (res.apiDisponible && res.ok && res.data) {
-        factura = res.data;
+      if (res.apiDisponible) {
+        if (res.status === 401 || res.status === 403) {
+          cerrarModalFactura();
+          mostrarAlerta(extraerMensajeApi(res.data, "No tiene autorización para consultar esa factura."), true);
+          return;
+        }
+        if (res.ok && res.data) {
+          factura = res.data;
+        }
       } else {
         const r = reservasMapa[facturaReservaIdActual];
         if (!r) return;
         factura = construirFacturaOffline(r, facturaMonedaActual);
       }
 
+      if (!factura) return;
       ultimaFacturaData = factura;
 
       document.getElementById("facNumero").textContent = factura.numeroFactura;

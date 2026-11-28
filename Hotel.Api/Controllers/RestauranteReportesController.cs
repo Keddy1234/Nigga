@@ -23,15 +23,21 @@ public class PlatillosController : ApiControllerBase
 
     [HttpPost("categorias")]
     public async Task<IActionResult> CrearCategoria(CategoriaPlatillo categoria)
-        => await EjecutarAsync(async () => Ok(await _servicio.CrearCategoriaAsync(categoria)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.CrearCategoriaAsync(categoria)));
+    }
 
     [HttpPut("categorias/{id:int}")]
     public async Task<IActionResult> ActualizarCategoria(int id, CategoriaPlatillo categoria)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ActualizarCategoriaAsync(id, categoria);
             return NoContent();
         });
+    }
 
     [HttpGet]
     public async Task<IActionResult> Listar([FromQuery] int? categoriaId, [FromQuery] bool soloDisponibles = false)
@@ -39,31 +45,43 @@ public class PlatillosController : ApiControllerBase
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Crear(Platillo platillo)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             var creado = await _servicio.CrearAsync(platillo);
             return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
         });
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Actualizar(int id, Platillo platillo)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ActualizarAsync(id, platillo);
             return NoContent();
         });
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Desactivar(int id)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.DesactivarAsync(id);
             return NoContent();
         });
+    }
 }
 
 [ApiController]
@@ -79,47 +97,68 @@ public class PedidosController : ApiControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Buscar([FromQuery] FiltroPedidoDto filtro)
-        => await EjecutarAsync(async () => Ok(await _servicio.BuscarAsync(filtro)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.BuscarAsync(filtro)));
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    }
 
     [HttpGet("reservacion/{reservacionId:int}/totales")]
     public async Task<IActionResult> TotalesPorReservacion(int reservacionId)
-        => await EjecutarAsync(async () => Ok(await _servicio.TotalesPorReservacionAsync(reservacionId)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.TotalesPorReservacionAsync(reservacionId)));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Crear(CrearPedidoDto dto)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             var creado = await _servicio.CrearAsync(dto);
             return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
         });
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Modificar(int id, CrearPedidoDto dto)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ModificarAsync(id, dto);
             return NoContent();
         });
+    }
 
     [HttpPatch("{id:int}/estado")]
     public async Task<IActionResult> CambiarEstado(int id, [FromQuery] EstadoPedido estado)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.AvanzarEstadoAsync(id, estado);
             return NoContent();
         });
+    }
 
     [HttpPost("{id:int}/cancelar")]
     public async Task<IActionResult> Cancelar(int id)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.CancelarAsync(id);
             return NoContent();
         });
+    }
 }
 
 [ApiController]
@@ -135,25 +174,43 @@ public class ReportesController : ApiControllerBase
 
     [HttpGet("ocupacion")]
     public async Task<IActionResult> Ocupacion([FromQuery] DateTime desde, [FromQuery] DateTime hasta)
-        => await EjecutarAsync(async () => Ok(await _servicio.OcupacionPorPeriodoAsync(desde, hasta)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.OcupacionPorPeriodoAsync(desde, hasta)));
+    }
 
     [HttpGet("ocupacion-mes")]
     public async Task<IActionResult> OcupacionPorMes([FromQuery] int anio)
-        => await EjecutarAsync(async () => Ok(await _servicio.ResumenOcupacionPorMesAsync(anio <= 0 ? DateTime.Today.Year : anio)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ResumenOcupacionPorMesAsync(anio <= 0 ? DateTime.Today.Year : anio)));
+    }
 
     [HttpGet("reservaciones")]
     public async Task<IActionResult> Reservaciones([FromQuery] DateTime desde, [FromQuery] DateTime hasta, [FromQuery] EstadoReservacion? estado)
-        => await EjecutarAsync(async () => Ok(await _servicio.ReservacionesAsync(desde, hasta, estado)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ReservacionesAsync(desde, hasta, estado)));
+    }
 
     [HttpGet("ingresos")]
     public async Task<IActionResult> Ingresos([FromQuery] DateTime desde, [FromQuery] DateTime hasta)
-        => await EjecutarAsync(async () => Ok(await _servicio.IngresosAsync(desde, hasta)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.IngresosAsync(desde, hasta)));
+    }
 
     [HttpGet("pedidos")]
     public async Task<IActionResult> Pedidos([FromQuery] DateTime? fecha, [FromQuery] EstadoPedido? estado)
-        => await EjecutarAsync(async () => Ok(await _servicio.PedidosAsync(fecha, estado)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.PedidosAsync(fecha, estado)));
+    }
 
     [HttpGet("platillos-mas-solicitados")]
     public async Task<IActionResult> PlatillosMasSolicitados([FromQuery] int top = 5, [FromQuery] DateTime? desde = null, [FromQuery] DateTime? hasta = null)
-        => await EjecutarAsync(async () => Ok(await _servicio.PlatillosMasSolicitadosAsync(top, desde, hasta)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.PlatillosMasSolicitadosAsync(top, desde, hasta)));
+    }
 }

@@ -1,14 +1,23 @@
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using Hotel.AccesoDatos;
 using Hotel.AccesoDatos.Contexto;
+using Hotel.Api.Servicios;
 using Hotel.Dominio.Entidades;
 using Hotel.Dominio.Enums;
 using Hotel.Dominio.Excepciones;
 using Hotel.Dominio.Interfaces;
 using Hotel.LogicaNegocios.Servicios;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.ConfigureKestrel(k =>
+{
+    k.AddServerHeader = false;
+    k.Limits.MaxRequestBodySize = 64 * 1024;
+});
 
 builder.Services.AddControllers().AddJsonOptions(o =>
 {
@@ -21,6 +30,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HotelDbContext>(o =>
     o.UseSqlServer(builder.Configuration.GetConnectionString("HotelDb")));
 
+builder.Services.AddSingleton<SeguridadApiServicio>();
 builder.Services.AddScoped<IUnidadTrabajo, UnidadTrabajo>();
 builder.Services.AddScoped<IClienteServicio, ClienteServicio>();
 builder.Services.AddScoped<ITipoHabitacionServicio, TipoHabitacionServicio>();
@@ -30,6 +40,49 @@ builder.Services.AddScoped<IPagoServicio, PagoServicio>();
 builder.Services.AddScoped<IPlatilloServicio, PlatilloServicio>();
 builder.Services.AddScoped<IPedidoServicio, PedidoServicio>();
 builder.Services.AddScoped<IReporteServicio, ReporteServicio>();
+
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.OnRejected = async (ctx, ct) =>
+    {
+        ctx.HttpContext.Response.ContentType = "application/json; charset=utf-8";
+        await ctx.HttpContext.Response.WriteAsJsonAsync(new
+        {
+            mensaje = "Demasiados intentos en poco tiempo. Espere un minuto antes de volver a intentarlo."
+        }, ct);
+    };
+
+    options.AddPolicy("auth", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "local",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0,
+                AutoReplenishment = true
+            }));
+
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    {
+        var seg = httpContext.RequestServices.GetService<SeguridadApiServicio>();
+        if (seg != null && seg.EsAdmin(httpContext.Request))
+            return RateLimitPartition.GetNoLimiter("admin");
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            partitionKey: httpContext.Connection.RemoteIpAddress?.ToString() ?? "local",
+            factory: _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 180,
+                Window = TimeSpan.FromMinutes(1),
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = 0,
+                AutoReplenishment = true
+            });
+    });
+});
 
 var app = builder.Build();
 
@@ -143,6 +196,37 @@ catch
 
 app.Use(async (ctx, next) =>
 {
+    var headers = ctx.Response.Headers;
+    headers["X-Content-Type-Options"] = "nosniff";
+    headers["X-Frame-Options"] = "DENY";
+    headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(), payment=(), usb=()";
+    headers["Cross-Origin-Opener-Policy"] = "same-origin";
+
+    string path = ctx.Request.Path.Value ?? string.Empty;
+    if (!path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase))
+    {
+        headers["Content-Security-Policy"] =
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'";
+    }
+
+    if (path.StartsWith("/api/clientes", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/api/reservaciones", StringComparison.OrdinalIgnoreCase))
+    {
+        headers["Cache-Control"] = "no-store, no-cache, must-revalidate";
+        headers["Pragma"] = "no-cache";
+    }
+
+    if (ctx.Request.IsHttps)
+    {
+        headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains";
+    }
+
+    await next();
+});
+
+app.Use(async (ctx, next) =>
+{
     try
     {
         await next();
@@ -162,12 +246,25 @@ app.Use(async (ctx, next) =>
         ctx.Response.StatusCode = StatusCodes.Status400BadRequest;
         await ctx.Response.WriteAsJsonAsync(new { mensaje = ex.Message });
     }
+    catch (Exception ex)
+    {
+        app.Logger.LogError(ex, "Error inesperado en {Path}", ctx.Request.Path);
+        if (!ctx.Response.HasStarted)
+        {
+            ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
+            await ctx.Response.WriteAsJsonAsync(new { mensaje = "Ocurrió un error interno al procesar la solicitud." });
+        }
+    }
 });
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
+app.UseRateLimiter();
 app.MapControllers();
 app.Run();

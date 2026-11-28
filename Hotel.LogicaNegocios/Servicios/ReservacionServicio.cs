@@ -80,7 +80,7 @@ public class ReservacionServicio : IReservacionServicio
                 FechaInicio = dto.FechaInicio,
                 FechaFin = rango.Salida,
                 CantidadHuespedes = dto.CantidadHuespedes,
-                Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(dto.Observaciones, dto.Moneda),
+                Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(SanitizarObservaciones(dto.Observaciones), dto.Moneda),
                 CostoTotal = cotizacion.Total,
                 Estado = EstadoReservacion.PendientePago
             };
@@ -129,7 +129,7 @@ public class ReservacionServicio : IReservacionServicio
             reservacion.FechaInicio = dto.FechaInicio;
             reservacion.FechaFin = rango.Salida;
             reservacion.CantidadHuespedes = dto.CantidadHuespedes;
-            reservacion.Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(dto.Observaciones, dto.Moneda);
+            reservacion.Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(SanitizarObservaciones(dto.Observaciones), dto.Moneda);
             reservacion.CostoTotal = cotizacion.Total;
 
             await _uow.GuardarAsync();
@@ -340,5 +340,14 @@ public class ReservacionServicio : IReservacionServicio
             throw new ReglaNegocioException("La cantidad de huéspedes debe ser al menos 1.");
         if (huespedes > hab.TipoHabitacion!.CapacidadTotal)
             throw new ReglaNegocioException($"La habitación admite como máximo {hab.TipoHabitacion.CapacidadTotal} huéspedes.");
+    }
+
+    private static string? SanitizarObservaciones(string? texto)
+    {
+        if (string.IsNullOrWhiteSpace(texto))
+            return null;
+
+        string limpio = new string(texto.Where(ch => !char.IsControl(ch) && ch != '<' && ch != '>').ToArray()).Trim();
+        return string.IsNullOrWhiteSpace(limpio) ? null : limpio;
     }
 }

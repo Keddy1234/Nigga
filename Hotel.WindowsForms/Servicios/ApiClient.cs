@@ -78,6 +78,7 @@ namespace Hotel.WindowsForms.Servicios
                 BaseAddress = new Uri("http://localhost:5158/"),
                 Timeout = TimeSpan.FromSeconds(5)
             };
+            _http.DefaultRequestHeaders.Add("X-Hotel-Admin-Key", "PosadaRoble-Admin-2026-Key!");
 
             _jsonOptions = new JsonSerializerOptions
             {

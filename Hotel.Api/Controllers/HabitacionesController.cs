@@ -22,31 +22,43 @@ public class TiposHabitacionController : ApiControllerBase
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Crear(TipoHabitacion tipo)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             var creado = await _servicio.CrearAsync(tipo);
             return CreatedAtAction(nameof(Obtener), new { id = creado.Id }, creado);
         });
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Actualizar(int id, TipoHabitacion tipo)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ActualizarAsync(id, tipo);
             return NoContent();
         });
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Eliminar(int id)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.EliminarAsync(id);
             return NoContent();
         });
+    }
 }
 
 [ApiController]
@@ -62,11 +74,17 @@ public class HabitacionesController : ApiControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Listar([FromQuery] int? tipoId, [FromQuery] int? capacidad, [FromQuery] decimal? tarifaMaxima)
-        => await EjecutarAsync(async () => Ok(await _servicio.ListarAsync(tipoId, capacidad, tarifaMaxima)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ListarAsync(tipoId, capacidad, tarifaMaxima)));
+    }
 
     [HttpGet("ordenadas")]
     public async Task<IActionResult> Ordenadas()
-        => await EjecutarAsync(async () => Ok(await _servicio.OrdenadasPorTarifaYCapacidadAsync()));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.OrdenadasPorTarifaYCapacidadAsync()));
+    }
 
     [HttpGet("disponibles")]
     public async Task<IActionResult> Disponibles([FromQuery] DateTime? entrada, [FromQuery] DateTime? salida, [FromQuery] int huespedes = 1, [FromQuery] int? tipoId = null)
@@ -79,37 +97,52 @@ public class HabitacionesController : ApiControllerBase
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Crear(Habitacion habitacion)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             var creada = await _servicio.CrearAsync(habitacion);
             return CreatedAtAction(nameof(Obtener), new { id = creada.Id }, creada);
         });
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Actualizar(int id, Habitacion habitacion)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ActualizarAsync(id, habitacion);
             return NoContent();
         });
+    }
 
     [HttpPatch("{id:int}/estado")]
     public async Task<IActionResult> CambiarEstado(int id, [FromQuery] EstadoHabitacion estado)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.CambiarEstadoAsync(id, estado);
             return NoContent();
         });
+    }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Desactivar(int id)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.DesactivarAsync(id);
             return NoContent();
         });
+    }
 }

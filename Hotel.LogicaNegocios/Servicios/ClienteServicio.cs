@@ -122,10 +122,14 @@ public class ClienteServicio : IClienteServicio
         c.Nombres = (c.Nombres ?? string.Empty).Trim();
         if (c.Nombres.Length < 2 || c.Nombres.Length > 100)
             throw new ReglaNegocioException("Los nombres son obligatorios (entre 2 y 100 caracteres).");
+        if (ContieneCaracteresPeligrosos(c.Nombres))
+            throw new ReglaNegocioException("Los nombres contienen caracteres no permitidos (<, > o caracteres de control).");
 
         c.Apellidos = (c.Apellidos ?? string.Empty).Trim();
         if (c.Apellidos.Length < 2 || c.Apellidos.Length > 100)
             throw new ReglaNegocioException("Los apellidos son obligatorios (entre 2 y 100 caracteres).");
+        if (ContieneCaracteresPeligrosos(c.Apellidos))
+            throw new ReglaNegocioException("Los apellidos contienen caracteres no permitidos (<, > o caracteres de control).");
 
         c.Telefono = (c.Telefono ?? string.Empty).Trim();
         int cantidadDigitosTelefono = c.Telefono.Count(char.IsDigit);
@@ -141,4 +145,7 @@ public class ClienteServicio : IClienteServicio
         if (string.IsNullOrWhiteSpace(c.Email) || c.Email.Length > 150 || !FormatoCorreo.IsMatch(c.Email))
             throw new ReglaNegocioException("El correo electrónico es obligatorio y debe tener un formato válido (máximo 150 caracteres).");
     }
+
+    private static bool ContieneCaracteresPeligrosos(string texto)
+        => texto.Any(ch => ch == '<' || ch == '>' || char.IsControl(ch));
 }

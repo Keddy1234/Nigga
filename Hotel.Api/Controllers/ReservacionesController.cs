@@ -19,19 +19,42 @@ public class ReservacionesController : ApiControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Buscar([FromQuery] FiltroReservacionDto filtro)
-        => await EjecutarAsync(async () => Ok(await _servicio.BuscarAsync(filtro)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.BuscarAsync(filtro)));
+    }
+
+    [HttpGet("mis-reservaciones")]
+    public async Task<IActionResult> MisReservaciones()
+    {
+        var sesion = ObtenerSesionHuesped();
+        if (sesion == null)
+            return Unauthorized(new { mensaje = "Debe iniciar sesión para consultar sus reservaciones." });
+
+        return await EjecutarAsync(async () =>
+            Ok(await _servicio.BuscarAsync(new FiltroReservacionDto { ClienteId = sesion.ClienteId })));
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
+    }
 
     [HttpGet("codigo/{codigo}")]
     public async Task<IActionResult> ObtenerPorCodigo(string codigo)
-        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerPorCodigoAsync(codigo)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ObtenerPorCodigoAsync(codigo)));
+    }
 
     [HttpGet("documento/{numeroDocumento}")]
     public async Task<IActionResult> PorDocumento(string numeroDocumento)
-        => await EjecutarAsync(async () => Ok(await _servicio.ActivasPorDocumentoAsync(numeroDocumento)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ActivasPorDocumentoAsync(numeroDocumento)));
+    }
 
     [HttpPost("cotizar")]
     public async Task<IActionResult> Cotizar(CotizarReservacionDto dto)
@@ -39,43 +62,64 @@ public class ReservacionesController : ApiControllerBase
 
     [HttpPost]
     public async Task<IActionResult> Crear(CrearReservacionDto dto)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirHuespedOAdmin(out var sesion) is { } authError) return authError;
+        if (sesion != null && dto.ClienteId != sesion.ClienteId)
+            return StatusCode(403, new { mensaje = "No tiene autorización para crear reservaciones a nombre de otro cliente." });
+
+        return await EjecutarAsync(async () =>
         {
             var creada = await _servicio.CrearAsync(dto);
             return CreatedAtAction(nameof(Obtener), new { id = creada.Id }, creada);
         });
+    }
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Modificar(int id, CrearReservacionDto dto)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.ModificarAsync(id, dto);
             return NoContent();
         });
+    }
 
     [HttpPost("{id:int}/cancelar")]
     public async Task<IActionResult> Cancelar(int id)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.CancelarAsync(id);
             return NoContent();
         });
+    }
 
     [HttpPost("{id:int}/checkin")]
     public async Task<IActionResult> CheckIn(int id, CheckInDto dto)
-        => await EjecutarAsync(async () =>
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () =>
         {
             await _servicio.CheckInAsync(id, dto);
             return NoContent();
         });
+    }
 
     [HttpPost("{id:int}/checkout")]
     public async Task<IActionResult> CheckOut(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.CheckOutAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.CheckOutAsync(id)));
+    }
 
     [HttpGet("{id:int}/cuenta")]
     public async Task<IActionResult> EstadoCuenta(int id)
-        => await EjecutarAsync(async () => Ok(await _servicio.EstadoCuentaAsync(id)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.EstadoCuentaAsync(id)));
+    }
 
     [HttpGet("tipo-cambio")]
     public IActionResult ObtenerTipoCambio()
@@ -89,7 +133,19 @@ public class ReservacionesController : ApiControllerBase
 
     [HttpGet("{id:int}/factura")]
     public async Task<IActionResult> Factura(int id, [FromQuery] Moneda? moneda)
-        => await EjecutarAsync(async () => Ok(await _servicio.GenerarFacturaAsync(id, moneda)));
+    {
+        if (RequerirHuespedOAdmin(out var sesion) is { } authError) return authError;
+        return await EjecutarAsync(async () =>
+        {
+            if (sesion != null)
+            {
+                var reserva = await _servicio.ObtenerAsync(id);
+                if (reserva.ClienteId != sesion.ClienteId)
+                    return StatusCode(403, new { mensaje = "No tiene autorización para consultar esta factura." });
+            }
+            return Ok(await _servicio.GenerarFacturaAsync(id, moneda));
+        });
+    }
 }
 
 [ApiController]
@@ -105,9 +161,15 @@ public class PagosController : ApiControllerBase
 
     [HttpGet("reservacion/{reservacionId:int}")]
     public async Task<IActionResult> ListarPorReservacion(int reservacionId)
-        => await EjecutarAsync(async () => Ok(await _servicio.ListarPorReservacionAsync(reservacionId)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.ListarPorReservacionAsync(reservacionId)));
+    }
 
     [HttpPost]
     public async Task<IActionResult> Registrar(RegistrarPagoDto dto)
-        => await EjecutarAsync(async () => Ok(await _servicio.RegistrarAsync(dto)));
+    {
+        if (RequerirAdmin() is { } authError) return authError;
+        return await EjecutarAsync(async () => Ok(await _servicio.RegistrarAsync(dto)));
+    }
 }
