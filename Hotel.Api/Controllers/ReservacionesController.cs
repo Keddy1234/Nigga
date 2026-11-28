@@ -1,5 +1,7 @@
 using Hotel.Dominio.DTOs;
+using Hotel.Dominio.Enums;
 using Hotel.Dominio.Interfaces;
+using Hotel.Dominio.Reglas;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel.Api.Controllers;
@@ -69,6 +71,20 @@ public class ReservacionesController : ControllerBase
     [HttpGet("{id:int}/cuenta")]
     public async Task<IActionResult> EstadoCuenta(int id)
         => Ok(await _servicio.EstadoCuentaAsync(id));
+
+    [HttpGet("tipo-cambio")]
+    public IActionResult ObtenerTipoCambio()
+        => Ok(new TipoCambioDto
+        {
+            MonedaBase = "CRC",
+            MonedaExtranjera = "USD",
+            TipoCambioUsd = ConversorMoneda.TipoCambioUsdDefecto,
+            FechaConsulta = DateTime.Now
+        });
+
+    [HttpGet("{id:int}/factura")]
+    public async Task<IActionResult> Factura(int id, [FromQuery] Moneda? moneda)
+        => Ok(await _servicio.GenerarFacturaAsync(id, moneda));
 }
 
 [ApiController]

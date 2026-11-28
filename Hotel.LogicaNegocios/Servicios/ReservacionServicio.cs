@@ -33,17 +33,23 @@ public class ReservacionServicio : IReservacionServicio
 
     public async Task<CotizacionDto> CotizarAsync(CotizarReservacionDto dto)
     {
+        if (!Enum.IsDefined(typeof(Moneda), dto.Moneda))
+            throw new ReglaNegocioException("La moneda seleccionada no es válida (use CRC o USD).");
+
         var rango = new RangoFechas(dto.FechaInicio, dto.FechaFin);
         var hab = await _uow.Habitaciones.ObtenerConTipoAsync(dto.HabitacionId)
                   ?? throw new NoEncontradoException("Habitación no encontrada.");
         ValidarCapacidad(hab, dto.CantidadHuespedes);
 
         bool frecuente = dto.ClienteId.HasValue && await EsClienteFrecuenteAsync(dto.ClienteId.Value);
-        return CalculadoraCosto.Calcular(rango, hab.TipoHabitacion!.PrecioBasePorNoche, dto.CantidadHuespedes, frecuente);
+        return CalculadoraCosto.Calcular(rango, hab.TipoHabitacion!.PrecioBasePorNoche, dto.CantidadHuespedes, frecuente, dto.Moneda);
     }
 
     public async Task<Reservacion> CrearAsync(CrearReservacionDto dto)
     {
+        if (!Enum.IsDefined(typeof(Moneda), dto.Moneda))
+            throw new ReglaNegocioException("La moneda seleccionada no es válida (use CRC o USD).");
+
         var rango = new RangoFechas(dto.FechaInicio, dto.FechaFin);
         if (rango.Entrada < DateTime.Today)
             throw new ReglaNegocioException("No se permiten reservaciones con fecha de entrada pasada.");
@@ -74,7 +80,7 @@ public class ReservacionServicio : IReservacionServicio
                 FechaInicio = dto.FechaInicio,
                 FechaFin = rango.Salida,
                 CantidadHuespedes = dto.CantidadHuespedes,
-                Observaciones = dto.Observaciones,
+                Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(dto.Observaciones, dto.Moneda),
                 CostoTotal = cotizacion.Total,
                 Estado = EstadoReservacion.PendientePago
             };
@@ -93,6 +99,9 @@ public class ReservacionServicio : IReservacionServicio
 
     public async Task ModificarAsync(int id, CrearReservacionDto dto)
     {
+        if (!Enum.IsDefined(typeof(Moneda), dto.Moneda))
+            throw new ReglaNegocioException("La moneda seleccionada no es válida (use CRC o USD).");
+
         var rango = new RangoFechas(dto.FechaInicio, dto.FechaFin);
 
         await _uow.IniciarTransaccionAsync(IsolationLevel.Serializable);
@@ -120,7 +129,7 @@ public class ReservacionServicio : IReservacionServicio
             reservacion.FechaInicio = dto.FechaInicio;
             reservacion.FechaFin = rango.Salida;
             reservacion.CantidadHuespedes = dto.CantidadHuespedes;
-            reservacion.Observaciones = dto.Observaciones;
+            reservacion.Observaciones = ConversorMoneda.AdjuntarEtiquetaMoneda(dto.Observaciones, dto.Moneda);
             reservacion.CostoTotal = cotizacion.Total;
 
             await _uow.GuardarAsync();
@@ -217,14 +226,98 @@ public class ReservacionServicio : IReservacionServicio
         return await CalcularCuentaAsync(reservacion);
     }
 
-    private async Task<EstadoCuentaDto> CalcularCuentaAsync(Reservacion r) => new()
+    public async Task<FacturaDto> GenerarFacturaAsync(int id, Moneda? monedaFacturacion = null)
     {
-        ReservacionId = r.Id,
-        Codigo = r.Codigo,
-        Hospedaje = r.CostoTotal,
-        Consumos = await _uow.Pedidos.TotalConsumosAsync(r.Id),
-        Pagado = await _uow.Pagos.TotalPagadoAsync(r.Id)
-    };
+        if (monedaFacturacion.HasValue && !Enum.IsDefined(typeof(Moneda), monedaFacturacion.Value))
+            throw new ReglaNegocioException("La moneda de facturación no es válida (use CRC o USD).");
+
+        var r = await ObtenerAsync(id);
+        var cuenta = await CalcularCuentaAsync(r);
+        var monedaReserva = cuenta.MonedaReserva;
+        var destino = monedaFacturacion ?? monedaReserva;
+        decimal tc = ConversorMoneda.TipoCambioUsdDefecto;
+
+        decimal hospedajeCrc = Math.Round(cuenta.Hospedaje, 2, MidpointRounding.AwayFromZero);
+        decimal subtotalCrc = Math.Round(hospedajeCrc / (1m + CalculadoraCosto.Iva), 2, MidpointRounding.AwayFromZero);
+        decimal ivaCrc = Math.Round(hospedajeCrc - subtotalCrc, 2, MidpointRounding.AwayFromZero);
+        decimal consumosCrc = Math.Round(cuenta.Consumos, 2, MidpointRounding.AwayFromZero);
+        decimal totalGeneralCrc = Math.Round(hospedajeCrc + consumosCrc, 2, MidpointRounding.AwayFromZero);
+        decimal pagadoCrc = Math.Round(cuenta.Pagado, 2, MidpointRounding.AwayFromZero);
+        decimal saldoCrc = Math.Max(0m, Math.Round(cuenta.Saldo, 2, MidpointRounding.AwayFromZero));
+
+        decimal hospedajeUsd = ConversorMoneda.ColonesADolares(hospedajeCrc, tc);
+        decimal subtotalUsd = Math.Round(hospedajeUsd / (1m + CalculadoraCosto.Iva), 2, MidpointRounding.AwayFromZero);
+        decimal ivaUsd = Math.Round(hospedajeUsd - subtotalUsd, 2, MidpointRounding.AwayFromZero);
+        decimal consumosUsd = ConversorMoneda.ColonesADolares(consumosCrc, tc);
+        decimal totalGeneralUsd = Math.Round(hospedajeUsd + consumosUsd, 2, MidpointRounding.AwayFromZero);
+        decimal pagadoUsd = ConversorMoneda.ColonesADolares(pagadoCrc, tc);
+        decimal saldoUsd = Math.Max(0m, ConversorMoneda.ColonesADolares(saldoCrc, tc));
+
+        bool enDolares = destino == Moneda.USD;
+
+        return new FacturaDto
+        {
+            NumeroFactura = $"FAC-{r.Codigo}",
+            FechaEmision = DateTime.Now,
+            ReservacionId = r.Id,
+            CodigoReservacion = r.Codigo,
+            ClienteNombre = r.Cliente?.NombreCompleto ?? $"Cliente #{r.ClienteId}",
+            ClienteDocumento = r.Cliente?.NumeroDocumento ?? string.Empty,
+            ClienteEmail = r.Cliente?.Email,
+            Habitacion = r.Habitacion != null ? $"Hab. {r.Habitacion.Numero} (Piso {r.Habitacion.Piso})" : $"Hab. #{r.HabitacionId}",
+            FechaInicio = r.FechaInicio,
+            FechaFin = r.FechaFin,
+            CantidadHuespedes = r.CantidadHuespedes,
+            Estado = r.Estado.ToString(),
+            Observaciones = r.Observaciones,
+
+            MonedaReserva = monedaReserva,
+            MonedaFacturacion = destino,
+            SimboloMoneda = ConversorMoneda.Simbolo(destino),
+            TipoCambioUsd = tc,
+            ConversionAplicada = destino != Moneda.CRC || monedaReserva != Moneda.CRC,
+
+            SubtotalHospedajeFacturado = enDolares ? subtotalUsd : subtotalCrc,
+            IvaHospedajeFacturado = enDolares ? ivaUsd : ivaCrc,
+            HospedajeFacturado = enDolares ? hospedajeUsd : hospedajeCrc,
+            ConsumosFacturados = enDolares ? consumosUsd : consumosCrc,
+            TotalFacturado = enDolares ? totalGeneralUsd : totalGeneralCrc,
+            PagadoFacturado = enDolares ? pagadoUsd : pagadoCrc,
+            SaldoFacturado = enDolares ? saldoUsd : saldoCrc,
+
+            SubtotalHospedajeCrc = subtotalCrc,
+            IvaHospedajeCrc = ivaCrc,
+            HospedajeCrc = hospedajeCrc,
+            ConsumosCrc = consumosCrc,
+            TotalGeneralCrc = totalGeneralCrc,
+            PagadoCrc = pagadoCrc,
+            SaldoCrc = saldoCrc,
+
+            SubtotalHospedajeUsd = subtotalUsd,
+            IvaHospedajeUsd = ivaUsd,
+            HospedajeUsd = hospedajeUsd,
+            ConsumosUsd = consumosUsd,
+            TotalGeneralUsd = totalGeneralUsd,
+            PagadoUsd = pagadoUsd,
+            SaldoUsd = saldoUsd
+        };
+    }
+
+    private async Task<EstadoCuentaDto> CalcularCuentaAsync(Reservacion r)
+    {
+        var monedaReserva = ConversorMoneda.DetectarMonedaDesdeObservaciones(r.Observaciones);
+        return new EstadoCuentaDto
+        {
+            ReservacionId = r.Id,
+            Codigo = r.Codigo,
+            Hospedaje = r.CostoTotal,
+            Consumos = await _uow.Pedidos.TotalConsumosAsync(r.Id),
+            Pagado = await _uow.Pagos.TotalPagadoAsync(r.Id),
+            MonedaReserva = monedaReserva,
+            MonedaFacturacion = monedaReserva,
+            TipoCambioUsd = ConversorMoneda.TipoCambioUsdDefecto
+        };
+    }
 
     private async Task<bool> EsClienteFrecuenteAsync(int clienteId)
         => await _uow.Clientes.ContarEstadiasCompletadasAsync(clienteId) >= EstadiasParaClienteFrecuente;

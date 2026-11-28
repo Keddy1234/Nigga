@@ -41,3 +41,9 @@ public enum EstadoPedido
     Entregado,
     Cancelado
 }
+
+public enum Moneda
+{
+    CRC,
+    USD
+}

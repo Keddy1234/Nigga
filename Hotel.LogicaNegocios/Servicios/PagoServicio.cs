@@ -21,6 +21,8 @@ public class PagoServicio : IPagoServicio
 
     public async Task<Pago> RegistrarAsync(RegistrarPagoDto dto)
     {
+        if (!Enum.IsDefined(typeof(Moneda), dto.Moneda))
+            throw new ReglaNegocioException("La moneda del pago no es válida (use CRC o USD).");
         if (dto.Monto <= 0)
             throw new ReglaNegocioException("El monto debe ser mayor que cero.");
         if (dto.MetodoPago != MetodoPago.Efectivo && string.IsNullOrWhiteSpace(dto.ReferenciaTransaccion))
@@ -37,23 +39,41 @@ public class PagoServicio : IPagoServicio
             decimal consumos = await _uow.Pedidos.TotalConsumosAsync(reservacion.Id);
             decimal pagado = await _uow.Pagos.TotalPagadoAsync(reservacion.Id);
             decimal saldo = reservacion.CostoTotal + consumos - pagado;
+            decimal montoCrc = ConversorMoneda.ConvertirAColones(dto.Monto, dto.Moneda);
 
-            if (dto.Monto > saldo)
-                throw new ReglaNegocioException($"El monto excede el saldo pendiente ({saldo:N2}).");
+            if (dto.Moneda == Moneda.USD && montoCrc > saldo && montoCrc - saldo <= ConversorMoneda.TipoCambioUsdDefecto * 0.01m)
+                montoCrc = saldo;
+
+            if (montoCrc > saldo)
+            {
+                decimal saldoUsd = ConversorMoneda.ColonesADolares(saldo);
+                throw new ReglaNegocioException($"El monto excede el saldo pendiente (₡{saldo:N2} / ${saldoUsd:N2} USD).");
+            }
+
+            string? refFinal = string.IsNullOrWhiteSpace(dto.ReferenciaTransaccion)
+                ? null
+                : dto.ReferenciaTransaccion.Trim();
+            if (dto.Moneda == Moneda.USD)
+            {
+                string tagUsd = $"USD ${dto.Monto:N2}";
+                refFinal = string.IsNullOrWhiteSpace(refFinal) ? tagUsd : $"{refFinal} ({tagUsd})";
+            }
+            if (refFinal != null && refFinal.Length > 60)
+                refFinal = refFinal[..60];
 
             var pago = new Pago
             {
                 ReservacionId = reservacion.Id,
-                Monto = dto.Monto,
+                Monto = montoCrc,
                 MetodoPago = dto.MetodoPago,
-                ReferenciaTransaccion = dto.ReferenciaTransaccion,
+                ReferenciaTransaccion = refFinal,
                 FechaPago = DateTime.Now
             };
             await _uow.Pagos.AgregarAsync(pago);
 
             // Se confirma la reservación al cubrir el anticipo mínimo
             if (reservacion.Estado == EstadoReservacion.PendientePago &&
-                pagado + dto.Monto >= Math.Round(reservacion.CostoTotal * CalculadoraCosto.PorcentajeAnticipo, 2))
+                pagado + montoCrc >= Math.Round(reservacion.CostoTotal * CalculadoraCosto.PorcentajeAnticipo, 2))
             {
                 reservacion.Estado = EstadoReservacion.Confirmada;
             }

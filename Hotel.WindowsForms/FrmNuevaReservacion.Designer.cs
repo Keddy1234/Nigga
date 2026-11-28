@@ -59,6 +59,8 @@ namespace Hotel.WindowsForms
             tabCotizacion = new TabPage();
             gbCotizacion = new GroupBox();
             gbPlanPago = new GroupBox();
+            lblMonedaReserva = new Label();
+            cmbMonedaReserva = new ComboBox();
             rbContado = new RadioButton();
             rbTasaCero = new RadioButton();
             lblPlazoTasaCero = new Label();
@@ -91,6 +93,7 @@ namespace Hotel.WindowsForms
             gbCliente.SuspendLayout();
             tabCotizacion.SuspendLayout();
             gbCotizacion.SuspendLayout();
+            gbPlanPago.SuspendLayout();
             SuspendLayout();
             // 
             // tabAsistente
@@ -520,6 +523,8 @@ namespace Hotel.WindowsForms
             gbPlanPago.Controls.Add(lblPlazoTasaCero);
             gbPlanPago.Controls.Add(rbTasaCero);
             gbPlanPago.Controls.Add(rbContado);
+            gbPlanPago.Controls.Add(cmbMonedaReserva);
+            gbPlanPago.Controls.Add(lblMonedaReserva);
             gbPlanPago.Location = new Point(468, 20);
             gbPlanPago.Name = "gbPlanPago";
             gbPlanPago.Size = new Size(348, 340);
@@ -527,15 +532,39 @@ namespace Hotel.WindowsForms
             gbPlanPago.TabStop = false;
             gbPlanPago.Text = "Modalidad de Pago";
             // 
+            // lblMonedaReserva
+            // 
+            lblMonedaReserva.AutoSize = true;
+            lblMonedaReserva.Font = new Font("Georgia", 9.5F, FontStyle.Bold);
+            lblMonedaReserva.Location = new Point(22, 26);
+            lblMonedaReserva.Name = "lblMonedaReserva";
+            lblMonedaReserva.Size = new Size(64, 16);
+            lblMonedaReserva.TabIndex = 0;
+            lblMonedaReserva.Text = "Moneda:";
+            // 
+            // cmbMonedaReserva
+            // 
+            cmbMonedaReserva.BackColor = Color.FromArgb(250, 242, 226);
+            cmbMonedaReserva.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMonedaReserva.Items.AddRange(new object[]
+            {
+                "Colones (₡ CRC)",
+                "Dólares ($ USD)"
+            });
+            cmbMonedaReserva.Location = new Point(108, 22);
+            cmbMonedaReserva.Name = "cmbMonedaReserva";
+            cmbMonedaReserva.Size = new Size(214, 23);
+            cmbMonedaReserva.TabIndex = 1;
+            // 
             // rbContado
             // 
             rbContado.AutoSize = true;
             rbContado.Checked = true;
             rbContado.Font = new Font("Georgia", 9.5F, FontStyle.Bold);
-            rbContado.Location = new Point(22, 42);
+            rbContado.Location = new Point(22, 58);
             rbContado.Name = "rbContado";
             rbContado.Size = new Size(192, 20);
-            rbContado.TabIndex = 0;
+            rbContado.TabIndex = 2;
             rbContado.TabStop = true;
             rbContado.Text = "Pago de Contado (100%)";
             // 
@@ -543,19 +572,19 @@ namespace Hotel.WindowsForms
             // 
             rbTasaCero.AutoSize = true;
             rbTasaCero.Font = new Font("Georgia", 9.5F, FontStyle.Bold);
-            rbTasaCero.Location = new Point(22, 82);
+            rbTasaCero.Location = new Point(22, 88);
             rbTasaCero.Name = "rbTasaCero";
             rbTasaCero.Size = new Size(235, 20);
-            rbTasaCero.TabIndex = 1;
+            rbTasaCero.TabIndex = 3;
             rbTasaCero.Text = "A Pagos (Tasa Cero - 0% Interés)";
             // 
             // lblPlazoTasaCero
             // 
             lblPlazoTasaCero.AutoSize = true;
-            lblPlazoTasaCero.Location = new Point(22, 130);
+            lblPlazoTasaCero.Location = new Point(22, 122);
             lblPlazoTasaCero.Name = "lblPlazoTasaCero";
             lblPlazoTasaCero.Size = new Size(125, 15);
-            lblPlazoTasaCero.TabIndex = 2;
+            lblPlazoTasaCero.TabIndex = 4;
             lblPlazoTasaCero.Text = "Plazo de Tasa Cero:";
             // 
             // cmbPlazoTasaCero
@@ -569,10 +598,10 @@ namespace Hotel.WindowsForms
                 "6 Meses (Tasa Cero)",
                 "12 Meses (Tasa Cero)"
             });
-            cmbPlazoTasaCero.Location = new Point(22, 154);
+            cmbPlazoTasaCero.Location = new Point(22, 144);
             cmbPlazoTasaCero.Name = "cmbPlazoTasaCero";
-            cmbPlazoTasaCero.Size = new Size(280, 23);
-            cmbPlazoTasaCero.TabIndex = 3;
+            cmbPlazoTasaCero.Size = new Size(300, 23);
+            cmbPlazoTasaCero.TabIndex = 5;
             // 
             // lblDetallePlanPago
             // 
@@ -580,11 +609,11 @@ namespace Hotel.WindowsForms
             lblDetallePlanPago.BorderStyle = BorderStyle.FixedSingle;
             lblDetallePlanPago.Font = new Font("Georgia", 9.5F, FontStyle.Bold);
             lblDetallePlanPago.ForeColor = Color.FromArgb(58, 102, 52);
-            lblDetallePlanPago.Location = new Point(22, 205);
+            lblDetallePlanPago.Location = new Point(22, 182);
             lblDetallePlanPago.Name = "lblDetallePlanPago";
             lblDetallePlanPago.Padding = new Padding(10);
-            lblDetallePlanPago.Size = new Size(300, 105);
-            lblDetallePlanPago.TabIndex = 4;
+            lblDetallePlanPago.Size = new Size(300, 134);
+            lblDetallePlanPago.TabIndex = 6;
             lblDetallePlanPago.Text = "Modalidad seleccionada:\r\nPago de Contado";
             // 
             // label10
@@ -798,6 +827,8 @@ namespace Hotel.WindowsForms
             tabCotizacion.ResumeLayout(false);
             gbCotizacion.ResumeLayout(false);
             gbCotizacion.PerformLayout();
+            gbPlanPago.ResumeLayout(false);
+            gbPlanPago.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -845,6 +876,8 @@ namespace Hotel.WindowsForms
         private TabPage tabCotizacion;
         private GroupBox gbCotizacion;
         private GroupBox gbPlanPago;
+        private Label lblMonedaReserva;
+        private ComboBox cmbMonedaReserva;
         private RadioButton rbContado;
         private RadioButton rbTasaCero;
         private Label lblPlazoTasaCero;

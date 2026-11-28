@@ -62,8 +62,12 @@ namespace Hotel.WindowsForms
             label16 = new Label();
             txtReferencia = new TextBox();
             btnRegistrarPago = new Button();
+            lblMonedaPago = new Label();
+            cmbMonedaPago = new ComboBox();
+            lblTipoCambioPago = new Label();
             btnCheckOut = new Button();
             btnFactura = new Button();
+            cmbMonedaFactura = new ComboBox();
             gbReservacion.SuspendLayout();
             gbCheckIn.SuspendLayout();
             gbCuenta.SuspendLayout();
@@ -446,6 +450,9 @@ namespace Hotel.WindowsForms
             // gbPago
             // 
             gbPago.BackColor = Color.FromArgb(224, 204, 170);
+            gbPago.Controls.Add(lblTipoCambioPago);
+            gbPago.Controls.Add(cmbMonedaPago);
+            gbPago.Controls.Add(lblMonedaPago);
             gbPago.Controls.Add(btnRegistrarPago);
             gbPago.Controls.Add(txtReferencia);
             gbPago.Controls.Add(label16);
@@ -529,6 +536,35 @@ namespace Hotel.WindowsForms
             btnRegistrarPago.Text = "Registrar Pago";
             btnRegistrarPago.UseVisualStyleBackColor = false;
             // 
+            // lblMonedaPago
+            // 
+            lblMonedaPago.AutoSize = true;
+            lblMonedaPago.Location = new Point(166, 114);
+            lblMonedaPago.Name = "lblMonedaPago";
+            lblMonedaPago.Size = new Size(56, 15);
+            lblMonedaPago.TabIndex = 7;
+            lblMonedaPago.Text = "Moneda:";
+            // 
+            // cmbMonedaPago
+            // 
+            cmbMonedaPago.BackColor = Color.FromArgb(250, 242, 226);
+            cmbMonedaPago.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMonedaPago.Items.AddRange(new object[] { "CRC (₡)", "USD ($)" });
+            cmbMonedaPago.Location = new Point(226, 110);
+            cmbMonedaPago.Name = "cmbMonedaPago";
+            cmbMonedaPago.Size = new Size(112, 23);
+            cmbMonedaPago.TabIndex = 8;
+            // 
+            // lblTipoCambioPago
+            // 
+            lblTipoCambioPago.AutoSize = true;
+            lblTipoCambioPago.Font = new Font("Georgia", 8.25F, FontStyle.Italic);
+            lblTipoCambioPago.Location = new Point(346, 115);
+            lblTipoCambioPago.Name = "lblTipoCambioPago";
+            lblTipoCambioPago.Size = new Size(64, 14);
+            lblTipoCambioPago.TabIndex = 9;
+            lblTipoCambioPago.Text = "TC: ₡515";
+            // 
             // btnCheckOut
             // 
             btnCheckOut.BackColor = Color.FromArgb(138, 44, 36);
@@ -555,12 +591,23 @@ namespace Hotel.WindowsForms
             btnFactura.Text = "Emitir Factura";
             btnFactura.UseVisualStyleBackColor = false;
             // 
+            // cmbMonedaFactura
+            // 
+            cmbMonedaFactura.BackColor = Color.FromArgb(250, 242, 226);
+            cmbMonedaFactura.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbMonedaFactura.Items.AddRange(new object[] { "CRC (₡)", "USD ($)" });
+            cmbMonedaFactura.Location = new Point(790, 488);
+            cmbMonedaFactura.Name = "cmbMonedaFactura";
+            cmbMonedaFactura.Size = new Size(110, 23);
+            cmbMonedaFactura.TabIndex = 9;
+            // 
             // FrmCheckInOut
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(236, 220, 192);
             ClientSize = new Size(920, 536);
+            Controls.Add(cmbMonedaFactura);
             Controls.Add(cmbPendientesCheckIn);
             Controls.Add(lblPendientes);
             Controls.Add(btnFactura);
@@ -638,7 +685,11 @@ namespace Hotel.WindowsForms
         private Label label16;
         private TextBox txtReferencia;
         private Button btnRegistrarPago;
+        private Label lblMonedaPago;
+        private ComboBox cmbMonedaPago;
+        private Label lblTipoCambioPago;
         private Button btnCheckOut;
         private Button btnFactura;
+        private ComboBox cmbMonedaFactura;
     }
 }

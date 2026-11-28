@@ -1,4 +1,5 @@
 using Hotel.Dominio.DTOs;
+using Hotel.Dominio.Enums;
 using Hotel.Dominio.ValueObjects;
 
 namespace Hotel.Dominio.Reglas;
@@ -15,7 +16,7 @@ public static class CalculadoraCosto
     public const decimal DescuentoClienteFrecuente = 0.05m;
     public const decimal RecargoRoomService = 0.10m;
 
-    public static CotizacionDto Calcular(RangoFechas rango, decimal tarifaBase, int huespedes, bool clienteFrecuente)
+    public static CotizacionDto Calcular(RangoFechas rango, decimal tarifaBase, int huespedes, bool clienteFrecuente, Moneda moneda = Moneda.CRC)
     {
         decimal hospedaje = 0;
         foreach (var dia in rango.Dias())
@@ -28,18 +29,31 @@ public static class CalculadoraCosto
         decimal subtotal = Math.Round(hospedaje + recargo - descuento, 2);
         decimal iva = Math.Round(subtotal * Iva, 2);
         decimal total = subtotal + iva;
+        decimal hospedajeRedondeado = Math.Round(hospedaje, 2);
+        decimal anticipo = Math.Round(total * PorcentajeAnticipo, 2);
+        decimal tc = ConversorMoneda.TipoCambioUsdDefecto;
 
         return new CotizacionDto
         {
             Noches = rango.Noches,
             TarifaBase = tarifaBase,
-            Hospedaje = Math.Round(hospedaje, 2),
+            Hospedaje = hospedajeRedondeado,
             RecargoPersonasExtra = recargo,
             Descuento = descuento,
             Subtotal = subtotal,
             Iva = iva,
             Total = total,
-            AnticipoMinimo = Math.Round(total * PorcentajeAnticipo, 2)
+            AnticipoMinimo = anticipo,
+            Moneda = moneda,
+            TipoCambioUsd = tc,
+            TarifaBaseUsd = ConversorMoneda.ColonesADolares(tarifaBase, tc),
+            HospedajeUsd = ConversorMoneda.ColonesADolares(hospedajeRedondeado, tc),
+            RecargoPersonasExtraUsd = ConversorMoneda.ColonesADolares(recargo, tc),
+            DescuentoUsd = ConversorMoneda.ColonesADolares(descuento, tc),
+            SubtotalUsd = ConversorMoneda.ColonesADolares(subtotal, tc),
+            IvaUsd = ConversorMoneda.ColonesADolares(iva, tc),
+            TotalUsd = ConversorMoneda.ColonesADolares(total, tc),
+            AnticipoMinimoUsd = ConversorMoneda.ColonesADolares(anticipo, tc)
         };
     }
 

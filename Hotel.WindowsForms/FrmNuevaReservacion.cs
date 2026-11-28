@@ -14,6 +14,7 @@ namespace Hotel.WindowsForms
         private Cliente? _clienteActual;
         private bool _sincronizando;
         private decimal _ultimoTotalCotizado;
+        private CotizacionDto? _ultimaCotizacion;
 
         private sealed record InfoTarifaTipo(
             string Nombre,
@@ -68,9 +69,16 @@ namespace Hotel.WindowsForms
             calFechas.SelectionStart = DateTime.Today.AddDays(1);
             calFechas.SelectionEnd = DateTime.Today.AddDays(3);
             cmbTipoDocumento.SelectedIndex = 0;
+            cmbMonedaReserva.SelectedIndex = 0;
             if (cmbPlazoTasaCero.Items.Count > 0)
                 cmbPlazoTasaCero.SelectedIndex = 0;
 
+            cmbMonedaReserva.SelectedIndexChanged += (s, e) =>
+            {
+                if (_sincronizando) return;
+                ActualizarResumenPreciosYDescripcion(ObtenerTipoSeleccionadoActual());
+                RenderizarCotizacion();
+            };
             rbContado.CheckedChanged += (s, e) => ActualizarTextoPlanPago();
             rbTasaCero.CheckedChanged += (s, e) =>
             {
@@ -206,6 +214,16 @@ namespace Hotel.WindowsForms
             ActualizarResumenPreciosYDescripcion(info.Nombre);
         }
 
+        private Moneda MonedaSeleccionada()
+            => cmbMonedaReserva.SelectedIndex == 1 ? Moneda.USD : Moneda.CRC;
+
+        private string FormatearSegunMoneda(decimal montoCrc)
+        {
+            var moneda = MonedaSeleccionada();
+            decimal convertido = ConversorMoneda.ConvertirDesdeColones(montoCrc, moneda);
+            return ConversorMoneda.Formatear(convertido, moneda);
+        }
+
         private void ActualizarResumenPreciosYDescripcion(string? nombreTipo)
         {
             var info = BuscarInfoTarifa(nombreTipo);
@@ -216,7 +234,9 @@ namespace Hotel.WindowsForms
 
             decimal totalAdultos = adultos * info.PrecioAdulto;
             decimal totalNinos = ninos * info.PrecioNino;
-            lblPreciosInfo.Text = $"Adulto: ₡{info.PrecioAdulto:N2} (₡{totalAdultos:N2}) | Niño: ₡{info.PrecioNino:N2} (₡{totalNinos:N2})";
+            lblPreciosInfo.Text = MonedaSeleccionada() == Moneda.USD
+                ? $"Adulto: ${ConversorMoneda.ColonesADolares(info.PrecioAdulto):N2} (${ConversorMoneda.ColonesADolares(totalAdultos):N2}) | Niño: ${ConversorMoneda.ColonesADolares(info.PrecioNino):N2} (TC ₡{ConversorMoneda.TipoCambioUsdDefecto:N0})"
+                : $"Adulto: ₡{info.PrecioAdulto:N2} (₡{totalAdultos:N2}) | Niño: ₡{info.PrecioNino:N2} (₡{totalNinos:N2})";
 
             var tipoEntidad = _tipos.FirstOrDefault(t => t.Nombre.Equals(info.Nombre, StringComparison.OrdinalIgnoreCase));
             txtDescripcionHabitacion.Text = !string.IsNullOrWhiteSpace(tipoEntidad?.Descripcion)
@@ -455,7 +475,8 @@ namespace Hotel.WindowsForms
                     ClienteId = _clienteActual?.Id,
                     FechaInicio = entrada,
                     FechaFin = salida,
-                    CantidadHuespedes = huespedes
+                    CantidadHuespedes = huespedes,
+                    Moneda = MonedaSeleccionada()
                 });
             }
             catch
@@ -465,17 +486,27 @@ namespace Hotel.WindowsForms
             if (TemaAdminRustico.EstaCerradoODispuesto(this, lblNoches, lblTotal, lblDetallePlanPago))
                 return;
 
-            cot ??= CalculadoraCosto.Calcular(new RangoFechas(entrada, salida), tarifaSegunPersonas, huespedes, false);
-            _ultimoTotalCotizado = cot.Total;
+            _ultimaCotizacion = cot ?? CalculadoraCosto.Calcular(new RangoFechas(entrada, salida), tarifaSegunPersonas, huespedes, false, MonedaSeleccionada());
+            _ultimoTotalCotizado = _ultimaCotizacion.Total;
+            RenderizarCotizacion();
+        }
 
-            lblNoches.Text = cot.Noches.ToString();
-            lblTarifaBase.Text = $"₡{cot.TarifaBase:N2}";
-            lblRecargo.Text = $"₡{cot.RecargoPersonasExtra:N2}";
-            lblDescuento.Text = $"₡{cot.Descuento:N2}";
-            lblSubtotal.Text = $"₡{cot.Subtotal:N2}";
-            lblIva.Text = $"₡{cot.Iva:N2}";
-            lblTotal.Text = $"₡{cot.Total:N2}";
-            lblAnticipo.Text = $"₡{cot.AnticipoMinimo:N2}";
+        private void RenderizarCotizacion()
+        {
+            if (_ultimaCotizacion == null)
+            {
+                ActualizarTextoPlanPago();
+                return;
+            }
+
+            lblNoches.Text = _ultimaCotizacion.Noches.ToString();
+            lblTarifaBase.Text = FormatearSegunMoneda(_ultimaCotizacion.TarifaBase);
+            lblRecargo.Text = FormatearSegunMoneda(_ultimaCotizacion.RecargoPersonasExtra);
+            lblDescuento.Text = FormatearSegunMoneda(_ultimaCotizacion.Descuento);
+            lblSubtotal.Text = FormatearSegunMoneda(_ultimaCotizacion.Subtotal);
+            lblIva.Text = FormatearSegunMoneda(_ultimaCotizacion.Iva);
+            lblTotal.Text = FormatearSegunMoneda(_ultimaCotizacion.Total);
+            lblAnticipo.Text = FormatearSegunMoneda(_ultimaCotizacion.AnticipoMinimo);
 
             ActualizarTextoPlanPago();
         }
@@ -490,31 +521,43 @@ namespace Hotel.WindowsForms
 
         private string ObtenerResumenPlanPago()
         {
+            var moneda = MonedaSeleccionada();
+            decimal totalMostrar = ConversorMoneda.ConvertirDesdeColones(_ultimoTotalCotizado, moneda);
+            string simbolo = ConversorMoneda.Simbolo(moneda);
+
             if (rbContado.Checked)
-                return $"Pago de Contado (₡{_ultimoTotalCotizado:N2})";
+                return $"Pago de Contado ({simbolo}{totalMostrar:N2} {moneda})";
 
             int meses = ObtenerMesesTasaCero();
-            decimal cuota = meses > 0 ? Math.Round(_ultimoTotalCotizado / meses, 2) : _ultimoTotalCotizado;
-            return $"Tasa Cero a {meses} meses (₡{cuota:N2} / mes)";
+            decimal cuota = meses > 0 ? Math.Round(totalMostrar / meses, 2) : totalMostrar;
+            return $"Tasa Cero a {meses} meses ({simbolo}{cuota:N2} {moneda} / mes)";
         }
 
         private void ActualizarTextoPlanPago()
         {
+            var moneda = MonedaSeleccionada();
+            var monedaAlterna = moneda == Moneda.USD ? Moneda.CRC : Moneda.USD;
+            decimal totalMostrar = ConversorMoneda.ConvertirDesdeColones(_ultimoTotalCotizado, moneda);
+            decimal equiv = ConversorMoneda.ConvertirDesdeColones(_ultimoTotalCotizado, monedaAlterna);
+            string simbolo = ConversorMoneda.Simbolo(moneda);
+            string equivTexto = $"{ConversorMoneda.Formatear(equiv, monedaAlterna)} {monedaAlterna} (TC ₡{ConversorMoneda.TipoCambioUsdDefecto:N2})";
+
             if (rbContado.Checked)
             {
                 lblDetallePlanPago.Text =
                     $"Modalidad: Pago de Contado (100%)\r\n" +
-                    $"Total a cancelar: ₡{_ultimoTotalCotizado:N2}\r\n" +
-                    $"Sin cargos ni intereses.";
+                    $"Total a cancelar: {simbolo}{totalMostrar:N2} ({moneda})\r\n" +
+                    $"Equivalente: {equivTexto}";
             }
             else
             {
                 int meses = ObtenerMesesTasaCero();
-                decimal cuota = meses > 0 ? Math.Round(_ultimoTotalCotizado / meses, 2) : _ultimoTotalCotizado;
+                decimal cuota = meses > 0 ? Math.Round(totalMostrar / meses, 2) : totalMostrar;
                 lblDetallePlanPago.Text =
                     $"Modalidad: Tasa Cero ({meses} Meses)\r\n" +
-                    $"Cuota mensual: ₡{cuota:N2} / mes\r\n" +
-                    $"Total: ₡{_ultimoTotalCotizado:N2} (0% interés)";
+                    $"Cuota mensual: {simbolo}{cuota:N2} / mes\r\n" +
+                    $"Total: {simbolo}{totalMostrar:N2} ({moneda})\r\n" +
+                    $"Equivalente: {equivTexto}";
             }
         }
 
@@ -554,10 +597,12 @@ namespace Hotel.WindowsForms
             await ActualizarCotizacionAsync();
             if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
 
+            var monedaElegida = MonedaSeleccionada();
             string planPago = ObtenerResumenPlanPago();
             string obsFinal = string.IsNullOrWhiteSpace(txtObservaciones.Text)
                 ? $"Modalidad: {planPago}"
                 : $"{txtObservaciones.Text.Trim()} | Modalidad: {planPago}";
+            string obsConMoneda = ConversorMoneda.AdjuntarEtiquetaMoneda(obsFinal, monedaElegida);
 
             try
             {
@@ -582,7 +627,8 @@ namespace Hotel.WindowsForms
                     FechaInicio = entrada,
                     FechaFin = salida,
                     CantidadHuespedes = ObtenerCantidadHuespedes(),
-                    Observaciones = obsFinal
+                    Observaciones = obsFinal,
+                    Moneda = monedaElegida
                 });
 
                 if (creada != null)
@@ -596,7 +642,7 @@ namespace Hotel.WindowsForms
                 if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
 
                 MessageBox.Show(
-                    $"Reservación registrada con código {creada?.Codigo}.\nTotal: {lblTotal.Text} | {planPago}",
+                    $"Reservación registrada con código {creada?.Codigo}.\nTotal: {lblTotal.Text} ({monedaElegida}) | {planPago}",
                     "Reservación creada",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
@@ -610,7 +656,7 @@ namespace Hotel.WindowsForms
                 int huespedes = Math.Max(1, adultos + ninos);
                 var info = BuscarInfoTarifa(hab.Tipo);
                 decimal tarifaSegunPersonas = (adultos * info.PrecioAdulto) + (ninos * info.PrecioNino);
-                var cot = CalculadoraCosto.Calcular(new RangoFechas(entrada, salida), tarifaSegunPersonas, huespedes, false);
+                var cot = CalculadoraCosto.Calcular(new RangoFechas(entrada, salida), tarifaSegunPersonas, huespedes, false, monedaElegida);
 
                 Enum.TryParse<TipoDocumento>(cmbTipoDocumento.SelectedItem?.ToString(), out var tipoDoc);
                 var nuevoCliente = new Cliente
@@ -635,7 +681,7 @@ namespace Hotel.WindowsForms
                     Estado = EstadoReservacion.Confirmada,
                     CostoTotal = cot.Total,
                     CantidadHuespedes = huespedes,
-                    Observaciones = obsFinal,
+                    Observaciones = obsConMoneda,
                     Cliente = nuevoCliente,
                     Habitacion = new Habitacion { Id = hab.Id, Numero = hab.Numero, Piso = hab.Piso }
                 });
@@ -645,7 +691,7 @@ namespace Hotel.WindowsForms
                     habLocal.EstadoOperativo = EstadoHabitacion.Reservada;
 
                 MessageBox.Show(
-                    $"Reservación registrada exitosamente con código {codigoLocal}.\nHabitación {hab.Numero} | Total: {lblTotal.Text}\n{planPago}",
+                    $"Reservación registrada exitosamente con código {codigoLocal}.\nHabitación {hab.Numero} | Total: {lblTotal.Text} ({monedaElegida})\n{planPago}",
                     "Reservación registrada",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information);

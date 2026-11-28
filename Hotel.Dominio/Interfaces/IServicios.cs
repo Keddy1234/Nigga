@@ -48,6 +48,7 @@ public interface IReservacionServicio
     Task CheckInAsync(int id, CheckInDto dto);
     Task<EstadoCuentaDto> CheckOutAsync(int id);
     Task<EstadoCuentaDto> EstadoCuentaAsync(int id);
+    Task<FacturaDto> GenerarFacturaAsync(int id, Moneda? monedaFacturacion = null);
 }
 
 public interface IPagoServicio

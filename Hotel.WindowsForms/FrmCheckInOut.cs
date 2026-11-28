@@ -2,6 +2,7 @@ using System.Text;
 using Hotel.Dominio.DTOs;
 using Hotel.Dominio.Entidades;
 using Hotel.Dominio.Enums;
+using Hotel.Dominio.Reglas;
 using Hotel.WindowsForms.Servicios;
 
 namespace Hotel.WindowsForms
@@ -12,6 +13,7 @@ namespace Hotel.WindowsForms
         private EstadoCuentaDto? _cuenta;
         private List<Reservacion> _listaPendientes = new();
         private bool _cargandoCombo;
+        private bool _sincronizandoMoneda;
 
         private sealed class OpcionReservaCheckIn
         {
@@ -33,6 +35,8 @@ namespace Hotel.WindowsForms
         private void ConfigurarEventos()
         {
             cmbMetodoPago.SelectedIndex = 0;
+            cmbMonedaPago.SelectedIndex = 0;
+            cmbMonedaFactura.SelectedIndex = 0;
 
             RestringirSoloNumeros(txtBuscar, 10);
             RestringirSoloNumeros(txtLlave, 8);
@@ -44,11 +48,22 @@ namespace Hotel.WindowsForms
                 SeleccionarDesdeComboPendientes();
             };
 
+            cmbMonedaPago.SelectedIndexChanged += (s, e) =>
+            {
+                if (_sincronizandoMoneda) return;
+                ActualizarMontoPagoSegunMoneda();
+            };
+            cmbMonedaFactura.SelectedIndexChanged += (s, e) =>
+            {
+                if (_sincronizandoMoneda) return;
+                MostrarEnPantalla();
+            };
+
             btnBuscar.Click += async (s, e) => await BuscarReservacionAsync();
             btnCheckIn.Click += async (s, e) => await RealizarCheckInAsync();
             btnRegistrarPago.Click += async (s, e) => await RegistrarPagoAsync();
             btnCheckOut.Click += async (s, e) => await RealizarCheckOutAsync();
-            btnFactura.Click += (s, e) => EmitirFactura();
+            btnFactura.Click += async (s, e) => await EmitirFacturaAsync();
         }
 
         private static void RestringirSoloNumeros(TextBox caja, int maxDigitos)
@@ -112,6 +127,32 @@ namespace Hotel.WindowsForms
                 SeleccionarDesdeComboPendientes();
         }
 
+        private Moneda MonedaPagoSeleccionada()
+            => cmbMonedaPago.SelectedIndex == 1 ? Moneda.USD : Moneda.CRC;
+
+        private Moneda MonedaFacturaSeleccionada()
+            => cmbMonedaFactura.SelectedIndex == 1 ? Moneda.USD : Moneda.CRC;
+
+        private void SincronizarMonedaDesdeObservaciones(string? observaciones)
+        {
+            var moneda = ConversorMoneda.DetectarMonedaDesdeObservaciones(observaciones);
+            _sincronizandoMoneda = true;
+            cmbMonedaFactura.SelectedIndex = moneda == Moneda.USD ? 1 : 0;
+            cmbMonedaPago.SelectedIndex = moneda == Moneda.USD ? 1 : 0;
+            _sincronizandoMoneda = false;
+        }
+
+        private void ActualizarMontoPagoSegunMoneda()
+        {
+            if (_reservacion == null) return;
+            decimal hospedaje = _cuenta?.Hospedaje ?? _reservacion.CostoTotal;
+            decimal consumos = _cuenta?.Consumos ?? 0m;
+            decimal pagado = _cuenta?.Pagado ?? 0m;
+            decimal saldoCrc = Math.Max(0, hospedaje + consumos - pagado);
+            decimal valor = ConversorMoneda.ConvertirDesdeColones(saldoCrc, MonedaPagoSeleccionada());
+            nudMontoPago.Value = Math.Clamp(valor, nudMontoPago.Minimum, nudMontoPago.Maximum);
+        }
+
         private void SeleccionarDesdeComboPendientes()
         {
             if (cmbPendientesCheckIn.SelectedValue is not int idSel) return;
@@ -123,6 +164,7 @@ namespace Hotel.WindowsForms
                 txtBuscar.Text = res.Cliente.NumeroDocumento;
 
             InicializarCuentaSegunModalidad(res);
+            SincronizarMonedaDesdeObservaciones(res.Observaciones);
             MostrarEnPantalla();
         }
 
@@ -197,6 +239,7 @@ namespace Hotel.WindowsForms
             };
 
             InicializarCuentaSegunModalidad(_reservacion);
+            SincronizarMonedaDesdeObservaciones(_reservacion.Observaciones);
             MostrarEnPantalla();
         }
 
@@ -214,6 +257,7 @@ namespace Hotel.WindowsForms
 
             if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvConsumos)) return;
 
+            SincronizarMonedaDesdeObservaciones(_reservacion?.Observaciones);
             MostrarEnPantalla();
         }
 
@@ -232,25 +276,38 @@ namespace Hotel.WindowsForms
             lblSalida.Text = _reservacion.FechaFin.ToString("dd/MM/yyyy");
             lblEstado.Text = _reservacion.Estado.ToString();
 
-            decimal hospedaje = _cuenta?.Hospedaje ?? _reservacion.CostoTotal;
-            decimal consumos = _cuenta?.Consumos ?? 0m;
-            decimal pagado = _cuenta?.Pagado ?? 0m;
-            decimal saldo = Math.Max(0, hospedaje + consumos - pagado);
+            var moneda = MonedaFacturaSeleccionada();
+            var monedaAlterna = moneda == Moneda.USD ? Moneda.CRC : Moneda.USD;
 
-            lblHospedaje.Text = $"₡{hospedaje:N2}";
-            lblConsumos.Text = $"₡{consumos:N2}";
-            lblPagado.Text = $"₡{pagado:N2}";
-            lblSaldo.Text = $"₡{saldo:N2}";
-            nudMontoPago.Value = Math.Clamp(saldo, nudMontoPago.Minimum, nudMontoPago.Maximum);
+            decimal hospedajeCrc = _cuenta?.Hospedaje ?? _reservacion.CostoTotal;
+            decimal consumosCrc = _cuenta?.Consumos ?? 0m;
+            decimal pagadoCrc = _cuenta?.Pagado ?? 0m;
+            decimal saldoCrc = Math.Max(0, hospedajeCrc + consumosCrc - pagadoCrc);
+
+            decimal hospMostrar = ConversorMoneda.ConvertirDesdeColones(hospedajeCrc, moneda);
+            decimal consMostrar = ConversorMoneda.ConvertirDesdeColones(consumosCrc, moneda);
+            decimal pagMostrar = ConversorMoneda.ConvertirDesdeColones(pagadoCrc, moneda);
+            decimal salMostrar = ConversorMoneda.ConvertirDesdeColones(saldoCrc, moneda);
+
+            lblHospedaje.Text = ConversorMoneda.Formatear(hospMostrar, moneda);
+            lblConsumos.Text = ConversorMoneda.Formatear(consMostrar, moneda);
+            lblPagado.Text = ConversorMoneda.Formatear(pagMostrar, moneda);
+            lblSaldo.Text = ConversorMoneda.Formatear(salMostrar, moneda);
+
+            ActualizarMontoPagoSegunMoneda();
 
             dgvConsumos.Rows.Clear();
-            dgvConsumos.Rows.Add(_reservacion.FechaInicio.ToString("dd/MM/yyyy"), $"Hospedaje ({_reservacion.Codigo})", $"₡{hospedaje:N2}");
+            dgvConsumos.Rows.Add(_reservacion.FechaInicio.ToString("dd/MM/yyyy"), $"Hospedaje ({_reservacion.Codigo})", ConversorMoneda.Formatear(hospMostrar, moneda));
             if (!string.IsNullOrWhiteSpace(_reservacion.Observaciones))
                 dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), _reservacion.Observaciones, "Plan elegido");
-            if (consumos > 0)
-                dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), "Consumos de restaurante", $"₡{consumos:N2}");
-            if (pagado > 0)
-                dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), "Pagos abonados", $"-₡{pagado:N2}");
+            if (consumosCrc > 0)
+                dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), "Consumos de restaurante", ConversorMoneda.Formatear(consMostrar, moneda));
+            if (pagadoCrc > 0)
+                dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), "Pagos abonados", $"-{ConversorMoneda.Formatear(pagMostrar, moneda)}");
+
+            decimal totalEquiv = ConversorMoneda.ConvertirDesdeColones(hospedajeCrc + consumosCrc, monedaAlterna);
+            string labelEquiv = monedaAlterna == Moneda.USD ? "Equivalente Total USD (TC ₡515)" : "Equivalente Total CRC (TC ₡515)";
+            dgvConsumos.Rows.Add(DateTime.Today.ToString("dd/MM/yyyy"), labelEquiv, ConversorMoneda.Formatear(totalEquiv, monedaAlterna));
         }
 
         private async Task RealizarCheckInAsync()
@@ -308,6 +365,7 @@ namespace Hotel.WindowsForms
                 return;
             }
 
+            var monedaPago = MonedaPagoSeleccionada();
             try
             {
                 await ApiClient.PostAsync("api/pagos", new RegistrarPagoDto
@@ -315,14 +373,15 @@ namespace Hotel.WindowsForms
                     ReservacionId = _reservacion.Id,
                     Monto = monto,
                     MetodoPago = metodo,
-                    ReferenciaTransaccion = txtReferencia.Text.Trim()
+                    ReferenciaTransaccion = txtReferencia.Text.Trim(),
+                    Moneda = monedaPago
                 });
                 await RefrescarVistaAsync();
             }
             catch
             {
                 _cuenta ??= new EstadoCuentaDto { ReservacionId = _reservacion.Id, Codigo = _reservacion.Codigo, Hospedaje = _reservacion.CostoTotal };
-                _cuenta.Pagado += monto;
+                _cuenta.Pagado += ConversorMoneda.ConvertirAColones(monto, monedaPago);
                 if (_reservacion.Estado == EstadoReservacion.PendientePago)
                     _reservacion.Estado = EstadoReservacion.Confirmada;
                 MostrarEnPantalla();
@@ -365,7 +424,73 @@ namespace Hotel.WindowsForms
             }
         }
 
-        private void EmitirFactura()
+        private FacturaDto ConstruirFacturaLocal(Moneda destino)
+        {
+            decimal tc = ConversorMoneda.TipoCambioUsdDefecto;
+            var monedaReserva = ConversorMoneda.DetectarMonedaDesdeObservaciones(_reservacion!.Observaciones);
+
+            decimal hospCrc = Math.Round(_cuenta?.Hospedaje ?? _reservacion.CostoTotal, 2, MidpointRounding.AwayFromZero);
+            decimal subCrc = Math.Round(hospCrc / (1m + CalculadoraCosto.Iva), 2, MidpointRounding.AwayFromZero);
+            decimal ivaCrc = Math.Round(hospCrc - subCrc, 2, MidpointRounding.AwayFromZero);
+            decimal consCrc = Math.Round(_cuenta?.Consumos ?? 0m, 2, MidpointRounding.AwayFromZero);
+            decimal totCrc = Math.Round(hospCrc + consCrc, 2, MidpointRounding.AwayFromZero);
+            decimal pagCrc = Math.Round(_cuenta?.Pagado ?? 0m, 2, MidpointRounding.AwayFromZero);
+            decimal salCrc = Math.Max(0m, Math.Round(totCrc - pagCrc, 2, MidpointRounding.AwayFromZero));
+
+            decimal hospUsd = ConversorMoneda.ColonesADolares(hospCrc, tc);
+            decimal subUsd = Math.Round(hospUsd / (1m + CalculadoraCosto.Iva), 2, MidpointRounding.AwayFromZero);
+            decimal ivaUsd = Math.Round(hospUsd - subUsd, 2, MidpointRounding.AwayFromZero);
+            decimal consUsd = ConversorMoneda.ColonesADolares(consCrc, tc);
+            decimal totUsd = Math.Round(hospUsd + consUsd, 2, MidpointRounding.AwayFromZero);
+            decimal pagUsd = ConversorMoneda.ColonesADolares(pagCrc, tc);
+            decimal salUsd = Math.Max(0m, ConversorMoneda.ColonesADolares(salCrc, tc));
+            bool enUsd = destino == Moneda.USD;
+
+            return new FacturaDto
+            {
+                NumeroFactura = $"FAC-{_reservacion.Codigo}",
+                FechaEmision = DateTime.Now,
+                ReservacionId = _reservacion.Id,
+                CodigoReservacion = _reservacion.Codigo,
+                ClienteNombre = lblCliente.Text,
+                ClienteDocumento = _reservacion.Cliente?.NumeroDocumento ?? "",
+                ClienteEmail = _reservacion.Cliente?.Email,
+                Habitacion = lblHabitacion.Text,
+                FechaInicio = _reservacion.FechaInicio,
+                FechaFin = _reservacion.FechaFin,
+                CantidadHuespedes = _reservacion.CantidadHuespedes,
+                Estado = lblEstado.Text,
+                Observaciones = _reservacion.Observaciones,
+                MonedaReserva = monedaReserva,
+                MonedaFacturacion = destino,
+                SimboloMoneda = ConversorMoneda.Simbolo(destino),
+                TipoCambioUsd = tc,
+                ConversionAplicada = destino != Moneda.CRC || monedaReserva != Moneda.CRC,
+                SubtotalHospedajeFacturado = enUsd ? subUsd : subCrc,
+                IvaHospedajeFacturado = enUsd ? ivaUsd : ivaCrc,
+                HospedajeFacturado = enUsd ? hospUsd : hospCrc,
+                ConsumosFacturados = enUsd ? consUsd : consCrc,
+                TotalFacturado = enUsd ? totUsd : totCrc,
+                PagadoFacturado = enUsd ? pagUsd : pagCrc,
+                SaldoFacturado = enUsd ? salUsd : salCrc,
+                SubtotalHospedajeCrc = subCrc,
+                IvaHospedajeCrc = ivaCrc,
+                HospedajeCrc = hospCrc,
+                ConsumosCrc = consCrc,
+                TotalGeneralCrc = totCrc,
+                PagadoCrc = pagCrc,
+                SaldoCrc = salCrc,
+                SubtotalHospedajeUsd = subUsd,
+                IvaHospedajeUsd = ivaUsd,
+                HospedajeUsd = hospUsd,
+                ConsumosUsd = consUsd,
+                TotalGeneralUsd = totUsd,
+                PagadoUsd = pagUsd,
+                SaldoUsd = salUsd
+            };
+        }
+
+        private async Task EmitirFacturaAsync()
         {
             if (_reservacion == null)
             {
@@ -373,32 +498,59 @@ namespace Hotel.WindowsForms
                 return;
             }
 
+            var monedaFactura = MonedaFacturaSeleccionada();
+            FacturaDto? factura = null;
+            try
+            {
+                factura = await ApiClient.GetAsync<FacturaDto>($"api/reservaciones/{_reservacion.Id}/factura?moneda={monedaFactura}");
+            }
+            catch
+            {
+            }
+
+            if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
+            factura ??= ConstruirFacturaLocal(monedaFactura);
+
             using var sfd = new SaveFileDialog
             {
                 Filter = "Archivo de texto (*.txt)|*.txt",
-                FileName = $"Factura_{_reservacion.Codigo}.txt"
+                FileName = $"Factura_{_reservacion.Codigo}_{monedaFactura}.txt"
             };
             if (sfd.ShowDialog(this) != DialogResult.OK) return;
 
+            string sim = factura.SimboloMoneda;
             var sb = new StringBuilder();
-            sb.AppendLine("============================================");
-            sb.AppendLine("         POSADA DEL ROBLE - FACTURA         ");
-            sb.AppendLine("============================================");
-            sb.AppendLine($"Reservación : {lblCodigo.Text}");
-            sb.AppendLine($"Huésped     : {lblCliente.Text}");
-            sb.AppendLine($"Habitación  : {lblHabitacion.Text}");
-            sb.AppendLine($"Estadía     : {lblEntrada.Text} al {lblSalida.Text}");
-            if (!string.IsNullOrWhiteSpace(_reservacion.Observaciones))
-                sb.AppendLine($"Plan Pago   : {_reservacion.Observaciones}");
-            sb.AppendLine("--------------------------------------------");
-            sb.AppendLine($"Hospedaje   : {lblHospedaje.Text}");
-            sb.AppendLine($"Consumos    : {lblConsumos.Text}");
-            sb.AppendLine($"Total Pagado: {lblPagado.Text}");
-            sb.AppendLine($"Saldo       : {lblSaldo.Text}");
-            sb.AppendLine("============================================");
+            sb.AppendLine("==========================================================");
+            sb.AppendLine("              POSADA DEL ROBLE - FACTURA                  ");
+            sb.AppendLine("==========================================================");
+            sb.AppendLine($"No. Factura       : {factura.NumeroFactura}");
+            sb.AppendLine($"Fecha Emisión     : {factura.FechaEmision:dd/MM/yyyy HH:mm}");
+            sb.AppendLine($"Reservación       : {factura.CodigoReservacion}");
+            sb.AppendLine($"Huésped           : {factura.ClienteNombre}");
+            sb.AppendLine($"Habitación        : {factura.Habitacion}");
+            sb.AppendLine($"Estadía           : {factura.FechaInicio:dd/MM/yyyy} al {factura.FechaFin:dd/MM/yyyy}");
+            sb.AppendLine($"Moneda Reserva    : {factura.MonedaReserva}");
+            sb.AppendLine($"Moneda Factura    : {factura.MonedaFacturacion} ({sim})");
+            sb.AppendLine($"Tipo de Cambio    : 1 USD = ₡{factura.TipoCambioUsd:N2} CRC");
+            if (!string.IsNullOrWhiteSpace(factura.Observaciones))
+                sb.AppendLine($"Plan / Notas      : {factura.Observaciones}");
+            sb.AppendLine("----------------------------------------------------------");
+            sb.AppendLine($"DESGLOSE EN MONEDA FACTURADA ({factura.MonedaFacturacion}):");
+            sb.AppendLine($"  Subtotal Hospedaje : {sim}{factura.SubtotalHospedajeFacturado:N2}");
+            sb.AppendLine($"  IVA (16%)          : {sim}{factura.IvaHospedajeFacturado:N2}");
+            sb.AppendLine($"  Total Hospedaje    : {sim}{factura.HospedajeFacturado:N2}");
+            sb.AppendLine($"  Consumos           : {sim}{factura.ConsumosFacturados:N2}");
+            sb.AppendLine($"  TOTAL GENERAL      : {sim}{factura.TotalFacturado:N2}");
+            sb.AppendLine($"  Total Pagado       : {sim}{factura.PagadoFacturado:N2}");
+            sb.AppendLine($"  Saldo Pendiente    : {sim}{factura.SaldoFacturado:N2}");
+            sb.AppendLine("----------------------------------------------------------");
+            sb.AppendLine("CONVERSIÓN REFERENCIAL DE FACTURACIÓN:");
+            sb.AppendLine($"  En Colones (CRC)   : Total ₡{factura.TotalGeneralCrc:N2} | Saldo ₡{factura.SaldoCrc:N2}");
+            sb.AppendLine($"  En Dólares (USD)   : Total ${factura.TotalGeneralUsd:N2} | Saldo ${factura.SaldoUsd:N2}");
+            sb.AppendLine("==========================================================");
 
             File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
-            MessageBox.Show($"Factura guardada en:\n{sfd.FileName}", "Factura emitida", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Factura emitida en {factura.MonedaFacturacion} con conversión CRC ↔ USD y guardada en:\n{sfd.FileName}", "Factura emitida", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

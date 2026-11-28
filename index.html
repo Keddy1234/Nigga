@@ -226,6 +226,33 @@
       background-color: var(--vino);
     }
 
+    .btn-secundario {
+      background-color: var(--bg-crema);
+      color: var(--roble);
+      border: 1px solid var(--borde-fuerte);
+      padding: 9px 16px;
+      font-size: 0.86rem;
+    }
+
+    .btn-secundario:hover:not(:disabled) {
+      background-color: var(--dorado-tenue);
+      border-color: var(--dorado);
+    }
+
+    .btn-factura-row {
+      background-color: var(--roble);
+      color: var(--dorado-claro);
+      border: 1px solid rgba(197, 155, 72, 0.5);
+      padding: 6px 12px;
+      font-size: 0.78rem;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-factura-row:hover:not(:disabled) {
+      background-color: var(--nogal-oscuro);
+    }
+
     .link-btn {
       background: none;
       border: none;
@@ -291,10 +318,10 @@
 
     /* Auth Split Card */
     .auth-shell {
-      max-width: 980px;
+      max-width: 1020px;
       margin: 12px auto 0;
       display: grid;
-      grid-template-columns: 1.02fr 1.18fr;
+      grid-template-columns: 1.06fr 1.14fr;
       background-color: var(--blanco);
       border: 1px solid var(--borde);
       border-radius: var(--radio-lg);
@@ -308,11 +335,11 @@
         radial-gradient(circle at 15% 90%, rgba(197, 155, 72, 0.12), transparent 50%),
         linear-gradient(160deg, var(--nogal-oscuro) 0%, #2d1e14 55%, #3d281a 100%);
       color: var(--blanco);
-      padding: 40px 34px;
+      padding: 34px 30px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      gap: 28px;
+      gap: 20px;
       border-right: 1px solid rgba(197, 155, 72, 0.35);
     }
 
@@ -330,24 +357,24 @@
     }
 
     .auth-editorial h2 {
-      margin: 16px 0 12px;
-      font-size: 2.15rem;
+      margin: 14px 0 10px;
+      font-size: 2.05rem;
       line-height: 1.12;
       color: var(--blanco);
       font-weight: 700;
     }
 
     .auth-editorial-lead {
-      margin: 0 0 26px;
-      font-size: 0.93rem;
+      margin: 0 0 20px;
+      font-size: 0.90rem;
       color: #e4d8c5;
-      line-height: 1.6;
+      line-height: 1.55;
     }
 
     .feature-list {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 13px;
     }
 
     .feature-item {
@@ -357,8 +384,8 @@
     }
 
     .feature-icon {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 8px;
       background: rgba(197, 155, 72, 0.15);
       border: 1px solid rgba(231, 200, 126, 0.32);
@@ -372,26 +399,105 @@
 
     .feature-item strong {
       display: block;
-      font-size: 0.89rem;
+      font-size: 0.87rem;
       color: var(--dorado-claro);
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
 
     .feature-item span {
       display: block;
-      font-size: 0.82rem;
+      font-size: 0.80rem;
       color: #d6c8b2;
-      line-height: 1.45;
+      line-height: 1.42;
+    }
+
+    /* Bloque ampliado Sobre Posada del Roble */
+    .hotel-info-box {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(231, 200, 126, 0.25);
+    }
+
+    .hotel-info-title {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--dorado-claro);
+      margin: 0 0 6px;
+    }
+
+    .hotel-info-desc {
+      margin: 0 0 12px;
+      font-size: 0.79rem;
+      color: #dfd2be;
+      line-height: 1.48;
+    }
+
+    .amenities-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 10px;
+      margin-bottom: 12px;
+    }
+
+    .amenity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: rgba(35, 24, 17, 0.42);
+      border: 1px solid rgba(231, 200, 126, 0.18);
+      border-radius: 8px;
+      padding: 8px 9px;
+    }
+
+    .amenity-item svg {
+      flex-shrink: 0;
+      color: var(--dorado-claro);
+      margin-top: 2px;
+    }
+
+    .amenity-item strong {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--blanco);
+      line-height: 1.25;
+    }
+
+    .amenity-item small {
+      display: block;
+      font-size: 0.70rem;
+      color: #cabaa2;
+      line-height: 1.3;
+      margin-top: 1px;
+    }
+
+    .hotel-contacto {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      font-size: 0.74rem;
+      color: #e4d8c5;
+      padding-top: 10px;
+      border-top: 1px solid rgba(231, 200, 126, 0.16);
+    }
+
+    .hotel-contacto span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .editorial-foot {
-      padding-top: 18px;
+      padding-top: 14px;
       border-top: 1px solid rgba(231, 200, 126, 0.24);
-      font-size: 0.78rem;
+      font-size: 0.77rem;
       color: #cfc0a8;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px 14px;
+      gap: 6px 12px;
     }
 
     .auth-panel {
@@ -503,11 +609,11 @@
     .card-header {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
       border-bottom: 1px solid var(--borde);
-      padding-bottom: 12px;
+      padding-bottom: 14px;
       margin-bottom: 20px;
     }
 
@@ -520,6 +626,53 @@
     .card-subtitle {
       font-size: 0.84rem;
       color: var(--texto-suave);
+    }
+
+    .moneda-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      background-color: var(--dorado-tenue);
+      border: 1px solid #e6d4a8;
+      border-radius: var(--radio-md);
+      padding: 12px 16px;
+      margin-bottom: 18px;
+    }
+
+    .moneda-selector-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .moneda-selector-wrap label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--nogal-oscuro);
+    }
+
+    .moneda-selector-wrap select {
+      background-color: var(--blanco);
+      border: 1.5px solid var(--dorado);
+      padding: 7px 12px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--nogal-oscuro);
+      border-radius: 8px;
+    }
+
+    .badge-tc {
+      font-size: 0.80rem;
+      font-weight: 600;
+      color: var(--roble);
+      background: var(--blanco);
+      border: 1px solid var(--borde-fuerte);
+      padding: 5px 11px;
+      border-radius: 999px;
     }
 
     /* Grids & Form Fields */
@@ -672,6 +825,20 @@
       color: var(--verde);
     }
 
+    .resumen-equivalente {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      padding: 8px 11px;
+      background-color: var(--dorado-tenue);
+      border: 1px solid #e6d4a8;
+      border-radius: 7px;
+      font-size: 0.82rem;
+      color: var(--roble);
+      font-weight: 600;
+    }
+
     .plan-cuota-box {
       background-color: var(--verde-bg);
       border: 1px solid var(--verde-borde);
@@ -695,21 +862,22 @@
       width: 100%;
       border-collapse: collapse;
       background-color: var(--blanco);
-      min-width: 680px;
+      min-width: 760px;
     }
 
     th, td {
       padding: 11px 14px;
       text-align: left;
-      font-size: 0.87rem;
+      font-size: 0.86rem;
       border-bottom: 1px solid var(--borde);
+      vertical-align: middle;
     }
 
     th {
       background-color: var(--nogal-oscuro);
       color: var(--dorado-claro);
       font-weight: 600;
-      font-size: 0.80rem;
+      font-size: 0.78rem;
       letter-spacing: 0.03em;
       text-transform: uppercase;
     }
@@ -720,6 +888,14 @@
 
     tbody tr:hover {
       background-color: var(--bg-crema);
+    }
+
+    .total-sub {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--texto-suave);
+      font-weight: 500;
+      margin-top: 2px;
     }
 
     .estado-pill {
@@ -737,6 +913,139 @@
     .estado-completada { background: #f1eee8; color: var(--roble); border: 1px solid var(--borde-fuerte); }
     .estado-cancelada { background: var(--vino-bg); color: var(--vino); border: 1px solid var(--vino-borde); }
 
+    /* Modal de Facturación */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(24, 16, 11, 0.65);
+      backdrop-filter: blur(2px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 1000;
+    }
+
+    .modal-card {
+      background: var(--blanco);
+      border: 1px solid var(--dorado);
+      border-radius: var(--radio-lg);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+      max-width: 740px;
+      width: 100%;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, var(--nogal-oscuro), var(--nogal-medio));
+      color: var(--blanco);
+      padding: 18px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--dorado);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 1.55rem;
+      color: var(--dorado-claro);
+    }
+
+    .modal-header p {
+      margin: 2px 0 0;
+      font-size: 0.80rem;
+      color: #dfd2bc;
+    }
+
+    .modal-cerrar {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: var(--blanco);
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .modal-cerrar:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .modal-body {
+      padding: 22px 24px;
+    }
+
+    .factura-meta-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px 14px;
+      background: var(--bg-crema);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 13px 15px;
+      margin-bottom: 16px;
+      font-size: 0.82rem;
+    }
+
+    .factura-meta-grid small {
+      display: block;
+      color: var(--texto-suave);
+      font-size: 0.72rem;
+    }
+
+    .factura-meta-grid strong {
+      color: var(--nogal-oscuro);
+    }
+
+    .factura-conversion-dual {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .factura-moneda-card {
+      background: var(--dorado-tenue);
+      border: 1px solid #e6d4a8;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 0.82rem;
+    }
+
+    .factura-moneda-card.activa {
+      background: var(--verde-bg);
+      border-color: var(--verde-borde);
+    }
+
+    .factura-moneda-card h4 {
+      margin: 0 0 6px;
+      font-size: 0.80rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--roble);
+    }
+
+    .factura-moneda-card .monto-grande {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--nogal-oscuro);
+      margin-bottom: 4px;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 14px 24px 20px;
+      border-top: 1px solid var(--borde);
+      background: var(--bg-crema);
+    }
+
     /* Footer */
     footer {
       background-color: var(--nogal-oscuro);
@@ -751,7 +1060,7 @@
       display: none !important;
     }
 
-    @media (max-width: 880px) {
+    @media (max-width: 900px) {
       .auth-shell {
         grid-template-columns: 1fr;
       }
@@ -769,11 +1078,27 @@
       header {
         padding: 14px 18px;
       }
-      .grid-2, .grid-3 {
+      .grid-2, .grid-3, .amenities-grid, .factura-meta-grid, .factura-conversion-dual {
         grid-template-columns: 1fr;
       }
       .card {
         padding: 20px 18px;
+      }
+    }
+
+    @media print {
+      header, main, footer, .modal-footer, .modal-cerrar, #tabsFacturaMoneda {
+        display: none !important;
+      }
+      .modal-backdrop {
+        position: static;
+        background: none;
+        padding: 0;
+      }
+      .modal-card {
+        box-shadow: none;
+        max-height: none;
+        border: 1px solid #999;
       }
     }
   </style>
@@ -844,13 +1169,13 @@
             <div class="feature-item">
               <div class="feature-icon" aria-hidden="true">
                 <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                  <path d="M16 2v4M8 2v4M3 10h18"></path>
+                  <path d="M12 2v20"></path>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
                 </svg>
               </div>
               <div>
-                <strong>Cotización Clara en Colones (₡)</strong>
-                <span>Visualice tarifas por noche, IVA del 16% y modalidades de Contado o Tasa Cero sin intereses.</span>
+                <strong>Reservaciones en Colones (₡) o Dólares ($)</strong>
+                <span>Cotice y reserve en la moneda que prefiera con IVA del 16%, Tasa Cero y conversión automática al facturar.</span>
               </div>
             </div>
 
@@ -862,9 +1187,69 @@
                 </svg>
               </div>
               <div>
-                <strong>Confirmación Inmediata</strong>
-                <span>Reciba su código de reservación al instante y consulte todo su historial desde un solo lugar.</span>
+                <strong>Confirmación y Facturación Inmediata</strong>
+                <span>Reciba su código de reservación al instante y emita su factura detallada en Colones o Dólares.</span>
               </div>
+            </div>
+          </div>
+
+          <div class="hotel-info-box">
+            <p class="hotel-info-title">Sobre Posada del Roble</p>
+            <p class="hotel-info-desc">
+              Hotel boutique de arquitectura rústica en madera de roble con 26 habitaciones distribuidas en 4 pisos: categorías Simple, Doble Estándar, Familiar y Suites Ejecutiva y Presidencial.
+            </p>
+            <div class="amenities-grid">
+              <div class="amenity-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"></path>
+                  <path d="M7 2v20"></path>
+                  <path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"></path>
+                </svg>
+                <div>
+                  <strong>Restaurante &amp; Room Service</strong>
+                  <small>Desayunos, cortes y cenas de autor</small>
+                </div>
+              </div>
+
+              <div class="amenity-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                  <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                  <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                  <line x1="12" y1="20" x2="12.01" y2="20"></line>
+                </svg>
+                <div>
+                  <strong>Wi-Fi 6 &amp; Frigobar</strong>
+                  <small>Incluido en cada habitación</small>
+                </div>
+              </div>
+
+              <div class="amenity-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                </svg>
+                <div>
+                  <strong>Suites con Jacuzzi y Vista</strong>
+                  <small>Balcón privado y vista al mar</small>
+                </div>
+              </div>
+
+              <div class="amenity-item">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <div>
+                  <strong>Recepción 24/7</strong>
+                  <small>Asistencia directa al huésped</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="hotel-contacto">
+              <span>Costa Rica &middot; Montaña y Pacífico</span>
+              <span>Tel. +506 2645-8000</span>
+              <span>reservas@posadadelroble.cr</span>
             </div>
           </div>
         </div>
@@ -874,7 +1259,7 @@
           <span>&bull;</span>
           <span>Check-out: 11:00 a.m.</span>
           <span>&bull;</span>
-          <span>Tarifas en Colones (₡)</span>
+          <span>CRC (₡) y USD ($)</span>
         </div>
       </aside>
 
@@ -1014,8 +1399,21 @@
 
       <div class="card">
         <div class="card-header">
-          <h2>Nueva Reservación de Habitación</h2>
-          <span class="card-subtitle">Seleccione fechas, tipo de habitación y modalidad de pago</span>
+          <div>
+            <h2>Nueva Reservación de Habitación</h2>
+            <span class="card-subtitle">Seleccione fechas, habitación, moneda y modalidad de pago</span>
+          </div>
+        </div>
+
+        <div class="moneda-bar">
+          <div class="moneda-selector-wrap">
+            <label for="cmbMonedaReserva">Moneda de Reservación:</label>
+            <select id="cmbMonedaReserva" onchange="alCambiarMoneda()">
+              <option value="CRC">Colones Costarricenses (₡ CRC)</option>
+              <option value="USD">Dólares Estadounidenses ($ USD)</option>
+            </select>
+          </div>
+          <span id="badgeTipoCambio" class="badge-tc">Tipo de cambio: $1.00 USD = ₡515.00 CRC</span>
         </div>
 
         <div class="grid-3">
@@ -1072,12 +1470,16 @@
 
         <div class="grid-2" style="margin-top: 10px;">
           <div class="resumen-box">
-            <h3>Resumen de Costos en Colones (₡)</h3>
+            <h3 id="tituloResumenCostos">Resumen de Costos en Colones (₡)</h3>
             <div class="resumen-linea"><span>Noches de estadía</span><strong id="lblNoches">2</strong></div>
             <div class="resumen-linea"><span>Tarifa base por noche</span><strong id="lblTarifaBase">₡0.00</strong></div>
             <div class="resumen-linea"><span>Hospedaje + temporada</span><strong id="lblHospedaje">₡0.00</strong></div>
             <div class="resumen-linea"><span>IVA (16%)</span><strong id="lblIva">₡0.00</strong></div>
             <div class="resumen-total"><span>Total Reservación</span><span id="lblTotal">₡0.00</span></div>
+            <div class="resumen-equivalente">
+              <span id="lblEquivEtiqueta">Equivalente en Dólares (USD):</span>
+              <strong id="lblEquivValor">$0.00</strong>
+            </div>
           </div>
 
           <div class="resumen-box">
@@ -1108,8 +1510,10 @@
       <!-- HISTORIAL DE RESERVACIONES DEL CLIENTE -->
       <div class="card">
         <div class="card-header">
-          <h2>Mis Reservaciones Registradas</h2>
-          <span class="card-subtitle">Historial asociado a su cuenta</span>
+          <div>
+            <h2>Mis Reservaciones Registradas</h2>
+            <span class="card-subtitle">Consulte sus estadías y genere su factura en Colones (₡) o Dólares ($)</span>
+          </div>
         </div>
         <div class="table-wrap">
           <table>
@@ -1121,12 +1525,13 @@
                 <th>Salida</th>
                 <th>Huéspedes</th>
                 <th>Estado</th>
-                <th>Plan de Pago / Observaciones</th>
+                <th>Plan de Pago / Notas</th>
                 <th>Total</th>
+                <th>Factura</th>
               </tr>
             </thead>
             <tbody id="tablaMisReservas">
-              <tr><td colspan="8" style="text-align:center;">Aún no tiene reservaciones registradas.</td></tr>
+              <tr><td colspan="9" style="text-align:center;">Aún no tiene reservaciones registradas.</td></tr>
             </tbody>
           </table>
         </div>
@@ -1134,8 +1539,82 @@
     </section>
   </main>
 
+  <!-- MODAL DE FACTURACIÓN CON CONVERSIÓN CRC <-> USD -->
+  <div id="modalFactura" class="modal-backdrop oculto" role="dialog" aria-modal="true" aria-labelledby="tituloModalFactura" onclick="if (event.target === this) cerrarModalFactura()">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 id="tituloModalFactura">Factura de Estadía — Posada del Roble</h3>
+          <p id="subtituloModalFactura">Conversión automática entre Colones Costarricenses (₡) y Dólares (USD $)</p>
+        </div>
+        <button type="button" class="modal-cerrar" aria-label="Cerrar factura" onclick="cerrarModalFactura()">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <div id="tabsFacturaMoneda" class="tabs-pill" style="margin-bottom:16px;">
+          <button id="btnFactCrc" type="button" class="tab-btn active" onclick="cambiarMonedaFactura('CRC')">Facturar en Colones (₡ CRC)</button>
+          <button id="btnFactUsd" type="button" class="tab-btn" onclick="cambiarMonedaFactura('USD')">Facturar en Dólares ($ USD)</button>
+        </div>
+
+        <div id="bannerConversionFactura" class="info-banner" style="margin-bottom:16px;">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M17 1l4 4-4 4"></path>
+            <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+            <path d="M7 23l-4-4 4-4"></path>
+            <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+          </svg>
+          <span id="textoConversionFactura"></span>
+        </div>
+
+        <div class="factura-meta-grid">
+          <div><small>N.º de Factura</small><strong id="facNumero">-</strong></div>
+          <div><small>Código de Reservación</small><strong id="facCodigo">-</strong></div>
+          <div><small>Fecha de Emisión</small><strong id="facFecha">-</strong></div>
+          <div><small>Huésped</small><strong id="facCliente">-</strong></div>
+          <div><small>Documento</small><strong id="facDocumento">-</strong></div>
+          <div><small>Habitación</small><strong id="facHabitacion">-</strong></div>
+          <div><small>Check-In / Check-Out</small><strong id="facFechas">-</strong></div>
+          <div><small>Moneda de Reservación</small><strong id="facMonedaReserva">-</strong></div>
+          <div><small>Tipo de Cambio Aplicado</small><strong id="facTipoCambio">-</strong></div>
+        </div>
+
+        <div class="table-wrap">
+          <table style="min-width:100%;">
+            <thead>
+              <tr>
+                <th>Concepto Facturado</th>
+                <th style="text-align:right;">Colones (₡ CRC)</th>
+                <th style="text-align:right;">Dólares ($ USD)</th>
+              </tr>
+            </thead>
+            <tbody id="facTablaBody"></tbody>
+          </table>
+        </div>
+
+        <div class="factura-conversion-dual">
+          <div id="cardFactCrc" class="factura-moneda-card activa">
+            <h4>Total en Colones (CRC)</h4>
+            <div class="monto-grande" id="facTotalCrc">₡0.00</div>
+            <div id="facDetalleCrc">Subtotal: ₡0.00 &middot; IVA 16%: ₡0.00</div>
+          </div>
+          <div id="cardFactUsd" class="factura-moneda-card">
+            <h4>Total Convertido en Dólares (USD)</h4>
+            <div class="monto-grande" id="facTotalUsd">$0.00</div>
+            <div id="facDetalleUsd">Subtotal: $0.00 &middot; IVA 16%: $0.00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secundario" onclick="descargarFacturaTxt()">Descargar Factura (.txt)</button>
+        <button type="button" class="btn btn-verde" onclick="window.print()">Imprimir Factura</button>
+        <button type="button" class="btn" onclick="cerrarModalFactura()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <footer>
-    Posada del Roble — Portal Oficial de Reservaciones &middot; Tarifas expresadas en Colones Costarricenses (₡)
+    Posada del Roble — Portal Oficial de Reservaciones &middot; Tarifas y Facturación en Colones Costarricenses (₡) y Dólares Estadounidenses ($ USD)
   </footer>
 
   <script>
@@ -1168,8 +1647,65 @@
     let clienteActual = null;
     let tiposHabitacion = [];
     let habitacionesDisponibles = [];
-    let ultimoTotal = 0;
+    let ultimoTotalCrc = 0;
+    let tipoCambioUsd = 515.00;
     let alertaTimer = null;
+    let reservasMapa = {};
+    let facturaReservaIdActual = null;
+    let facturaMonedaActual = "CRC";
+    let ultimaFacturaData = null;
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !document.getElementById("modalFactura").classList.contains("oculto")) {
+        cerrarModalFactura();
+      }
+    });
+
+    function redondear2(valor) {
+      return Math.round((Number(valor || 0) + Number.EPSILON) * 100) / 100;
+    }
+
+    function convertirDesdeColones(montoCrc, moneda = obtenerMonedaReserva()) {
+      const n = Number(montoCrc || 0);
+      return moneda === "USD" ? redondear2(n / tipoCambioUsd) : redondear2(n);
+    }
+
+    function obtenerMonedaReserva() {
+      const sel = document.getElementById("cmbMonedaReserva");
+      return sel && sel.value === "USD" ? "USD" : "CRC";
+    }
+
+    function formatoColones(monto) {
+      return "₡" + Number(monto || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatoDolares(monto) {
+      return "$" + Number(monto || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function formatoMonedaDirecto(monto, moneda = "CRC") {
+      return moneda === "USD" ? formatoDolares(monto) : formatoColones(monto);
+    }
+
+    function formatoDesdeColones(montoCrc, moneda = obtenerMonedaReserva()) {
+      return formatoMonedaDirecto(convertirDesdeColones(montoCrc, moneda), moneda);
+    }
+
+    function detectarMonedaReserva(r) {
+      if (r && (r.moneda === "USD" || r.monedaReserva === "USD")) return "USD";
+      const obs = (r && r.observaciones ? r.observaciones : "").toUpperCase();
+      return obs.includes("MONEDA: USD") || obs.includes("[USD]") ? "USD" : "CRC";
+    }
+
+    function adjuntarEtiquetaMoneda(obs, moneda) {
+      const etiqueta = moneda === "USD"
+        ? `Moneda: USD (TC ₡${tipoCambioUsd.toFixed(2)})`
+        : "Moneda: CRC";
+      const limpio = (obs || "").trim();
+      if (!limpio) return etiqueta;
+      if (/moneda:\s*(usd|crc)/i.test(limpio)) return limpio;
+      return `${limpio} | ${etiqueta}`;
+    }
 
     function escaparHtml(texto) {
       return String(texto ?? "")
@@ -1218,12 +1754,13 @@
           documentoCliente: "101110111",
           emailCliente: "carlos@correo.com",
           habitacionId: 202,
-          habitacion: { numero: "202" },
+          habitacion: { numero: "202", piso: 2 },
           fechaInicio: new Date().toISOString(),
           fechaFin: new Date(Date.now() + 86400000 * 2).toISOString(),
           cantidadHuespedes: 2,
           estado: "Confirmada",
-          observaciones: "Vista al mar | Tasa Cero a 6 meses",
+          moneda: "CRC",
+          observaciones: "Vista al mar | Tasa Cero a 6 meses | Moneda: CRC",
           costoTotal: 719200
         }
       ];
@@ -1276,10 +1813,6 @@
         return data.title.trim();
       }
       return respaldo;
-    }
-
-    function formatoColones(monto) {
-      return "₡" + Number(monto || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
 
     function soloNumeros(input, max) {
@@ -1419,7 +1952,6 @@
           return;
         }
 
-        // Respaldo cuando el portal se sirve en hosting estático sin backend API
         const clientes = obtenerClientesStorage();
         const encontrado = clientes.find(c => (c.email || "").trim().toLowerCase() === correo);
         if (!encontrado) {
@@ -1529,7 +2061,6 @@
           return;
         }
 
-        // Respaldo cuando el portal se sirve en hosting estático sin backend API
         const existentes = obtenerClientesStorage();
         if (existentes.some(c => c.numeroDocumento === numeroDocumento)) {
           const msg = "Ya existe una cuenta registrada con ese número de documento.";
@@ -1571,6 +2102,17 @@
       return ((n + a) || "HR").toUpperCase();
     }
 
+    async function cargarTipoCambio() {
+      const res = await llamarApi("/api/reservaciones/tipo-cambio");
+      if (res.apiDisponible && res.ok && res.data && res.data.tipoCambioUsd > 0) {
+        tipoCambioUsd = Number(res.data.tipoCambioUsd);
+      } else {
+        tipoCambioUsd = 515.00;
+      }
+      document.getElementById("badgeTipoCambio").textContent =
+        `Tipo de cambio: $1.00 USD = ${formatoColones(tipoCambioUsd)} CRC`;
+    }
+
     async function entrarAlPortal(cliente, recienRegistrado = false) {
       clienteActual = cliente;
       document.getElementById("seccionAuth").classList.add("oculto");
@@ -1588,6 +2130,7 @@
       document.getElementById("dtpEntrada").value = manana.toISOString().split("T")[0];
       document.getElementById("dtpSalida").value = salida.toISOString().split("T")[0];
 
+      await cargarTipoCambio();
       await cargarTiposHabitacion();
       await cargarHabitacionesYCotizar();
       await cargarMisReservaciones();
@@ -1602,6 +2145,7 @@
 
     function cerrarSesion() {
       clienteActual = null;
+      cerrarModalFactura();
       ocultarAlerta();
       limpiarErroresAuth();
       document.getElementById("seccionReserva").classList.add("oculto");
@@ -1610,7 +2154,12 @@
       document.getElementById("usuarioChip").classList.add("oculto");
       document.getElementById("btnCerrarSesion").classList.add("oculto");
       document.getElementById("txtLoginEmail").value = "";
+      document.getElementById("cmbMonedaReserva").value = "CRC";
       cambiarTabAuth("login");
+    }
+
+    function alCambiarMoneda() {
+      recalcularCotizacion();
     }
 
     async function cargarTiposHabitacion() {
@@ -1706,42 +2255,60 @@
 
     function recalcularCotizacion() {
       const info = obtenerInfoTipoActual();
+      const moneda = obtenerMonedaReserva();
+      const monedaAlterna = moneda === "USD" ? "CRC" : "USD";
+
       document.getElementById("txtPreciosPersona").value =
-        `Adulto: ${formatoColones(info.adulto)} | Niño: ${formatoColones(info.nino)} (Base: ${info.adBase} ad, ${info.niBase} niñ)`;
+        `Adulto: ${formatoDesdeColones(info.adulto, moneda)} | Niño: ${formatoDesdeColones(info.nino, moneda)} (Base: ${info.adBase} ad, ${info.niBase} niñ)`;
 
       const cmbHab = document.getElementById("cmbHabitacion");
       const selOpt = cmbHab.options[cmbHab.selectedIndex];
-      const tarifaNoche = selOpt && selOpt.dataset.tarifa ? parseFloat(selOpt.dataset.tarifa) : info.adulto;
+      const tarifaNocheCrc = selOpt && selOpt.dataset.tarifa ? parseFloat(selOpt.dataset.tarifa) : info.adulto;
 
       const f1 = new Date(document.getElementById("dtpEntrada").value);
       const f2 = new Date(document.getElementById("dtpSalida").value);
       const noches = Math.max(1, Math.round((f2 - f1) / (1000 * 60 * 60 * 24)));
 
-      const hospedaje = tarifaNoche * noches;
-      const iva = Math.round(hospedaje * 0.16 * 100) / 100;
-      ultimoTotal = hospedaje + iva;
+      const hospedajeCrc = redondear2(tarifaNocheCrc * noches);
+      const ivaCrc = redondear2(hospedajeCrc * 0.16);
+      ultimoTotalCrc = redondear2(hospedajeCrc + ivaCrc);
 
+      document.getElementById("tituloResumenCostos").textContent = moneda === "USD"
+        ? "Resumen de Costos en Dólares ($ USD)"
+        : "Resumen de Costos en Colones (₡ CRC)";
       document.getElementById("lblNoches").textContent = noches;
-      document.getElementById("lblTarifaBase").textContent = formatoColones(tarifaNoche);
-      document.getElementById("lblHospedaje").textContent = formatoColones(hospedaje);
-      document.getElementById("lblIva").textContent = formatoColones(iva);
-      document.getElementById("lblTotal").textContent = formatoColones(ultimoTotal);
+      document.getElementById("lblTarifaBase").textContent = formatoDesdeColones(tarifaNocheCrc, moneda);
+      document.getElementById("lblHospedaje").textContent = formatoDesdeColones(hospedajeCrc, moneda);
+      document.getElementById("lblIva").textContent = formatoDesdeColones(ivaCrc, moneda);
+      document.getElementById("lblTotal").textContent = `${formatoDesdeColones(ultimoTotalCrc, moneda)} ${moneda}`;
+
+      document.getElementById("lblEquivEtiqueta").textContent = monedaAlterna === "USD"
+        ? `Equivalente al facturar en Dólares (TC ₡${tipoCambioUsd.toFixed(2)}):`
+        : `Equivalente al facturar en Colones (TC ₡${tipoCambioUsd.toFixed(2)}):`;
+      document.getElementById("lblEquivValor").textContent =
+        `${formatoDesdeColones(ultimoTotalCrc, monedaAlterna)} ${monedaAlterna}`;
 
       actualizarPlanPago();
     }
 
     function obtenerTextoModalidad() {
+      const moneda = obtenerMonedaReserva();
+      const totalMostrar = convertirDesdeColones(ultimoTotalCrc, moneda);
       const mod = document.getElementById("cmbModalidadPago").value;
       if (mod === "Contado") {
-        return `Pago de Contado (${formatoColones(ultimoTotal)})`;
+        return `Pago de Contado (${formatoMonedaDirecto(totalMostrar, moneda)} ${moneda})`;
       }
       const meses = mod === "TasaCero12" ? 12 : (mod === "TasaCero6" ? 6 : 3);
-      const cuota = ultimoTotal / meses;
-      return `Tasa Cero a ${meses} meses (${formatoColones(cuota)} / mes - 0% interés)`;
+      const cuota = redondear2(totalMostrar / meses);
+      return `Tasa Cero a ${meses} meses (${formatoMonedaDirecto(cuota, moneda)} ${moneda} / mes - 0% interés)`;
     }
 
     function actualizarPlanPago() {
-      document.getElementById("cajaDetalleCuota").textContent = "Modalidad seleccionada: " + obtenerTextoModalidad();
+      const moneda = obtenerMonedaReserva();
+      const monedaAlterna = moneda === "USD" ? "CRC" : "USD";
+      const equiv = formatoDesdeColones(ultimoTotalCrc, monedaAlterna);
+      document.getElementById("cajaDetalleCuota").textContent =
+        `Modalidad seleccionada: ${obtenerTextoModalidad()} · Equiv: ${equiv} ${monedaAlterna}`;
     }
 
     async function confirmarReservacion() {
@@ -1766,11 +2333,13 @@
         return;
       }
 
+      const moneda = obtenerMonedaReserva();
       const adultos = parseInt(document.getElementById("cmbAdultos").value || "1", 10);
       const ninos = parseInt(document.getElementById("cmbNinos").value || "0", 10);
       const obsUsuario = document.getElementById("txtObservaciones").value.trim();
       const plan = obtenerTextoModalidad();
-      const observaciones = obsUsuario ? `${obsUsuario} | Modalidad: ${plan}` : `Modalidad: ${plan}`;
+      const observacionesBase = obsUsuario ? `${obsUsuario} | Modalidad: ${plan}` : `Modalidad: ${plan}`;
+      const observacionesConMoneda = adjuntarEtiquetaMoneda(observacionesBase, moneda);
 
       const cmbHab = document.getElementById("cmbHabitacion");
       const habTexto = cmbHab.options[cmbHab.selectedIndex]?.text || `Hab. #${habitacionId}`;
@@ -1791,7 +2360,8 @@
             fechaInicio,
             fechaFin,
             cantidadHuespedes: Math.max(1, adultos + ninos),
-            observaciones
+            observaciones: observacionesBase,
+            moneda
           })
         });
 
@@ -1800,7 +2370,7 @@
             mostrarAlerta(extraerMensajeApi(res.data, "No se pudo confirmar la reservación."), true);
             return;
           }
-          mostrarAlerta(`¡Reservación confirmada con código ${res.data.codigo}! Su correo electrónico queda habilitado para iniciar sesión.`);
+          mostrarAlerta(`¡Reservación confirmada en ${moneda} con código ${res.data.codigo}! Podrá consultar o convertir su factura en Colones o Dólares.`);
         } else {
           const codigoReserva = "RES-" + Math.floor(10000 + Math.random() * 90000);
           const nuevaReserva = {
@@ -1810,16 +2380,18 @@
             documentoCliente: clienteActual.numeroDocumento,
             emailCliente: clienteActual.email,
             habitacionId,
-            habitacion: { numero: numHab },
+            habitacion: { numero: numHab, piso: 1 },
             fechaInicio: new Date(fechaInicio + "T14:00:00").toISOString(),
             fechaFin: new Date(fechaFin + "T11:00:00").toISOString(),
             cantidadHuespedes: Math.max(1, adultos + ninos),
             estado: "Confirmada",
-            observaciones,
-            costoTotal: ultimoTotal
+            moneda,
+            tipoCambioUsd,
+            observaciones: observacionesConMoneda,
+            costoTotal: ultimoTotalCrc
           };
           guardarReservacionStorage(nuevaReserva);
-          mostrarAlerta(`¡Reservación confirmada con código ${codigoReserva}! Su correo electrónico queda habilitado para iniciar sesión.`);
+          mostrarAlerta(`¡Reservación confirmada en ${moneda} con código ${codigoReserva}! Podrá consultar o convertir su factura en Colones o Dólares.`);
         }
 
         document.getElementById("txtObservaciones").value = "";
@@ -1867,12 +2439,13 @@
         );
       }
 
+      reservasMapa = {};
       const tbody = document.getElementById("tablaMisReservas");
       tbody.innerHTML = "";
 
       const aviso = document.getElementById("avisoPrimeraReserva");
       if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#66584b;">Aún no tiene reservaciones registradas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#66584b;">Aún no tiene reservaciones registradas.</td></tr>`;
         document.getElementById("textoPrimeraReserva").textContent =
           `Su perfil está listo. Confirme una reservación arriba para que su correo (${clienteActual.email}) quede habilitado en futuros inicios de sesión.`;
         aviso.classList.remove("oculto");
@@ -1882,12 +2455,17 @@
       aviso.classList.add("oculto");
 
       lista.forEach(r => {
+        reservasMapa[r.id] = r;
         const tr = document.createElement("tr");
         const f1 = new Date(r.fechaInicio).toLocaleDateString("es-CR");
         const f2 = new Date(r.fechaFin).toLocaleDateString("es-CR");
         const hab = r.habitacion ? `Hab. ${r.habitacion.numero}` : `Hab. #${r.habitacionId}`;
         const claseEstado = obtenerClaseEstado(r.estado);
         const estadoTexto = formatearEstado(r.estado);
+        const monedaRes = detectarMonedaReserva(r);
+        const monedaAlt = monedaRes === "USD" ? "CRC" : "USD";
+        const montoPrincipal = formatoDesdeColones(r.costoTotal, monedaRes);
+        const montoEquiv = formatoDesdeColones(r.costoTotal, monedaAlt);
 
         tr.innerHTML = `
           <td><strong>${escaparHtml(r.codigo)}</strong></td>
@@ -1897,10 +2475,209 @@
           <td>${escaparHtml(r.cantidadHuespedes)}</td>
           <td><span class="estado-pill ${claseEstado}">${escaparHtml(estadoTexto)}</span></td>
           <td>${escaparHtml(r.observaciones || "Estándar")}</td>
-          <td><strong>${escaparHtml(formatoColones(r.costoTotal))}</strong></td>
+          <td>
+            <strong>${escaparHtml(montoPrincipal)} ${escaparHtml(monedaRes)}</strong>
+            <span class="total-sub">Equiv: ${escaparHtml(montoEquiv)} ${escaparHtml(monedaAlt)}</span>
+          </td>
+          <td>
+            <button type="button" class="btn btn-factura-row" onclick="abrirModalFactura(${Number(r.id)}, '${escaparHtml(monedaRes)}')">Ver Factura</button>
+          </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function construirFacturaOffline(r, monedaFacturacion) {
+      const tc = Number(r.tipoCambioUsd || tipoCambioUsd || 515.00);
+      const monedaReserva = detectarMonedaReserva(r);
+      const hospCrc = redondear2(r.costoTotal);
+      const subCrc = redondear2(hospCrc / 1.16);
+      const ivaCrc = redondear2(hospCrc - subCrc);
+      const consCrc = 0;
+      const totCrc = hospCrc;
+      const esContado = (r.observaciones || "").toLowerCase().includes("contado");
+      const pagCrc = esContado ? totCrc : 0;
+      const salCrc = Math.max(0, redondear2(totCrc - pagCrc));
+
+      const hospUsd = convertirDesdeColones(hospCrc, "USD");
+      const subUsd = redondear2(hospUsd / 1.16);
+      const ivaUsd = redondear2(hospUsd - subUsd);
+      const consUsd = 0;
+      const totUsd = hospUsd;
+      const pagUsd = esContado ? totUsd : 0;
+      const salUsd = Math.max(0, convertirDesdeColones(salCrc, "USD"));
+      const enUsd = monedaFacturacion === "USD";
+
+      return {
+        numeroFactura: `FAC-${r.codigo}`,
+        fechaEmision: new Date().toISOString(),
+        reservacionId: r.id,
+        codigoReservacion: r.codigo,
+        clienteNombre: `${clienteActual?.nombres || ""} ${clienteActual?.apellidos || ""}`.trim(),
+        clienteDocumento: clienteActual?.numeroDocumento || "",
+        clienteEmail: clienteActual?.email || "",
+        habitacion: r.habitacion ? `Hab. ${r.habitacion.numero}${r.habitacion.piso ? ` (Piso ${r.habitacion.piso})` : ""}` : `Hab. #${r.habitacionId}`,
+        fechaInicio: r.fechaInicio,
+        fechaFin: r.fechaFin,
+        cantidadHuespedes: r.cantidadHuespedes,
+        estado: r.estado,
+        observaciones: r.observaciones,
+        monedaReserva,
+        monedaFacturacion,
+        simboloMoneda: monedaFacturacion === "USD" ? "$" : "₡",
+        tipoCambioUsd: tc,
+        conversionAplicada: monedaFacturacion !== "CRC" || monedaReserva !== "CRC",
+        subtotalHospedajeFacturado: enUsd ? subUsd : subCrc,
+        ivaHospedajeFacturado: enUsd ? ivaUsd : ivaCrc,
+        hospedajeFacturado: enUsd ? hospUsd : hospCrc,
+        consumosFacturados: enUsd ? consUsd : consCrc,
+        totalFacturado: enUsd ? totUsd : totCrc,
+        pagadoFacturado: enUsd ? pagUsd : pagCrc,
+        saldoFacturado: enUsd ? salUsd : salCrc,
+        subtotalHospedajeCrc: subCrc,
+        ivaHospedajeCrc: ivaCrc,
+        hospedajeCrc: hospCrc,
+        consumosCrc: consCrc,
+        totalGeneralCrc: totCrc,
+        pagadoCrc: pagCrc,
+        saldoCrc: salCrc,
+        subtotalHospedajeUsd: subUsd,
+        ivaHospedajeUsd: ivaUsd,
+        hospedajeUsd: hospUsd,
+        consumosUsd: consUsd,
+        totalGeneralUsd: totUsd,
+        pagadoUsd: pagUsd,
+        saldoUsd: salUsd
+      };
+    }
+
+    async function abrirModalFactura(reservacionId, monedaInicial = "CRC") {
+      facturaReservaIdActual = reservacionId;
+      facturaMonedaActual = monedaInicial === "USD" ? "USD" : "CRC";
+      document.getElementById("modalFactura").classList.remove("oculto");
+      await cargarYRenderizarFactura();
+    }
+
+    async function cambiarMonedaFactura(moneda) {
+      facturaMonedaActual = moneda === "USD" ? "USD" : "CRC";
+      await cargarYRenderizarFactura();
+    }
+
+    function cerrarModalFactura() {
+      document.getElementById("modalFactura").classList.add("oculto");
+      facturaReservaIdActual = null;
+      ultimaFacturaData = null;
+    }
+
+    async function cargarYRenderizarFactura() {
+      if (!facturaReservaIdActual) return;
+
+      document.getElementById("btnFactCrc").classList.toggle("active", facturaMonedaActual === "CRC");
+      document.getElementById("btnFactUsd").classList.toggle("active", facturaMonedaActual === "USD");
+      document.getElementById("cardFactCrc").classList.toggle("activa", facturaMonedaActual === "CRC");
+      document.getElementById("cardFactUsd").classList.toggle("activa", facturaMonedaActual === "USD");
+
+      let factura = null;
+      const res = await llamarApi(`/api/reservaciones/${encodeURIComponent(facturaReservaIdActual)}/factura?moneda=${encodeURIComponent(facturaMonedaActual)}`);
+      if (res.apiDisponible && res.ok && res.data) {
+        factura = res.data;
+      } else {
+        const r = reservasMapa[facturaReservaIdActual];
+        if (!r) return;
+        factura = construirFacturaOffline(r, facturaMonedaActual);
+      }
+
+      ultimaFacturaData = factura;
+
+      document.getElementById("facNumero").textContent = factura.numeroFactura;
+      document.getElementById("facCodigo").textContent = factura.codigoReservacion;
+      document.getElementById("facFecha").textContent = new Date(factura.fechaEmision).toLocaleDateString("es-CR");
+      document.getElementById("facCliente").textContent = factura.clienteNombre || "-";
+      document.getElementById("facDocumento").textContent = factura.clienteDocumento || "-";
+      document.getElementById("facHabitacion").textContent = factura.habitacion || "-";
+      const fIn = new Date(factura.fechaInicio).toLocaleDateString("es-CR");
+      const fOut = new Date(factura.fechaFin).toLocaleDateString("es-CR");
+      document.getElementById("facFechas").textContent = `${fIn} - ${fOut}`;
+      document.getElementById("facMonedaReserva").textContent = factura.monedaReserva === "USD" ? "Dólares ($ USD)" : "Colones (₡ CRC)";
+      document.getElementById("facTipoCambio").textContent = `$1.00 = ${formatoColones(factura.tipoCambioUsd)}`;
+
+      const textoConv = factura.monedaReserva === factura.monedaFacturacion
+        ? `Facturando en la moneda original de la reservación (${factura.monedaFacturacion}) con conversión referencial visible al tipo de cambio $1.00 USD = ${formatoColones(factura.tipoCambioUsd)}.`
+        : `Conversión aplicada al facturar: reservación registrada en ${factura.monedaReserva} convertida a ${factura.monedaFacturacion} al tipo de cambio $1.00 USD = ${formatoColones(factura.tipoCambioUsd)}.`;
+      document.getElementById("textoConversionFactura").textContent = textoConv;
+
+      const filas = [
+        ["Subtotal Hospedaje (base)", formatoColones(factura.subtotalHospedajeCrc), formatoDolares(factura.subtotalHospedajeUsd), false],
+        ["IVA Hospedaje (16%)", formatoColones(factura.ivaHospedajeCrc), formatoDolares(factura.ivaHospedajeUsd), false],
+        ["Total Hospedaje", formatoColones(factura.hospedajeCrc), formatoDolares(factura.hospedajeUsd), false],
+        ["Consumos de Restaurante", formatoColones(factura.consumosCrc), formatoDolares(factura.consumosUsd), false],
+        ["Total General", formatoColones(factura.totalGeneralCrc), formatoDolares(factura.totalGeneralUsd), true],
+        ["Total Pagado", formatoColones(factura.pagadoCrc), formatoDolares(factura.pagadoUsd), false],
+        ["Saldo Pendiente", formatoColones(factura.saldoCrc), formatoDolares(factura.saldoUsd), true]
+      ];
+
+      const tbody = document.getElementById("facTablaBody");
+      tbody.innerHTML = filas.map(([concepto, crc, usd, bold]) => `
+        <tr style="${bold ? "background:#fbf8f1; font-weight:700;" : ""}">
+          <td>${escaparHtml(concepto)}</td>
+          <td style="text-align:right;">${escaparHtml(crc)}</td>
+          <td style="text-align:right;">${escaparHtml(usd)}</td>
+        </tr>
+      `).join("");
+
+      document.getElementById("facTotalCrc").textContent = formatoColones(factura.totalGeneralCrc);
+      document.getElementById("facDetalleCrc").textContent =
+        `Subtotal: ${formatoColones(factura.subtotalHospedajeCrc)} · IVA 16%: ${formatoColones(factura.ivaHospedajeCrc)} · Saldo: ${formatoColones(factura.saldoCrc)}`;
+
+      document.getElementById("facTotalUsd").textContent = formatoDolares(factura.totalGeneralUsd);
+      document.getElementById("facDetalleUsd").textContent =
+        `Subtotal: ${formatoDolares(factura.subtotalHospedajeUsd)} · IVA 16%: ${formatoDolares(factura.ivaHospedajeUsd)} · Saldo: ${formatoDolares(factura.saldoUsd)}`;
+    }
+
+    function descargarFacturaTxt() {
+      if (!ultimaFacturaData) return;
+      const f = ultimaFacturaData;
+      const sim = f.monedaFacturacion === "USD" ? "$" : "₡";
+      const fmtFact = n => f.monedaFacturacion === "USD" ? formatoDolares(n) : formatoColones(n);
+      const lineas = [
+        "==========================================================",
+        "             POSADA DEL ROBLE - FACTURA                   ",
+        "==========================================================",
+        `No. Factura       : ${f.numeroFactura}`,
+        `Fecha Emisión     : ${new Date(f.fechaEmision).toLocaleString("es-CR")}`,
+        `Reservación       : ${f.codigoReservacion}`,
+        `Huésped           : ${f.clienteNombre} (${f.clienteDocumento})`,
+        `Habitación        : ${f.habitacion}`,
+        `Estadía           : ${new Date(f.fechaInicio).toLocaleDateString("es-CR")} al ${new Date(f.fechaFin).toLocaleDateString("es-CR")}`,
+        `Moneda Reserva    : ${f.monedaReserva}`,
+        `Moneda Factura    : ${f.monedaFacturacion} (${sim})`,
+        `Tipo de Cambio    : $1.00 USD = ${formatoColones(f.tipoCambioUsd)} CRC`,
+        f.observaciones ? `Plan / Notas      : ${f.observaciones}` : "",
+        "----------------------------------------------------------",
+        `DESGLOSE EN MONEDA FACTURADA (${f.monedaFacturacion}):`,
+        `  Subtotal Hospedaje : ${fmtFact(f.subtotalHospedajeFacturado)}`,
+        `  IVA (16%)          : ${fmtFact(f.ivaHospedajeFacturado)}`,
+        `  Total Hospedaje    : ${fmtFact(f.hospedajeFacturado)}`,
+        `  Consumos           : ${fmtFact(f.consumosFacturados)}`,
+        `  TOTAL GENERAL      : ${fmtFact(f.totalFacturado)}`,
+        `  Total Pagado       : ${fmtFact(f.pagadoFacturado)}`,
+        `  Saldo Pendiente    : ${fmtFact(f.saldoFacturado)}`,
+        "----------------------------------------------------------",
+        "CONVERSIÓN COMPLETA:",
+        `  Colones (CRC) : Total ${formatoColones(f.totalGeneralCrc)} | Saldo ${formatoColones(f.saldoCrc)}`,
+        `  Dólares (USD) : Total ${formatoDolares(f.totalGeneralUsd)} | Saldo ${formatoDolares(f.saldoUsd)}`,
+        "=========================================================="
+      ].filter(Boolean).join("\r\n");
+
+      const blob = new Blob([lineas], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `Factura_${f.codigoReservacion}_${f.monedaFacturacion}.txt`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     }
   </script>
 </body>
