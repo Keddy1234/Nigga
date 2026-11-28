@@ -102,3 +102,8 @@ public class FiltroPedidoDto
     public DateTime? Fecha { get; set; }
     public EstadoPedido? Estado { get; set; }
 }
+
+public class LoginClienteDto
+{
+    public string Email { get; set; } = string.Empty;
+}

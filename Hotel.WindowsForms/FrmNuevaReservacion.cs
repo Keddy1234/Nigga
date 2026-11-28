@@ -537,6 +537,19 @@ namespace Hotel.WindowsForms
                 return;
             }
 
+            if (_clienteActual == null)
+            {
+                string telefono = txtTelefono.Text.Trim();
+                string email = txtEmail.Text.Trim();
+                if (string.IsNullOrWhiteSpace(telefono) || string.IsNullOrWhiteSpace(email) ||
+                    !email.Contains('@') || !email.Contains('.'))
+                {
+                    MessageBox.Show("Para registrar un cliente nuevo debe completar su teléfono y un correo electrónico válido en el paso 2.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    tabAsistente.SelectedIndex = 1;
+                    return;
+                }
+            }
+
             var (entrada, salida) = ObtenerFechas();
             await ActualizarCotizacionAsync();
             if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;

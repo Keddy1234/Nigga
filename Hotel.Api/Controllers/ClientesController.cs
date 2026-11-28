@@ -1,3 +1,4 @@
+using Hotel.Dominio.DTOs;
 using Hotel.Dominio.Entidades;
 using Hotel.Dominio.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,10 @@ public class ClientesController : ControllerBase
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> Obtener(int id) => Ok(await _servicio.ObtenerAsync(id));
+
+    [HttpPost("login")]
+    public async Task<IActionResult> IniciarSesion([FromBody] LoginClienteDto? dto)
+        => Ok(await _servicio.IniciarSesionPorEmailAsync(dto?.Email ?? string.Empty));
 
     [HttpPost]
     public async Task<IActionResult> Crear(Cliente cliente)

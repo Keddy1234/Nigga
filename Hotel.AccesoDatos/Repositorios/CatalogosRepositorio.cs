@@ -27,6 +27,22 @@ public class ClienteRepositorio : Repositorio<Cliente>, IClienteRepositorio
     public Task<bool> ExisteDocumentoAsync(string numeroDocumento, int? excluirId = null)
         => _db.Clientes.AnyAsync(c => c.NumeroDocumento == numeroDocumento && c.Id != excluirId);
 
+    public Task<Cliente?> ObtenerPorEmailAsync(string email)
+    {
+        var normalizado = email.Trim().ToLower();
+        return _db.Clientes.AsNoTracking()
+            .FirstOrDefaultAsync(c => c.Email != null && c.Email.ToLower() == normalizado);
+    }
+
+    public Task<bool> ExisteEmailAsync(string email, int? excluirId = null)
+    {
+        var normalizado = email.Trim().ToLower();
+        return _db.Clientes.AnyAsync(c => c.Email != null && c.Email.ToLower() == normalizado && c.Id != excluirId);
+    }
+
+    public Task<bool> TieneReservacionesAsync(int clienteId)
+        => _db.Reservaciones.AnyAsync(r => r.ClienteId == clienteId);
+
     public Task<int> ContarEstadiasCompletadasAsync(int clienteId)
         => _db.Reservaciones.CountAsync(r => r.ClienteId == clienteId && r.Estado == EstadoReservacion.Completada);
 }

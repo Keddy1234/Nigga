@@ -3,332 +3,1043 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Posada del Roble — Portal de Reservaciones para Clientes</title>
+  <title>Posada del Roble — Portal de Reservaciones para Huéspedes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --madera-oscura: #2e1f14;
-      --madera-media: #5c3a21;
-      --pergamino: #ecdcbe;
-      --pergamino-claro: #faf2e2;
-      --pergamino-panel: #e0ccaa;
-      --dorado: #c49a45;
-      --verde-bosque: #3a6634;
-      --rojo-vino: #8a2c24;
+      --bg-alabastro: #f7f4ee;
+      --bg-crema: #fbf9f5;
+      --nogal-oscuro: #231811;
+      --nogal-medio: #352419;
+      --roble: #4b3120;
+      --roble-suave: #6c4a32;
+      --dorado: #c59b48;
+      --dorado-claro: #e7c87e;
+      --dorado-tenue: #f9f3e4;
+      --blanco: #ffffff;
+      --borde: #e4dccd;
+      --borde-fuerte: #cfc2ac;
+      --texto: #231811;
+      --texto-suave: #66584b;
+      --verde: #2e5a36;
+      --verde-hover: #24472b;
+      --verde-bg: #eaf4ec;
+      --verde-borde: #9ec9a6;
+      --vino: #8b2d26;
+      --vino-bg: #fcecea;
+      --vino-borde: #e0a7a2;
+      --ambar: #8a5a14;
+      --ambar-bg: #fdf4e3;
+      --ambar-borde: #e7ca91;
+      --sombra-sm: 0 4px 14px rgba(35, 24, 17, 0.06);
+      --sombra-md: 0 14px 36px rgba(35, 24, 17, 0.10);
+      --radio-md: 10px;
+      --radio-lg: 16px;
     }
-    * { box-sizing: border-box; font-family: Georgia, 'Times New Roman', serif; }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       margin: 0;
-      background-color: var(--pergamino);
-      color: var(--madera-oscura);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background:
+        radial-gradient(circle at top right, rgba(197, 155, 72, 0.10), transparent 36%),
+        radial-gradient(circle at bottom left, rgba(75, 49, 32, 0.06), transparent 40%),
+        var(--bg-alabastro);
+      color: var(--texto);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
+
+    h1, h2, h3, .font-serif {
+      font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+      letter-spacing: 0.01em;
+    }
+
+    /* Header */
     header {
-      background-color: var(--madera-oscura);
-      color: var(--pergamino-claro);
-      border-bottom: 4px solid var(--dorado);
-      padding: 16px 32px;
+      background: linear-gradient(135deg, var(--nogal-oscuro) 0%, var(--nogal-medio) 100%);
+      color: var(--blanco);
+      border-bottom: 2px solid var(--dorado);
+      padding: 14px 32px;
+      box-shadow: 0 4px 20px rgba(35, 24, 17, 0.18);
+    }
+
+    .header-inner {
+      max-width: 1140px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 16px;
     }
-    header h1 {
-      margin: 0;
-      font-size: 1.7rem;
-      color: #f3cf7a;
-      letter-spacing: 0.5px;
-    }
-    header p {
-      margin: 4px 0 0;
-      font-size: 0.9rem;
-      color: var(--pergamino);
-    }
-    .header-actions {
+
+    .brand {
       display: flex;
       align-items: center;
       gap: 14px;
+    }
+
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(197, 155, 72, 0.14);
+      border: 1px solid rgba(231, 200, 126, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--dorado-claro);
+      flex-shrink: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--dorado-claro);
+      line-height: 1.1;
+      letter-spacing: 0.06em;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      font-size: 0.80rem;
+      color: #dfd2bc;
+      letter-spacing: 0.04em;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       flex-wrap: wrap;
     }
-    .btn {
-      background-color: var(--madera-media);
-      color: var(--pergamino-claro);
-      border: 2px solid var(--dorado);
-      padding: 9px 18px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      border-radius: 4px;
-      transition: filter 0.15s;
+
+    .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(231, 200, 126, 0.35);
+      border-radius: 999px;
+      padding: 5px 14px 5px 6px;
     }
-    .btn:hover { filter: brightness(1.12); }
-    .btn-verde { background-color: var(--verde-bosque); }
-    .btn-rojo { background-color: var(--rojo-vino); }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--dorado);
+      color: var(--nogal-oscuro);
+      font-weight: 700;
+      font-size: 0.78rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+    }
+
+    .user-meta {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .user-name {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--blanco);
+    }
+
+    .user-email {
+      font-size: 0.72rem;
+      color: #dfd2bc;
+    }
+
+    /* Main Layout */
     .container {
-      max-width: 1020px;
+      max-width: 1140px;
       width: 100%;
-      margin: 24px auto;
+      margin: 28px auto 40px;
       padding: 0 20px;
       flex: 1;
     }
-    .banner-modo {
-      background-color: #f7e8c8;
-      border: 1.5px solid var(--dorado);
-      color: var(--madera-oscura);
-      padding: 8px 14px;
-      border-radius: 4px;
-      margin-bottom: 18px;
-      font-size: 0.88rem;
-      display: flex;
-      justify-content: space-between;
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
       align-items: center;
-    }
-    .card {
-      background-color: var(--pergamino-panel);
-      border: 2px solid var(--madera-media);
-      box-shadow: 0 6px 18px rgba(46, 31, 20, 0.18);
-      border-radius: 6px;
-      padding: 24px;
-      margin-bottom: 24px;
-    }
-    .card h2 {
-      margin-top: 0;
-      color: var(--madera-media);
-      border-bottom: 2px solid var(--dorado);
-      padding-bottom: 8px;
-    }
-    .tabs {
-      display: flex;
+      justify-content: center;
       gap: 8px;
+      background-color: var(--roble);
+      color: var(--blanco);
+      border: 1px solid transparent;
+      padding: 11px 20px;
+      font-family: inherit;
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background-color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(35, 24, 17, 0.16);
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .btn-verde {
+      background-color: var(--verde);
+      color: var(--blanco);
+    }
+
+    .btn-verde:hover:not(:disabled) {
+      background-color: var(--verde-hover);
+    }
+
+    .btn-rojo {
+      background-color: rgba(139, 45, 38, 0.92);
+      border-color: rgba(255, 255, 255, 0.18);
+      padding: 8px 15px;
+      font-size: 0.84rem;
+    }
+
+    .btn-rojo:hover:not(:disabled) {
+      background-color: var(--vino);
+    }
+
+    .link-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      font-weight: 600;
+      color: var(--roble);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+
+    .link-btn:hover {
+      color: var(--verde);
+    }
+
+    /* Alerts */
+    .alerta {
+      padding: 13px 16px;
+      border-radius: var(--radio-md);
+      margin-bottom: 20px;
+      font-size: 0.92rem;
+      font-weight: 500;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      box-shadow: var(--sombra-sm);
+    }
+
+    .alerta-visible {
+      display: flex;
+    }
+
+    .alerta-ok {
+      background-color: var(--verde-bg);
+      border: 1px solid var(--verde-borde);
+      border-left: 4px solid var(--verde);
+      color: #1b4222;
+    }
+
+    .alerta-error {
+      background-color: var(--vino-bg);
+      border: 1px solid var(--vino-borde);
+      border-left: 4px solid var(--vino);
+      color: #6b1e19;
+    }
+
+    .alerta-cerrar {
+      background: none;
+      border: none;
+      color: inherit;
+      font-size: 1.15rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 2px 6px;
+      opacity: 0.7;
+    }
+
+    .alerta-cerrar:hover {
+      opacity: 1;
+    }
+
+    /* Auth Split Card */
+    .auth-shell {
+      max-width: 980px;
+      margin: 12px auto 0;
+      display: grid;
+      grid-template-columns: 1.02fr 1.18fr;
+      background-color: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-lg);
+      overflow: hidden;
+      box-shadow: var(--sombra-md);
+    }
+
+    .auth-editorial {
+      background:
+        radial-gradient(circle at 85% 15%, rgba(197, 155, 72, 0.20), transparent 45%),
+        radial-gradient(circle at 15% 90%, rgba(197, 155, 72, 0.12), transparent 50%),
+        linear-gradient(160deg, var(--nogal-oscuro) 0%, #2d1e14 55%, #3d281a 100%);
+      color: var(--blanco);
+      padding: 40px 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 28px;
+      border-right: 1px solid rgba(197, 155, 72, 0.35);
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--dorado-claro);
+      background: rgba(197, 155, 72, 0.14);
+      border: 1px solid rgba(231, 200, 126, 0.35);
+      padding: 5px 11px;
+      border-radius: 999px;
+    }
+
+    .auth-editorial h2 {
+      margin: 16px 0 12px;
+      font-size: 2.15rem;
+      line-height: 1.12;
+      color: var(--blanco);
+      font-weight: 700;
+    }
+
+    .auth-editorial-lead {
+      margin: 0 0 26px;
+      font-size: 0.93rem;
+      color: #e4d8c5;
+      line-height: 1.6;
+    }
+
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .feature-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: rgba(197, 155, 72, 0.15);
+      border: 1px solid rgba(231, 200, 126, 0.32);
+      color: var(--dorado-claro);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .feature-item strong {
+      display: block;
+      font-size: 0.89rem;
+      color: var(--dorado-claro);
+      margin-bottom: 2px;
+    }
+
+    .feature-item span {
+      display: block;
+      font-size: 0.82rem;
+      color: #d6c8b2;
+      line-height: 1.45;
+    }
+
+    .editorial-foot {
+      padding-top: 18px;
+      border-top: 1px solid rgba(231, 200, 126, 0.24);
+      font-size: 0.78rem;
+      color: #cfc0a8;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+    }
+
+    .auth-panel {
+      padding: 36px 34px;
+      background: var(--blanco);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .auth-panel-header {
       margin-bottom: 20px;
     }
+
+    .auth-panel-header h3 {
+      margin: 0 0 4px;
+      font-size: 1.75rem;
+      color: var(--nogal-oscuro);
+    }
+
+    .auth-panel-header p {
+      margin: 0;
+      font-size: 0.88rem;
+      color: var(--texto-suave);
+    }
+
+    /* Segmented Tabs */
+    .tabs-pill {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      background-color: var(--bg-alabastro);
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      margin-bottom: 22px;
+    }
+
     .tab-btn {
-      flex: 1;
-      padding: 12px;
-      background-color: var(--pergamino);
-      border: 2px solid var(--madera-media);
-      color: var(--madera-oscura);
-      font-weight: bold;
-      font-size: 1rem;
+      padding: 10px 12px;
+      background: transparent;
+      border: none;
+      color: var(--texto-suave);
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.88rem;
       cursor: pointer;
-      border-radius: 4px;
+      border-radius: 7px;
+      transition: all 0.16s ease;
     }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--texto);
+      background: rgba(255, 255, 255, 0.55);
+    }
+
     .tab-btn.active {
-      background-color: var(--madera-media);
-      color: #f3cf7a;
-      border-color: var(--dorado);
+      background-color: var(--blanco);
+      color: var(--nogal-oscuro);
+      box-shadow: 0 2px 8px rgba(35, 24, 17, 0.10);
+      border: 1px solid var(--borde);
     }
+
+    /* Info Notice */
+    .info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background-color: var(--dorado-tenue);
+      border: 1px solid #e6d4a8;
+      border-radius: 8px;
+      padding: 11px 13px;
+      margin-bottom: 18px;
+      font-size: 0.83rem;
+      color: var(--roble);
+      line-height: 1.45;
+    }
+
+    .info-banner svg {
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: #9e7422;
+    }
+
+    .aviso-primera-reserva {
+      background-color: var(--ambar-bg);
+      border: 1px solid var(--ambar-borde);
+      border-left: 4px solid var(--dorado);
+      color: #5b3c0e;
+      padding: 12px 16px;
+      border-radius: var(--radio-md);
+      margin-bottom: 20px;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Cards in Booking View */
+    .card {
+      background-color: var(--blanco);
+      border: 1px solid var(--borde);
+      box-shadow: var(--sombra-sm);
+      border-radius: var(--radio-lg);
+      padding: 26px 28px;
+      margin-bottom: 24px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+      border-bottom: 1px solid var(--borde);
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+
+    .card-header h2 {
+      margin: 0;
+      font-size: 1.65rem;
+      color: var(--nogal-oscuro);
+    }
+
+    .card-subtitle {
+      font-size: 0.84rem;
+      color: var(--texto-suave);
+    }
+
+    /* Grids & Form Fields */
     .grid-2 {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 14px 16px;
     }
+
     .grid-3 {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
+      gap: 14px 16px;
     }
+
     .campo {
       display: flex;
       flex-direction: column;
       margin-bottom: 14px;
     }
+
     .campo label {
-      font-weight: bold;
-      margin-bottom: 5px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      font-size: 0.84rem;
+      color: var(--nogal-oscuro);
+    }
+
+    .req {
+      color: var(--vino);
+      margin-left: 2px;
+    }
+
+    .input-icon-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon-wrap svg {
+      position: absolute;
+      left: 12px;
+      color: #8b7b6b;
+      pointer-events: none;
+    }
+
+    .input-icon-wrap input {
+      width: 100%;
+      padding-left: 38px !important;
+    }
+
+    .campo input,
+    .campo select,
+    .campo textarea {
+      background-color: var(--bg-crema);
+      border: 1.5px solid var(--borde-fuerte);
+      padding: 10px 12px;
+      font-family: inherit;
       font-size: 0.92rem;
+      color: var(--texto);
+      border-radius: 8px;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
     }
-    .campo input, .campo select, .campo textarea {
-      background-color: var(--pergamino-claro);
-      border: 1.5px solid var(--madera-media);
-      padding: 8px 10px;
-      font-size: 0.95rem;
-      color: var(--madera-oscura);
-      border-radius: 4px;
+
+    .campo input:focus,
+    .campo select:focus,
+    .campo textarea:focus {
+      outline: none;
+      background-color: var(--blanco);
+      border-color: var(--dorado);
+      box-shadow: 0 0 0 3px rgba(197, 155, 72, 0.22);
     }
+
+    .campo input.is-invalid,
+    .campo select.is-invalid {
+      border-color: var(--vino);
+      background-color: #fff8f7;
+    }
+
+    .campo input.is-invalid:focus {
+      box-shadow: 0 0 0 3px rgba(139, 45, 38, 0.16);
+    }
+
     .campo input[readonly] {
-      background-color: #f0e0c4;
-      font-weight: bold;
+      background-color: #f3ede2;
+      border-color: var(--borde);
+      color: var(--roble);
+      font-weight: 600;
     }
-    .alerta {
-      padding: 12px 16px;
-      border-radius: 4px;
-      margin-bottom: 16px;
-      font-weight: bold;
-      display: none;
+
+    .field-hint {
+      font-size: 0.74rem;
+      color: var(--texto-suave);
+      margin-top: 4px;
     }
-    .alerta-ok {
-      background-color: #d7ecd2;
-      border: 2px solid var(--verde-bosque);
-      color: #1f421b;
+
+    .field-error {
+      font-size: 0.76rem;
+      color: var(--vino);
+      font-weight: 600;
+      margin-top: 4px;
+      min-height: 0;
     }
-    .alerta-error {
-      background-color: #f7d6d2;
-      border: 2px solid var(--rojo-vino);
-      color: #641912;
+
+    .auth-footer-switch {
+      margin-top: 16px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--texto-suave);
     }
+
+    .auth-nota-legal {
+      margin: 10px 0 0;
+      font-size: 0.78rem;
+      color: var(--texto-suave);
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    /* Cost Summary & Payment Boxes */
     .resumen-box {
-      background-color: var(--pergamino-claro);
-      border: 2px solid var(--dorado);
-      padding: 16px;
-      border-radius: 6px;
+      background-color: var(--bg-crema);
+      border: 1px solid var(--borde);
+      padding: 20px;
+      border-radius: var(--radio-md);
     }
+
+    .resumen-box h3 {
+      margin: 0 0 14px;
+      font-size: 1.32rem;
+      color: var(--nogal-oscuro);
+    }
+
     .resumen-linea {
       display: flex;
       justify-content: space-between;
-      padding: 6px 0;
-      border-bottom: 1px dashed #c8b08a;
+      align-items: center;
+      padding: 8px 0;
+      font-size: 0.91rem;
+      border-bottom: 1px dashed var(--borde-fuerte);
     }
+
     .resumen-total {
       display: flex;
       justify-content: space-between;
-      padding: 10px 0 4px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--verde-bosque);
+      align-items: center;
+      padding: 14px 0 4px;
+      font-size: 1.18rem;
+      font-weight: 700;
+      color: var(--verde);
     }
+
+    .plan-cuota-box {
+      background-color: var(--verde-bg);
+      border: 1px solid var(--verde-borde);
+      padding: 11px 13px;
+      border-radius: 8px;
+      font-size: 0.87rem;
+      font-weight: 600;
+      color: var(--verde);
+      margin-bottom: 14px;
+    }
+
+    /* Tables */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--borde);
+      border-radius: var(--radio-md);
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: var(--pergamino-claro);
-      margin-top: 10px;
+      background-color: var(--blanco);
+      min-width: 680px;
     }
+
     th, td {
-      border: 1px solid var(--madera-media);
-      padding: 9px 12px;
+      padding: 11px 14px;
       text-align: left;
-      font-size: 0.92rem;
+      font-size: 0.87rem;
+      border-bottom: 1px solid var(--borde);
     }
+
     th {
-      background-color: var(--madera-media);
-      color: #f3cf7a;
+      background-color: var(--nogal-oscuro);
+      color: var(--dorado-claro);
+      font-weight: 600;
+      font-size: 0.80rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
     }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tbody tr:hover {
+      background-color: var(--bg-crema);
+    }
+
+    .estado-pill {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .estado-confirmada { background: var(--verde-bg); color: var(--verde); border: 1px solid var(--verde-borde); }
+    .estado-pendiente { background: var(--ambar-bg); color: var(--ambar); border: 1px solid var(--ambar-borde); }
+    .estado-curso { background: #e8f1fb; color: #1f4d7a; border: 1px solid #b4d0ee; }
+    .estado-completada { background: #f1eee8; color: var(--roble); border: 1px solid var(--borde-fuerte); }
+    .estado-cancelada { background: var(--vino-bg); color: var(--vino); border: 1px solid var(--vino-borde); }
+
+    /* Footer */
     footer {
-      background-color: var(--madera-oscura);
-      color: var(--pergamino);
+      background-color: var(--nogal-oscuro);
+      color: #d8cbb6;
       text-align: center;
-      padding: 12px;
-      font-size: 0.85rem;
-      border-top: 3px solid var(--dorado);
+      padding: 16px 20px;
+      font-size: 0.82rem;
+      border-top: 2px solid var(--dorado);
     }
-    footer a { color: #f3cf7a; text-decoration: none; font-weight: bold; }
-    .oculto { display: none !important; }
-    @media (max-width: 768px) {
-      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+
+    .oculto {
+      display: none !important;
+    }
+
+    @media (max-width: 880px) {
+      .auth-shell {
+        grid-template-columns: 1fr;
+      }
+      .auth-editorial {
+        border-right: none;
+        border-bottom: 1px solid rgba(197, 155, 72, 0.35);
+        padding: 28px 24px;
+      }
+      .auth-panel {
+        padding: 28px 24px;
+      }
+    }
+
+    @media (max-width: 720px) {
+      header {
+        padding: 14px 18px;
+      }
+      .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+      }
+      .card {
+        padding: 20px 18px;
+      }
     }
   </style>
 </head>
 <body>
 
   <header>
-    <div>
-      <h1>POSADA DEL ROBLE</h1>
-      <p>Portal en Línea de Reservaciones para Huéspedes</p>
-    </div>
-    <div class="header-actions">
-      <span id="lblUsuarioActivo" class="oculto" style="font-weight:bold; color:#f3cf7a;"></span>
-      <button id="btnCerrarSesion" class="btn btn-rojo oculto" onclick="cerrarSesion()">Cerrar Sesión</button>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v18"></path>
+            <path d="M12 7c2.8-2.4 6-1.8 6 1.4 0 2-1.8 3.6-4.2 3.8"></path>
+            <path d="M12 7c-2.8-2.4-6-1.8-6 1.4 0 2 1.8 3.6 4.2 3.8"></path>
+            <path d="M12 12c2.5-1.4 5-.6 5 1.8 0 1.8-1.7 3-5 3.2"></path>
+            <path d="M12 12c-2.5-1.4-5-.6-5 1.8 0 1.8 1.7 3 5 3.2"></path>
+          </svg>
+        </div>
+        <div>
+          <h1>POSADA DEL ROBLE</h1>
+          <p>Hotel Boutique &amp; Portal de Reservaciones</p>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <div id="usuarioChip" class="user-chip oculto">
+          <div id="lblUsuarioIniciales" class="user-avatar">HR</div>
+          <div class="user-meta">
+            <span id="lblUsuarioActivo" class="user-name"></span>
+            <span id="lblUsuarioEmail" class="user-email"></span>
+          </div>
+        </div>
+        <button id="btnCerrarSesion" type="button" class="btn btn-rojo oculto" onclick="cerrarSesion()">Cerrar Sesión</button>
+      </div>
     </div>
   </header>
 
-  <div class="container">
-    <div class="banner-modo">
-      <span>🏨 <strong>Posada del Roble</strong> — Reservaciones en Colones Costarricenses (₡)</span>
-      <span id="badgeModo" style="font-size:0.82rem; background:#5c3a21; color:#f3cf7a; padding:3px 8px; border-radius:3px;">Listo</span>
+  <main class="container">
+    <div id="cajaAlerta" class="alerta" role="alert">
+      <span id="textoAlerta"></span>
+      <button type="button" class="alerta-cerrar" aria-label="Cerrar aviso" onclick="ocultarAlerta()">&times;</button>
     </div>
-
-    <div id="cajaAlerta" class="alerta"></div>
 
     <!-- SECCIÓN 1: INICIAR SESIÓN O CREAR CUENTA -->
-    <div id="seccionAuth" class="card" style="max-width: 580px; margin: 20px auto;">
-      <h2>Acceso de Huéspedes</h2>
-      <div class="tabs">
-        <button id="tabBtnLogin" class="tab-btn active" onclick="cambiarTabAuth('login')">Iniciar Sesión</button>
-        <button id="tabBtnRegistro" class="tab-btn" onclick="cambiarTabAuth('registro')">Crear una Cuenta</button>
-      </div>
+    <section id="seccionAuth" class="auth-shell">
+      <aside class="auth-editorial">
+        <div>
+          <span class="eyebrow">Portal Oficial de Huéspedes</span>
+          <h2>Su estadía en Posada del Roble comienza aquí</h2>
+          <p class="auth-editorial-lead">
+            Acceda con el correo electrónico de sus reservaciones registradas o cree su perfil completo de huésped para cotizar y confirmar su estancia en línea.
+          </p>
 
-      <!-- FORMULARIO LOGIN -->
-      <div id="formLogin">
-        <p style="margin-top:0;">Ingrese su número de documento de identificación para acceder a sus reservaciones:</p>
-        <div class="campo">
-          <label>Documento de Identificación (solo números, máx. 10 dígitos):</label>
-          <input type="text" id="txtLoginDocumento" maxlength="10" placeholder="Ej: 101110111" oninput="soloNumeros(this, 10)" value="101110111" />
-        </div>
-        <button class="btn btn-verde" style="width:100%; padding:12px;" onclick="iniciarSesion()">Ingresar al Portal</button>
-        <p style="font-size:0.85rem; color:#775231; margin-top:8px; text-align:center;">
-          (Cuenta de prueba incluida: Cédula <strong>101110111</strong> de Carlos Mendoza)
-        </p>
-      </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <div class="feature-icon" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                  <path d="m3 7 9 6 9-6"></path>
+                </svg>
+              </div>
+              <div>
+                <strong>Acceso Verificado por Correo</strong>
+                <span>Solo correos electrónicos que ya tengan al menos una reservación registrada pueden iniciar sesión.</span>
+              </div>
+            </div>
 
-      <!-- FORMULARIO CREAR CUENTA -->
-      <div id="formRegistro" class="oculto">
-        <div class="grid-2">
-          <div class="campo">
-            <label>Tipo de Documento:</label>
-            <select id="cmbRegTipoDoc">
-              <option value="Cedula">Cédula</option>
-              <option value="DNI">DNI</option>
-              <option value="Pasaporte">Pasaporte</option>
-            </select>
-          </div>
-          <div class="campo">
-            <label>Número de Documento (máx. 10 dígitos):</label>
-            <input type="text" id="txtRegDocumento" maxlength="10" placeholder="Solo números (máx. 10)" oninput="soloNumeros(this, 10)" />
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="campo">
-            <label>Nombres:</label>
-            <input type="text" id="txtRegNombres" placeholder="Sus nombres" />
-          </div>
-          <div class="campo">
-            <label>Apellidos:</label>
-            <input type="text" id="txtRegApellidos" placeholder="Sus apellidos" />
-          </div>
-        </div>
-        <div class="grid-2">
-          <div class="campo">
-            <label>Teléfono (solo números, máx. 8 dígitos):</label>
-            <input type="text" id="txtRegTelefono" maxlength="8" placeholder="Ej: 88881111" oninput="soloNumeros(this, 8)" />
-          </div>
-          <div class="campo">
-            <label>Correo Electrónico:</label>
-            <input type="email" id="txtRegEmail" placeholder="cliente@correo.com" />
+            <div class="feature-item">
+              <div class="feature-icon" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                  <path d="M16 2v4M8 2v4M3 10h18"></path>
+                </svg>
+              </div>
+              <div>
+                <strong>Cotización Clara en Colones (₡)</strong>
+                <span>Visualice tarifas por noche, IVA del 16% y modalidades de Contado o Tasa Cero sin intereses.</span>
+              </div>
+            </div>
+
+            <div class="feature-item">
+              <div class="feature-icon" aria-hidden="true">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 12l2 2 4-4"></path>
+                  <circle cx="12" cy="12" r="9"></circle>
+                </svg>
+              </div>
+              <div>
+                <strong>Confirmación Inmediata</strong>
+                <span>Reciba su código de reservación al instante y consulte todo su historial desde un solo lugar.</span>
+              </div>
+            </div>
           </div>
         </div>
-        <button class="btn btn-verde" style="width:100%; padding:12px;" onclick="crearCuenta()">Crear Cuenta y Continuar</button>
+
+        <div class="editorial-foot">
+          <span>Check-in: 2:00 p.m.</span>
+          <span>&bull;</span>
+          <span>Check-out: 11:00 a.m.</span>
+          <span>&bull;</span>
+          <span>Tarifas en Colones (₡)</span>
+        </div>
+      </aside>
+
+      <div class="auth-panel">
+        <div class="auth-panel-header">
+          <h3 id="tituloAuthPanel">Bienvenido de nuevo</h3>
+          <p id="subtituloAuthPanel">Ingrese su correo electrónico para consultar o realizar una reservación.</p>
+        </div>
+
+        <div class="tabs-pill" role="tablist">
+          <button id="tabBtnLogin" type="button" class="tab-btn active" onclick="cambiarTabAuth('login')">Iniciar Sesión</button>
+          <button id="tabBtnRegistro" type="button" class="tab-btn" onclick="cambiarTabAuth('registro')">Crear Cuenta para Reservar</button>
+        </div>
+
+        <!-- FORMULARIO LOGIN -->
+        <form id="formLogin" novalidate onsubmit="event.preventDefault(); iniciarSesion();">
+          <div class="info-banner">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 16v-4"></path>
+              <path d="M12 8h.01"></path>
+            </svg>
+            <span>
+              El inicio de sesión está habilitado exclusivamente para <strong>correos electrónicos que ya cuenten con al menos una reservación registrada</strong>.
+            </span>
+          </div>
+
+          <div class="campo">
+            <label for="txtLoginEmail">Correo Electrónico <span class="req">*</span></label>
+            <div class="input-icon-wrap">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m3 7 9 6 9-6"></path>
+              </svg>
+              <input type="email" id="txtLoginEmail" autocomplete="email" placeholder="nombre@correo.com" oninput="limpiarErrorCampo('txtLoginEmail', 'errLoginEmail')" />
+            </div>
+            <span class="field-error" id="errLoginEmail"></span>
+          </div>
+
+          <button id="btnLogin" type="submit" class="btn btn-verde" style="width:100%; padding:13px; margin-top:4px;">
+            Ingresar a Mis Reservaciones
+          </button>
+
+          <p class="auth-footer-switch">
+            ¿Aún no ha realizado una reservación?
+            <button type="button" class="link-btn" onclick="cambiarTabAuth('registro')">Crear cuenta para reservar</button>
+          </p>
+        </form>
+
+        <!-- FORMULARIO CREAR CUENTA -->
+        <form id="formRegistro" class="oculto" novalidate onsubmit="event.preventDefault(); crearCuenta();">
+          <div class="info-banner">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M19 8v6M22 11h-6"></path>
+            </svg>
+            <span>
+              Complete <strong>todos los campos obligatorios (*)</strong> para registrar sus datos y pasar de inmediato a reservar su habitación.
+            </span>
+          </div>
+
+          <div class="grid-2">
+            <div class="campo">
+              <label for="cmbRegTipoDoc">Tipo de Documento <span class="req">*</span></label>
+              <select id="cmbRegTipoDoc" onchange="actualizarModoDocumento()">
+                <option value="Cedula">Cédula de Identidad</option>
+                <option value="DNI">DNI</option>
+                <option value="Pasaporte">Pasaporte</option>
+              </select>
+              <span class="field-error" id="errRegTipoDoc"></span>
+            </div>
+
+            <div class="campo">
+              <label for="txtRegDocumento">Número de Documento <span class="req">*</span></label>
+              <input type="text" id="txtRegDocumento" maxlength="10" placeholder="Ej: 101110111" oninput="manejarInputDocumento(this)" />
+              <span class="field-hint" id="hintRegDocumento">Solo números (5 a 10 dígitos)</span>
+              <span class="field-error" id="errRegDocumento"></span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="campo">
+              <label for="txtRegNombres">Nombres <span class="req">*</span></label>
+              <input type="text" id="txtRegNombres" maxlength="100" autocomplete="given-name" placeholder="Sus nombres" oninput="limpiarErrorCampo('txtRegNombres', 'errRegNombres')" />
+              <span class="field-error" id="errRegNombres"></span>
+            </div>
+
+            <div class="campo">
+              <label for="txtRegApellidos">Apellidos <span class="req">*</span></label>
+              <input type="text" id="txtRegApellidos" maxlength="100" autocomplete="family-name" placeholder="Sus apellidos" oninput="limpiarErrorCampo('txtRegApellidos', 'errRegApellidos')" />
+              <span class="field-error" id="errRegApellidos"></span>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <div class="campo">
+              <label for="txtRegTelefono">Teléfono <span class="req">*</span></label>
+              <input type="tel" id="txtRegTelefono" maxlength="15" autocomplete="tel" placeholder="Ej: 88881111" oninput="soloNumeros(this, 15); limpiarErrorCampo('txtRegTelefono', 'errRegTelefono')" />
+              <span class="field-hint">Solo números (8 a 15 dígitos)</span>
+              <span class="field-error" id="errRegTelefono"></span>
+            </div>
+
+            <div class="campo">
+              <label for="txtRegEmail">Correo Electrónico <span class="req">*</span></label>
+              <input type="email" id="txtRegEmail" maxlength="150" autocomplete="email" placeholder="nombre@correo.com" oninput="limpiarErrorCampo('txtRegEmail', 'errRegEmail')" />
+              <span class="field-error" id="errRegEmail"></span>
+            </div>
+          </div>
+
+          <button id="btnRegistro" type="submit" class="btn btn-verde" style="width:100%; padding:13px; margin-top:4px;">
+            Crear Cuenta y Pasar a Reservar
+          </button>
+
+          <p class="auth-nota-legal">
+            Tras completar su primera reservación en el siguiente paso, su correo quedará habilitado para iniciar sesión en futuras visitas.
+          </p>
+
+          <p class="auth-footer-switch">
+            ¿Ya tiene una reservación con su correo?
+            <button type="button" class="link-btn" onclick="cambiarTabAuth('login')">Iniciar sesión</button>
+          </p>
+        </form>
       </div>
-    </div>
+    </section>
 
     <!-- SECCIÓN 2: PORTAL DE RESERVACIÓN DEL CLIENTE -->
-    <div id="seccionReserva" class="oculto">
+    <section id="seccionReserva" class="oculto">
+      <div id="avisoPrimeraReserva" class="aviso-primera-reserva oculto">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink:0;">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 16v-4"></path>
+          <path d="M12 8h.01"></path>
+        </svg>
+        <span id="textoPrimeraReserva"></span>
+      </div>
+
       <div class="card">
-        <h2>Nueva Reservación de Habitación</h2>
+        <div class="card-header">
+          <h2>Nueva Reservación de Habitación</h2>
+          <span class="card-subtitle">Seleccione fechas, tipo de habitación y modalidad de pago</span>
+        </div>
 
         <div class="grid-3">
           <div class="campo">
-            <label>Fecha de Entrada (Check-In):</label>
+            <label for="dtpEntrada">Fecha de Entrada (Check-In)</label>
             <input type="date" id="dtpEntrada" onchange="alCambiarFechas()" />
           </div>
           <div class="campo">
-            <label>Fecha de Salida (Check-Out):</label>
+            <label for="dtpSalida">Fecha de Salida (Check-Out)</label>
             <input type="date" id="dtpSalida" onchange="alCambiarFechas()" />
           </div>
           <div class="campo">
-            <label>Tipo de Habitación:</label>
+            <label for="cmbTipoHab">Tipo de Habitación</label>
             <select id="cmbTipoHab" onchange="alCambiarTipoHab()"></select>
           </div>
         </div>
 
         <div class="grid-3">
           <div class="campo">
-            <label>Habitación Disponible Asignada:</label>
+            <label for="cmbHabitacion">Habitación Disponible Asignada</label>
             <select id="cmbHabitacion" onchange="recalcularCotizacion()"></select>
           </div>
           <div class="campo">
-            <label>Adultos (≥ 12 años):</label>
+            <label for="cmbAdultos">Adultos (&ge; 12 años)</label>
             <select id="cmbAdultos" onchange="recalcularCotizacion()">
               <option value="1">1 Adulto</option>
               <option value="2">2 Adultos</option>
@@ -337,7 +1048,7 @@
             </select>
           </div>
           <div class="campo">
-            <label>Niños (&lt; 12 años):</label>
+            <label for="cmbNinos">Niños (&lt; 12 años)</label>
             <select id="cmbNinos" onchange="recalcularCotizacion()">
               <option value="0" selected>0 Niños</option>
               <option value="1">1 Niño</option>
@@ -350,31 +1061,29 @@
 
         <div class="grid-2">
           <div class="campo">
-            <label>Tarifas por Persona de esta Habitación:</label>
+            <label for="txtPreciosPersona">Tarifas por Persona de esta Habitación</label>
             <input type="text" id="txtPreciosPersona" readonly />
           </div>
           <div class="campo">
-            <label>Descripción Incluida:</label>
+            <label for="txtDescripcionHab">Descripción Incluida</label>
             <input type="text" id="txtDescripcionHab" readonly />
           </div>
         </div>
 
-        <div class="grid-2" style="margin-top: 12px;">
-          <!-- Desglose de Costos -->
+        <div class="grid-2" style="margin-top: 10px;">
           <div class="resumen-box">
-            <h3 style="margin-top:0; color:var(--madera-media);">Resumen de Costos en Colones (₡)</h3>
-            <div class="resumen-linea"><span>Noches de estadía:</span><strong id="lblNoches">2</strong></div>
-            <div class="resumen-linea"><span>Tarifa base por noche:</span><strong id="lblTarifaBase">₡0.00</strong></div>
-            <div class="resumen-linea"><span>Hospedaje + temporada:</span><strong id="lblHospedaje">₡0.00</strong></div>
-            <div class="resumen-linea"><span>IVA (16%):</span><strong id="lblIva">₡0.00</strong></div>
-            <div class="resumen-total"><span>Total Reservación:</span><span id="lblTotal">₡0.00</span></div>
+            <h3>Resumen de Costos en Colones (₡)</h3>
+            <div class="resumen-linea"><span>Noches de estadía</span><strong id="lblNoches">2</strong></div>
+            <div class="resumen-linea"><span>Tarifa base por noche</span><strong id="lblTarifaBase">₡0.00</strong></div>
+            <div class="resumen-linea"><span>Hospedaje + temporada</span><strong id="lblHospedaje">₡0.00</strong></div>
+            <div class="resumen-linea"><span>IVA (16%)</span><strong id="lblIva">₡0.00</strong></div>
+            <div class="resumen-total"><span>Total Reservación</span><span id="lblTotal">₡0.00</span></div>
           </div>
 
-          <!-- Modalidad de Pago: Contado o Tasa Cero -->
           <div class="resumen-box">
-            <h3 style="margin-top:0; color:var(--madera-media);">Modalidad de Pago</h3>
+            <h3>Modalidad de Pago</h3>
             <div class="campo">
-              <label>Seleccione cómo desea realizar su pago:</label>
+              <label for="cmbModalidadPago">Seleccione cómo desea realizar su pago</label>
               <select id="cmbModalidadPago" onchange="actualizarPlanPago()">
                 <option value="Contado">Pago de Contado (100% - Único Pago)</option>
                 <option value="TasaCero3">A Pagos — Tasa Cero a 3 Meses (0% Interés)</option>
@@ -382,14 +1091,14 @@
                 <option value="TasaCero12">A Pagos — Tasa Cero a 12 Meses (0% Interés)</option>
               </select>
             </div>
-            <div id="cajaDetalleCuota" style="background:#ecdcbe; border:1px solid var(--madera-media); padding:10px; border-radius:4px; font-weight:bold; color:var(--verde-bosque); margin-bottom:12px;">
+            <div id="cajaDetalleCuota" class="plan-cuota-box">
               Pago de Contado
             </div>
             <div class="campo">
-              <label>Solicitudes especiales u observaciones:</label>
-              <input type="text" id="txtObservaciones" placeholder="Ej: Piso alto, llegada tarde..." />
+              <label for="txtObservaciones">Solicitudes especiales u observaciones</label>
+              <input type="text" id="txtObservaciones" maxlength="400" placeholder="Ej: Piso alto, llegada tarde..." />
             </div>
-            <button class="btn btn-verde" style="width:100%; padding:13px; font-size:1.05rem;" onclick="confirmarReservacion()">
+            <button id="btnConfirmarReserva" type="button" class="btn btn-verde" style="width:100%; padding:13px; font-size:0.98rem;" onclick="confirmarReservacion()">
               Confirmar Reservación
             </button>
           </div>
@@ -398,31 +1107,35 @@
 
       <!-- HISTORIAL DE RESERVACIONES DEL CLIENTE -->
       <div class="card">
-        <h2>Mis Reservaciones Registradas</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Código</th>
-              <th>Habitación</th>
-              <th>Entrada</th>
-              <th>Salida</th>
-              <th>Huéspedes</th>
-              <th>Estado</th>
-              <th>Plan de Pago</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody id="tablaMisReservas">
-            <tr><td colspan="8" style="text-align:center;">Aún no tiene reservaciones registradas.</td></tr>
-          </tbody>
-        </table>
+        <div class="card-header">
+          <h2>Mis Reservaciones Registradas</h2>
+          <span class="card-subtitle">Historial asociado a su cuenta</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Habitación</th>
+                <th>Entrada</th>
+                <th>Salida</th>
+                <th>Huéspedes</th>
+                <th>Estado</th>
+                <th>Plan de Pago / Observaciones</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="tablaMisReservas">
+              <tr><td colspan="8" style="text-align:center;">Aún no tiene reservaciones registradas.</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <footer>
-    Posada del Roble — Sistema de Reservaciones y Gestión Hotelera &nbsp;|&nbsp;
-    <a href="/swagger" target="_blank">Documentación API (Swagger)</a>
+    Posada del Roble — Portal Oficial de Reservaciones &middot; Tarifas expresadas en Colones Costarricenses (₡)
   </footer>
 
   <script>
@@ -448,16 +1161,32 @@
       { id: 402, numero: "402", piso: 4, tipoHabitacionId: 4, tieneVistaMar: true, tieneJacuzzi: true, precioPorNoche: 700000 }
     ];
 
+    const ES_EMAIL_VALIDO = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const ES_PASAPORTE_VALIDO = /^[A-Za-z0-9\-]{5,20}$/;
+    const ES_DIGITOS_DOC_VALIDO = /^\d{5,10}$/;
+
     let clienteActual = null;
     let tiposHabitacion = [];
     let habitacionesDisponibles = [];
     let ultimoTotal = 0;
-    let modoOffline = false;
+    let alertaTimer = null;
+
+    function escaparHtml(texto) {
+      return String(texto ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
 
     function obtenerClientesStorage() {
       const guardados = localStorage.getItem("hotel_clientes");
       if (guardados) {
-        try { return JSON.parse(guardados); } catch (e) {}
+        try {
+          const parsed = JSON.parse(guardados);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
       }
       const inicial = [
         { id: 1, tipoDocumento: "Cedula", numeroDocumento: "101110111", nombres: "Carlos", apellidos: "Mendoza Delgado", telefono: "88881111", email: "carlos@correo.com" },
@@ -476,7 +1205,10 @@
     function obtenerReservacionesStorage() {
       const guardadas = localStorage.getItem("hotel_reservaciones");
       if (guardadas) {
-        try { return JSON.parse(guardadas); } catch (e) {}
+        try {
+          const parsed = JSON.parse(guardadas);
+          if (Array.isArray(parsed)) return parsed;
+        } catch (e) {}
       }
       const inicial = [
         {
@@ -484,6 +1216,7 @@
           codigo: "RES-94821",
           clienteId: 1,
           documentoCliente: "101110111",
+          emailCliente: "carlos@correo.com",
           habitacionId: 202,
           habitacion: { numero: "202" },
           fechaInicio: new Date().toISOString(),
@@ -504,6 +1237,47 @@
       localStorage.setItem("hotel_reservaciones", JSON.stringify(lista));
     }
 
+    function clienteTieneReservacionesStorage(cliente) {
+      const correo = (cliente.email || "").trim().toLowerCase();
+      return obtenerReservacionesStorage().some(r =>
+        r.clienteId === cliente.id ||
+        (correo && r.emailCliente && r.emailCliente.trim().toLowerCase() === correo) ||
+        (cliente.numeroDocumento && r.documentoCliente === cliente.numeroDocumento)
+      );
+    }
+
+    async function llamarApi(url, options = {}) {
+      try {
+        const resp = await fetch(url, options);
+        if (resp.status === 204) {
+          return { apiDisponible: true, ok: true, status: 204, data: null };
+        }
+        const contentType = (resp.headers.get("content-type") || "").toLowerCase();
+        const esJson = contentType.includes("application/json") || contentType.includes("application/problem+json");
+        if (!esJson) {
+          return { apiDisponible: false, ok: false, status: resp.status, data: null };
+        }
+        const data = await resp.json().catch(() => null);
+        return { apiDisponible: true, ok: resp.ok, status: resp.status, data };
+      } catch (e) {
+        return { apiDisponible: false, ok: false, status: 0, data: null };
+      }
+    }
+
+    function extraerMensajeApi(data, respaldo) {
+      if (data && typeof data.mensaje === "string" && data.mensaje.trim()) {
+        return data.mensaje.trim();
+      }
+      if (data && data.errors && typeof data.errors === "object") {
+        const mensajes = Object.values(data.errors).flat().filter(Boolean);
+        if (mensajes.length > 0) return mensajes.join(" ");
+      }
+      if (data && typeof data.title === "string" && data.title.trim()) {
+        return data.title.trim();
+      }
+      return respaldo;
+    }
+
     function formatoColones(monto) {
       return "₡" + Number(monto || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     }
@@ -512,100 +1286,300 @@
       input.value = input.value.replace(/\D/g, "").slice(0, max);
     }
 
+    function sanearPasaporte(input, max) {
+      input.value = input.value.replace(/[^A-Za-z0-9\-]/g, "").slice(0, max).toUpperCase();
+    }
+
+    function manejarInputDocumento(input) {
+      const tipo = document.getElementById("cmbRegTipoDoc").value;
+      if (tipo === "Pasaporte") {
+        sanearPasaporte(input, 20);
+      } else {
+        soloNumeros(input, 10);
+      }
+      limpiarErrorCampo("txtRegDocumento", "errRegDocumento");
+    }
+
+    function actualizarModoDocumento() {
+      const tipo = document.getElementById("cmbRegTipoDoc").value;
+      const input = document.getElementById("txtRegDocumento");
+      const hint = document.getElementById("hintRegDocumento");
+      limpiarErrorCampo("cmbRegTipoDoc", "errRegTipoDoc");
+      limpiarErrorCampo("txtRegDocumento", "errRegDocumento");
+
+      if (tipo === "Pasaporte") {
+        input.maxLength = 20;
+        input.placeholder = "Ej: PA1234567";
+        hint.textContent = "Letras, números o guion (5 a 20 caracteres)";
+        sanearPasaporte(input, 20);
+      } else {
+        input.maxLength = 10;
+        input.placeholder = tipo === "Cedula" ? "Ej: 101110111" : "Ej: 12345678";
+        hint.textContent = "Solo números (5 a 10 dígitos)";
+        soloNumeros(input, 10);
+      }
+    }
+
+    function mostrarErrorCampo(inputId, errorId, mensaje) {
+      const input = document.getElementById(inputId);
+      const err = document.getElementById(errorId);
+      if (input) input.classList.add("is-invalid");
+      if (err) err.textContent = mensaje;
+    }
+
+    function limpiarErrorCampo(inputId, errorId) {
+      const input = document.getElementById(inputId);
+      const err = document.getElementById(errorId);
+      if (input) input.classList.remove("is-invalid");
+      if (err) err.textContent = "";
+    }
+
+    function limpiarErroresAuth() {
+      [
+        ["txtLoginEmail", "errLoginEmail"],
+        ["cmbRegTipoDoc", "errRegTipoDoc"],
+        ["txtRegDocumento", "errRegDocumento"],
+        ["txtRegNombres", "errRegNombres"],
+        ["txtRegApellidos", "errRegApellidos"],
+        ["txtRegTelefono", "errRegTelefono"],
+        ["txtRegEmail", "errRegEmail"]
+      ].forEach(([i, e]) => limpiarErrorCampo(i, e));
+    }
+
     function mostrarAlerta(texto, esError = false) {
       const el = document.getElementById("cajaAlerta");
-      el.textContent = texto;
-      el.className = "alerta " + (esError ? "alerta-error" : "alerta-ok");
-      el.style.display = "block";
-      setTimeout(() => { el.style.display = "none"; }, 6000);
+      const lbl = document.getElementById("textoAlerta");
+      lbl.textContent = texto;
+      el.className = "alerta alerta-visible " + (esError ? "alerta-error" : "alerta-ok");
+      if (alertaTimer) clearTimeout(alertaTimer);
+      alertaTimer = setTimeout(ocultarAlerta, 8000);
+    }
+
+    function ocultarAlerta() {
+      const el = document.getElementById("cajaAlerta");
+      el.className = "alerta";
+      if (alertaTimer) {
+        clearTimeout(alertaTimer);
+        alertaTimer = null;
+      }
     }
 
     function cambiarTabAuth(modo) {
       const esLogin = modo === "login";
+      ocultarAlerta();
+      limpiarErroresAuth();
+
       document.getElementById("tabBtnLogin").classList.toggle("active", esLogin);
       document.getElementById("tabBtnRegistro").classList.toggle("active", !esLogin);
       document.getElementById("formLogin").classList.toggle("oculto", !esLogin);
       document.getElementById("formRegistro").classList.toggle("oculto", esLogin);
+
+      document.getElementById("tituloAuthPanel").textContent = esLogin
+        ? "Bienvenido de nuevo"
+        : "Crear Cuenta de Huésped";
+      document.getElementById("subtituloAuthPanel").textContent = esLogin
+        ? "Ingrese su correo electrónico para consultar o realizar una reservación."
+        : "Complete todos sus datos personales para habilitar su reservación.";
     }
 
     async function iniciarSesion() {
-      const doc = document.getElementById("txtLoginDocumento").value.trim();
-      if (!doc) {
-        mostrarAlerta("Ingrese su número de documento de identificación.", true);
+      ocultarAlerta();
+      limpiarErrorCampo("txtLoginEmail", "errLoginEmail");
+
+      const emailInput = document.getElementById("txtLoginEmail");
+      const correo = emailInput.value.trim().toLowerCase();
+
+      if (!correo || !ES_EMAIL_VALIDO.test(correo)) {
+        const msg = "Ingrese un correo electrónico válido.";
+        mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
+        mostrarAlerta(msg, true);
+        emailInput.focus();
         return;
       }
+
+      const btn = document.getElementById("btnLogin");
+      btn.disabled = true;
+      btn.textContent = "Verificando acceso...";
+
       try {
-        const resp = await fetch(`/api/clientes?buscar=${encodeURIComponent(doc)}`);
-        if (!resp.ok) throw new Error();
-        const lista = await resp.json();
-        const encontrado = lista.find(c => c.numeroDocumento === doc) || lista[0];
-        if (!encontrado) throw new Error("No encontrado");
-        entrarAlPortal(encontrado);
-      } catch (e) {
-        // Fallback local/Vercel
-        modoOffline = true;
-        document.getElementById("badgeModo").textContent = "En Línea (Cloud)";
-        const clientes = obtenerClientesStorage();
-        const encontrado = clientes.find(c => c.numeroDocumento === doc);
-        if (!encontrado) {
-          mostrarAlerta("No encontramos una cuenta con ese documento. Puede registrarse en la pestaña 'Crear una Cuenta'.", true);
-          cambiarTabAuth("registro");
-          document.getElementById("txtRegDocumento").value = doc;
+        const res = await llamarApi("/api/clientes/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: correo })
+        });
+
+        if (res.apiDisponible) {
+          if (!res.ok) {
+            const msg = extraerMensajeApi(res.data, "No se pudo iniciar sesión con ese correo electrónico.");
+            mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
+            mostrarAlerta(msg, true);
+            return;
+          }
+          await entrarAlPortal(res.data, false);
           return;
         }
-        entrarAlPortal(encontrado);
+
+        // Respaldo cuando el portal se sirve en hosting estático sin backend API
+        const clientes = obtenerClientesStorage();
+        const encontrado = clientes.find(c => (c.email || "").trim().toLowerCase() === correo);
+        if (!encontrado) {
+          const msg = "No existe una cuenta registrada con ese correo electrónico. Cree una cuenta para realizar su primera reservación.";
+          mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
+          mostrarAlerta(msg, true);
+          return;
+        }
+
+        if (!clienteTieneReservacionesStorage(encontrado)) {
+          const msg = "Este correo aún no tiene ninguna reservación registrada. Solo pueden iniciar sesión clientes que ya hayan registrado una reservación.";
+          mostrarErrorCampo("txtLoginEmail", "errLoginEmail", msg);
+          mostrarAlerta(msg, true);
+          return;
+        }
+
+        await entrarAlPortal(encontrado, false);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Ingresar a Mis Reservaciones";
       }
     }
 
     async function crearCuenta() {
+      ocultarAlerta();
+      limpiarErroresAuth();
+
       const tipoDocumento = document.getElementById("cmbRegTipoDoc").value;
       const numeroDocumento = document.getElementById("txtRegDocumento").value.trim();
       const nombres = document.getElementById("txtRegNombres").value.trim();
       const apellidos = document.getElementById("txtRegApellidos").value.trim();
       const telefono = document.getElementById("txtRegTelefono").value.trim();
-      const email = document.getElementById("txtRegEmail").value.trim();
+      const email = document.getElementById("txtRegEmail").value.trim().toLowerCase();
 
-      if (!numeroDocumento || !nombres || !apellidos) {
-        mostrarAlerta("Complete su documento, nombres y apellidos para crear la cuenta.", true);
+      let valido = true;
+
+      if (!["Cedula", "DNI", "Pasaporte"].includes(tipoDocumento)) {
+        mostrarErrorCampo("cmbRegTipoDoc", "errRegTipoDoc", "Seleccione un tipo de documento válido.");
+        valido = false;
+      }
+
+      if (tipoDocumento === "Pasaporte") {
+        if (!ES_PASAPORTE_VALIDO.test(numeroDocumento)) {
+          mostrarErrorCampo("txtRegDocumento", "errRegDocumento", "Ingrese un pasaporte válido (5 a 20 caracteres alfanuméricos).");
+          valido = false;
+        }
+      } else if (!ES_DIGITOS_DOC_VALIDO.test(numeroDocumento)) {
+        mostrarErrorCampo("txtRegDocumento", "errRegDocumento", "Ingrese un número de documento válido (5 a 10 dígitos).");
+        valido = false;
+      }
+
+      if (nombres.length < 2 || nombres.length > 100) {
+        mostrarErrorCampo("txtRegNombres", "errRegNombres", "Ingrese sus nombres (mínimo 2 caracteres).");
+        valido = false;
+      }
+
+      if (apellidos.length < 2 || apellidos.length > 100) {
+        mostrarErrorCampo("txtRegApellidos", "errRegApellidos", "Ingrese sus apellidos (mínimo 2 caracteres).");
+        valido = false;
+      }
+
+      const digitosTelefono = telefono.replace(/\D/g, "");
+      if (!digitosTelefono || digitosTelefono.length < 8 || digitosTelefono.length > 15) {
+        mostrarErrorCampo("txtRegTelefono", "errRegTelefono", "El teléfono es obligatorio (8 a 15 dígitos).");
+        valido = false;
+      }
+
+      if (!email || email.length > 150 || !ES_EMAIL_VALIDO.test(email)) {
+        mostrarErrorCampo("txtRegEmail", "errRegEmail", "Ingrese un correo electrónico válido.");
+        valido = false;
+      }
+
+      if (!valido) {
+        mostrarAlerta("Complete todos los campos obligatorios con información válida para crear su cuenta.", true);
         return;
       }
 
-      const nuevoCliente = {
-        id: Date.now() % 100000,
+      const payloadApi = {
         tipoDocumento,
         numeroDocumento,
         nombres,
         apellidos,
-        telefono: telefono || null,
-        email: email || null
+        telefono: digitosTelefono,
+        email
       };
 
+      const btn = document.getElementById("btnRegistro");
+      btn.disabled = true;
+      btn.textContent = "Creando cuenta...";
+
       try {
-        const resp = await fetch("/api/clientes", {
+        const res = await llamarApi("/api/clientes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(nuevoCliente)
+          body: JSON.stringify(payloadApi)
         });
-        if (!resp.ok) throw new Error();
-        const creado = await resp.json();
-        mostrarAlerta("¡Cuenta creada exitosamente! Bienvenido(a) a Posada del Roble.");
-        entrarAlPortal(creado);
-      } catch (e) {
-        // Fallback local/Vercel
-        modoOffline = true;
-        document.getElementById("badgeModo").textContent = "En Línea (Cloud)";
+
+        if (res.apiDisponible) {
+          if (!res.ok) {
+            const msg = extraerMensajeApi(res.data, "No se pudo crear la cuenta. Verifique los datos ingresados.");
+            mostrarAlerta(msg, true);
+            return;
+          }
+          limpiarFormularioRegistro();
+          mostrarAlerta("¡Cuenta creada exitosamente! Complete su primera reservación para activar su acceso futuro por correo.");
+          await entrarAlPortal(res.data, true);
+          return;
+        }
+
+        // Respaldo cuando el portal se sirve en hosting estático sin backend API
+        const existentes = obtenerClientesStorage();
+        if (existentes.some(c => c.numeroDocumento === numeroDocumento)) {
+          const msg = "Ya existe una cuenta registrada con ese número de documento.";
+          mostrarErrorCampo("txtRegDocumento", "errRegDocumento", msg);
+          mostrarAlerta(msg, true);
+          return;
+        }
+        if (existentes.some(c => (c.email || "").trim().toLowerCase() === email)) {
+          const msg = "Ya existe una cuenta registrada con ese correo electrónico.";
+          mostrarErrorCampo("txtRegEmail", "errRegEmail", msg);
+          mostrarAlerta(msg, true);
+          return;
+        }
+
+        const nuevoCliente = { id: Date.now() % 100000, ...payloadApi };
         guardarClienteStorage(nuevoCliente);
-        mostrarAlerta("¡Cuenta creada exitosamente! Bienvenido(a) a Posada del Roble.");
-        entrarAlPortal(nuevoCliente);
+        limpiarFormularioRegistro();
+        mostrarAlerta("¡Cuenta creada exitosamente! Complete su primera reservación para activar su acceso futuro por correo.");
+        await entrarAlPortal(nuevoCliente, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Crear Cuenta y Pasar a Reservar";
       }
     }
 
-    async function entrarAlPortal(cliente) {
+    function limpiarFormularioRegistro() {
+      document.getElementById("cmbRegTipoDoc").value = "Cedula";
+      document.getElementById("txtRegDocumento").value = "";
+      document.getElementById("txtRegNombres").value = "";
+      document.getElementById("txtRegApellidos").value = "";
+      document.getElementById("txtRegTelefono").value = "";
+      document.getElementById("txtRegEmail").value = "";
+      actualizarModoDocumento();
+    }
+
+    function obtenerIniciales(nombres, apellidos) {
+      const n = (nombres || "").trim().charAt(0);
+      const a = (apellidos || "").trim().charAt(0);
+      return ((n + a) || "HR").toUpperCase();
+    }
+
+    async function entrarAlPortal(cliente, recienRegistrado = false) {
       clienteActual = cliente;
       document.getElementById("seccionAuth").classList.add("oculto");
       document.getElementById("seccionReserva").classList.remove("oculto");
-      document.getElementById("lblUsuarioActivo").textContent = `Huésped: ${cliente.nombres} ${cliente.apellidos} (Doc: ${cliente.numeroDocumento})`;
-      document.getElementById("lblUsuarioActivo").classList.remove("oculto");
+
+      document.getElementById("lblUsuarioIniciales").textContent = obtenerIniciales(cliente.nombres, cliente.apellidos);
+      document.getElementById("lblUsuarioActivo").textContent = `${cliente.nombres} ${cliente.apellidos}`.trim();
+      document.getElementById("lblUsuarioEmail").textContent = cliente.email || `Doc: ${cliente.numeroDocumento}`;
+      document.getElementById("usuarioChip").classList.remove("oculto");
       document.getElementById("btnCerrarSesion").classList.remove("oculto");
 
       const hoy = new Date();
@@ -617,24 +1591,33 @@
       await cargarTiposHabitacion();
       await cargarHabitacionesYCotizar();
       await cargarMisReservaciones();
+
+      if (recienRegistrado) {
+        const aviso = document.getElementById("avisoPrimeraReserva");
+        document.getElementById("textoPrimeraReserva").textContent =
+          `Su perfil fue creado. Confirme su primera reservación a continuación para que el correo ${cliente.email} quede habilitado para futuros inicios de sesión.`;
+        aviso.classList.remove("oculto");
+      }
     }
 
     function cerrarSesion() {
       clienteActual = null;
+      ocultarAlerta();
+      limpiarErroresAuth();
       document.getElementById("seccionReserva").classList.add("oculto");
+      document.getElementById("avisoPrimeraReserva").classList.add("oculto");
       document.getElementById("seccionAuth").classList.remove("oculto");
-      document.getElementById("lblUsuarioActivo").classList.add("oculto");
+      document.getElementById("usuarioChip").classList.add("oculto");
       document.getElementById("btnCerrarSesion").classList.add("oculto");
-      document.getElementById("txtLoginDocumento").value = "";
+      document.getElementById("txtLoginEmail").value = "";
+      cambiarTabAuth("login");
     }
 
     async function cargarTiposHabitacion() {
-      try {
-        const resp = await fetch("/api/tiposhabitacion");
-        if (!resp.ok) throw new Error();
-        tiposHabitacion = await resp.json();
-      } catch (e) {
-        modoOffline = true;
+      const res = await llamarApi("/api/tiposhabitacion");
+      if (res.apiDisponible && res.ok && Array.isArray(res.data)) {
+        tiposHabitacion = res.data;
+      } else {
         tiposHabitacion = Object.keys(TARIFAS_TIPO).map(nombre => ({
           id: TARIFAS_TIPO[nombre].id,
           nombre: nombre,
@@ -685,17 +1668,15 @@
       const inputEntrada = document.getElementById("dtpEntrada");
       const inputSalida = document.getElementById("dtpSalida");
       const entrada = inputEntrada.value;
-      let salida = inputSalida.value;
+      const salida = inputSalida.value;
       if (!entrada || !salida) return;
 
       const tipoId = parseInt(document.getElementById("cmbTipoHab").value || "1", 10);
 
-      try {
-        const resp = await fetch(`/api/habitaciones/disponibles?entrada=${entrada}&salida=${salida}&huespedes=1&tipoId=${tipoId}`);
-        if (!resp.ok) throw new Error();
-        habitacionesDisponibles = await resp.json();
-      } catch (e) {
-        modoOffline = true;
+      const res = await llamarApi(`/api/habitaciones/disponibles?entrada=${entrada}&salida=${salida}&huespedes=1&tipoId=${tipoId}`);
+      if (res.apiDisponible && res.ok && Array.isArray(res.data)) {
+        habitacionesDisponibles = res.data;
+      } else {
         habitacionesDisponibles = MOCK_HABITACIONES.filter(h => h.tipoHabitacionId === tipoId);
       }
 
@@ -709,7 +1690,7 @@
         if (h.tieneJacuzzi) extras.push("Jacuzzi");
         const extraTexto = extras.length > 0 ? ` (${extras.join(", ")})` : "";
         opt.textContent = `Habitación ${h.numero} - Piso ${h.piso}${extraTexto}`;
-        opt.dataset.tarifa = h.precioPorNoche || 75000;
+        opt.dataset.tarifa = h.precioBasePorNoche || h.precioPorNoche || 75000;
         cmbHab.appendChild(opt);
       });
 
@@ -725,9 +1706,6 @@
 
     function recalcularCotizacion() {
       const info = obtenerInfoTipoActual();
-      const adultos = parseInt(document.getElementById("cmbAdultos").value || "1", 10);
-      const ninos = parseInt(document.getElementById("cmbNinos").value || "0", 10);
-
       document.getElementById("txtPreciosPersona").value =
         `Adulto: ${formatoColones(info.adulto)} | Niño: ${formatoColones(info.nino)} (Base: ${info.adBase} ad, ${info.niBase} niñ)`;
 
@@ -775,17 +1753,19 @@
       }
 
       const fechaInicio = document.getElementById("dtpEntrada").value;
-      let fechaFin = document.getElementById("dtpSalida").value;
+      const fechaFin = document.getElementById("dtpSalida").value;
       if (!fechaInicio || !fechaFin) {
         mostrarAlerta("Seleccione fechas válidas de entrada y salida.", true);
         return;
       }
+
       const f1 = new Date(fechaInicio + "T12:00:00");
       const f2 = new Date(fechaFin + "T12:00:00");
       if (f2 <= f1) {
         mostrarAlerta("La fecha de salida debe ser posterior a la fecha de entrada.", true);
         return;
       }
+
       const adultos = parseInt(document.getElementById("cmbAdultos").value || "1", 10);
       const ninos = parseInt(document.getElementById("cmbNinos").value || "0", 10);
       const obsUsuario = document.getElementById("txtObservaciones").value.trim();
@@ -797,24 +1777,12 @@
       const matchNum = habTexto.match(/\d+/);
       const numHab = matchNum ? matchNum[0] : habitacionId.toString();
 
-      const codigoReserva = "RES-" + Math.floor(10000 + Math.random() * 90000);
-      const nuevaReserva = {
-        id: Date.now() % 100000,
-        codigo: codigoReserva,
-        clienteId: clienteActual.id,
-        documentoCliente: clienteActual.numeroDocumento,
-        habitacionId,
-        habitacion: { numero: numHab },
-        fechaInicio: new Date(fechaInicio + "T14:00:00").toISOString(),
-        fechaFin: new Date(fechaFin + "T11:00:00").toISOString(),
-        cantidadHuespedes: Math.max(1, adultos + ninos),
-        estado: "Confirmada",
-        observaciones,
-        costoTotal: ultimoTotal
-      };
+      const btn = document.getElementById("btnConfirmarReserva");
+      btn.disabled = true;
+      btn.textContent = "Confirmando reservación...";
 
       try {
-        const resp = await fetch("/api/reservaciones", {
+        const res = await llamarApi("/api/reservaciones", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -827,55 +1795,109 @@
           })
         });
 
-        if (!resp.ok) throw new Error();
-        const creada = await resp.json();
-        mostrarAlerta(`¡Reservación confirmada con código ${creada.codigo}! Ya puede presentarse a Check-In en recepción.`);
-      } catch (e) {
-        // Fallback local/Vercel
-        guardarReservacionStorage(nuevaReserva);
-        mostrarAlerta(`¡Reservación confirmada con código ${codigoReserva}! Ya puede presentarse a Check-In en recepción.`);
-      }
+        if (res.apiDisponible) {
+          if (!res.ok) {
+            mostrarAlerta(extraerMensajeApi(res.data, "No se pudo confirmar la reservación."), true);
+            return;
+          }
+          mostrarAlerta(`¡Reservación confirmada con código ${res.data.codigo}! Su correo electrónico queda habilitado para iniciar sesión.`);
+        } else {
+          const codigoReserva = "RES-" + Math.floor(10000 + Math.random() * 90000);
+          const nuevaReserva = {
+            id: Date.now() % 100000,
+            codigo: codigoReserva,
+            clienteId: clienteActual.id,
+            documentoCliente: clienteActual.numeroDocumento,
+            emailCliente: clienteActual.email,
+            habitacionId,
+            habitacion: { numero: numHab },
+            fechaInicio: new Date(fechaInicio + "T14:00:00").toISOString(),
+            fechaFin: new Date(fechaFin + "T11:00:00").toISOString(),
+            cantidadHuespedes: Math.max(1, adultos + ninos),
+            estado: "Confirmada",
+            observaciones,
+            costoTotal: ultimoTotal
+          };
+          guardarReservacionStorage(nuevaReserva);
+          mostrarAlerta(`¡Reservación confirmada con código ${codigoReserva}! Su correo electrónico queda habilitado para iniciar sesión.`);
+        }
 
-      document.getElementById("txtObservaciones").value = "";
-      await cargarHabitacionesYCotizar();
-      await cargarMisReservaciones();
+        document.getElementById("txtObservaciones").value = "";
+        await cargarHabitacionesYCotizar();
+        await cargarMisReservaciones();
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Confirmar Reservación";
+      }
+    }
+
+    function obtenerClaseEstado(estado) {
+      switch (estado) {
+        case "Confirmada": return "estado-confirmada";
+        case "PendientePago": return "estado-pendiente";
+        case "EnCurso": return "estado-curso";
+        case "Completada": return "estado-completada";
+        case "Cancelada": return "estado-cancelada";
+        default: return "estado-completada";
+      }
+    }
+
+    function formatearEstado(estado) {
+      switch (estado) {
+        case "PendientePago": return "Pendiente de Pago";
+        case "EnCurso": return "En Curso";
+        default: return estado || "Registrada";
+      }
     }
 
     async function cargarMisReservaciones() {
       if (!clienteActual) return;
       let lista = [];
-      try {
-        const resp = await fetch(`/api/reservaciones/documento/${encodeURIComponent(clienteActual.numeroDocumento)}`);
-        if (!resp.ok) throw new Error();
-        lista = await resp.json();
-      } catch (e) {
-        modoOffline = true;
+
+      const res = await llamarApi(`/api/reservaciones?clienteId=${encodeURIComponent(clienteActual.id)}`);
+      if (res.apiDisponible && res.ok && Array.isArray(res.data)) {
+        lista = res.data;
+      } else {
         const todas = obtenerReservacionesStorage();
-        lista = todas.filter(r => r.clienteId === clienteActual.id || r.documentoCliente === clienteActual.numeroDocumento);
+        const correo = (clienteActual.email || "").trim().toLowerCase();
+        lista = todas.filter(r =>
+          r.clienteId === clienteActual.id ||
+          (correo && r.emailCliente && r.emailCliente.trim().toLowerCase() === correo) ||
+          (clienteActual.numeroDocumento && r.documentoCliente === clienteActual.numeroDocumento)
+        );
       }
 
       const tbody = document.getElementById("tablaMisReservas");
       tbody.innerHTML = "";
 
+      const aviso = document.getElementById("avisoPrimeraReserva");
       if (lista.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;">Aún no tiene reservaciones registradas.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#66584b;">Aún no tiene reservaciones registradas.</td></tr>`;
+        document.getElementById("textoPrimeraReserva").textContent =
+          `Su perfil está listo. Confirme una reservación arriba para que su correo (${clienteActual.email}) quede habilitado en futuros inicios de sesión.`;
+        aviso.classList.remove("oculto");
         return;
       }
+
+      aviso.classList.add("oculto");
 
       lista.forEach(r => {
         const tr = document.createElement("tr");
         const f1 = new Date(r.fechaInicio).toLocaleDateString("es-CR");
         const f2 = new Date(r.fechaFin).toLocaleDateString("es-CR");
         const hab = r.habitacion ? `Hab. ${r.habitacion.numero}` : `Hab. #${r.habitacionId}`;
+        const claseEstado = obtenerClaseEstado(r.estado);
+        const estadoTexto = formatearEstado(r.estado);
+
         tr.innerHTML = `
-          <td><strong>${r.codigo}</strong></td>
-          <td>${hab}</td>
-          <td>${f1}</td>
-          <td>${f2}</td>
-          <td>${r.cantidadHuespedes}</td>
-          <td>${r.estado}</td>
-          <td>${r.observaciones || "Estándar"}</td>
-          <td><strong>${formatoColones(r.costoTotal)}</strong></td>
+          <td><strong>${escaparHtml(r.codigo)}</strong></td>
+          <td>${escaparHtml(hab)}</td>
+          <td>${escaparHtml(f1)}</td>
+          <td>${escaparHtml(f2)}</td>
+          <td>${escaparHtml(r.cantidadHuespedes)}</td>
+          <td><span class="estado-pill ${claseEstado}">${escaparHtml(estadoTexto)}</span></td>
+          <td>${escaparHtml(r.observaciones || "Estándar")}</td>
+          <td><strong>${escaparHtml(formatoColones(r.costoTotal))}</strong></td>
         `;
         tbody.appendChild(tr);
       });

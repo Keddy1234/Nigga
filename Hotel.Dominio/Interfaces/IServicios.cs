@@ -11,6 +11,7 @@ public interface IClienteServicio
     Task<List<Cliente>> BuscarAsync(string texto);
     Task<Cliente> CrearAsync(Cliente cliente);
     Task ActualizarAsync(int id, Cliente cliente);
+    Task<Cliente> IniciarSesionPorEmailAsync(string email);
 }
 
 public interface ITipoHabitacionServicio

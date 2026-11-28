@@ -116,6 +116,25 @@ try
             new Platillo { CategoriaId = categorias[4].Id, Nombre = "Tarta Rústica de Manzana", Descripcion = "Horneada al momento con miel y canela", Precio = 8900m, TiempoPreparacionMinutos = 12, Disponible = true }
         );
         db.SaveChanges();
+
+        var clienteCarlos = db.Clientes.FirstOrDefault(c => c.Email == "carlos@correo.com");
+        var hab201 = db.Habitaciones.FirstOrDefault(h => h.Numero == "201");
+        if (clienteCarlos != null && hab201 != null && !db.Reservaciones.Any())
+        {
+            db.Reservaciones.Add(new Reservacion
+            {
+                Codigo = $"RES-{DateTime.Today.Year}-0001",
+                ClienteId = clienteCarlos.Id,
+                HabitacionId = hab201.Id,
+                FechaInicio = DateTime.Today.AddDays(1),
+                FechaFin = DateTime.Today.AddDays(3),
+                CantidadHuespedes = 2,
+                Estado = EstadoReservacion.Confirmada,
+                CostoTotal = 366560m,
+                Observaciones = "Reservación inicial confirmada | Modalidad: Pago de Contado"
+            });
+            db.SaveChanges();
+        }
     }
 }
 catch

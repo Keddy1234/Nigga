@@ -19,6 +19,9 @@ public interface IClienteRepositorio : IRepositorio<Cliente>
     Task<List<Cliente>> BuscarAsync(string texto);
     Task<Cliente?> ObtenerPorDocumentoAsync(string numeroDocumento);
     Task<bool> ExisteDocumentoAsync(string numeroDocumento, int? excluirId = null);
+    Task<Cliente?> ObtenerPorEmailAsync(string email);
+    Task<bool> ExisteEmailAsync(string email, int? excluirId = null);
+    Task<bool> TieneReservacionesAsync(int clienteId);
     Task<int> ContarEstadiasCompletadasAsync(int clienteId);
 }
 
