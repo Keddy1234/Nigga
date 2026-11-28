@@ -14,6 +14,11 @@ public partial class FrmPlatillos : Form
     public FrmPlatillos()
     {
         InitializeComponent();
+        TemaAdminRustico.AplicarEsteticaSubFormulario(
+            this,
+            "Catálogo Gastronómico y Bebidas",
+            "Administración de tiempos de comida, precios y categorías",
+            TipoPaisajeAdmin.RestauranteRustico);
         ConfigurarEventos();
     }
 
@@ -112,6 +117,8 @@ public partial class FrmPlatillos : Form
         if (_platillos.Count == 0 || !_platillos.Any(p => p.CategoriaId == CatalogoLocal.CategoriaBebidas && p.Precio == 0m))
             _platillos = CatalogoLocal.Platillos;
 
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbCategoria, dgvCategorias, dgvPlatillos)) return;
+
         RefrescarComboCategorias();
         RefrescarTablaCategorias();
         FiltrarPorCategoriaSeleccionada();
@@ -130,6 +137,8 @@ public partial class FrmPlatillos : Form
 
     private void RefrescarTablaCategorias()
     {
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvCategorias)) return;
+
         dgvCategorias.Rows.Clear();
         foreach (var cat in _categorias)
         {
@@ -143,6 +152,8 @@ public partial class FrmPlatillos : Form
 
     private void RefrescarTablaPlatillos()
     {
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvPlatillos)) return;
+
         int catId = ObtenerCategoriaIdActual();
         dgvPlatillos.Rows.Clear();
         foreach (var p in _platillos.Where(x => x.CategoriaId == catId))

@@ -17,4 +17,9 @@
     <ProjectReference Include="..\Hotel.Dominio\Hotel.Dominio.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Recursos\*.jpg" />
+    <EmbeddedResource Include="Recursos\*.jpg" />
+  </ItemGroup>
+
 </Project>

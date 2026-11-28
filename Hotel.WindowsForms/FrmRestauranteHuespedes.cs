@@ -47,6 +47,11 @@ public partial class FrmRestauranteHuespedes : Form
     public FrmRestauranteHuespedes()
     {
         InitializeComponent();
+        TemaAdminRustico.AplicarEsteticaSubFormulario(
+            this,
+            "Restaurante y Room Service",
+            "Toma de pedidos a habitación o mesa y control de comandas",
+            TipoPaisajeAdmin.RestauranteRustico);
         ConfigurarControlesIniciales();
         ConfigurarEventos();
     }
@@ -154,6 +159,8 @@ public partial class FrmRestauranteHuespedes : Form
 
         if (_platillos.Count == 0 || !_platillos.Any(p => p.CategoriaId == CatalogoLocal.CategoriaBebidas && p.Precio == 0m))
             CargarRespaldoLocal();
+
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbHabitacion, flpMenu, dgvPedidos)) return;
 
         PoblarHabitacionesActivas();
         PoblarCategoriasFiltro();
@@ -521,11 +528,13 @@ public partial class FrmRestauranteHuespedes : Form
             string url = $"api/pedidos?Fecha={fechaIso}";
             if (estadoTexto != "Todos") url += $"&Estado={estadoTexto}";
             var lista = await ApiClient.GetAsync<List<PedidoRestaurante>>(url) ?? new();
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvPedidos)) return;
             _pedidos = lista;
             RefrescarTablaPedidos(lista);
         }
         catch
         {
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvPedidos)) return;
             var filtrados = _pedidos.Where(p => p.FechaPedido.Date == dtpFechaFiltro.Value.Date);
             if (estadoTexto != "Todos" && Enum.TryParse<EstadoPedido>(estadoTexto, out var est))
                 filtrados = filtrados.Where(p => p.EstadoPedido == est);
@@ -536,6 +545,8 @@ public partial class FrmRestauranteHuespedes : Form
 
     private void RefrescarTablaPedidos(IEnumerable<PedidoRestaurante> pedidos)
     {
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvPedidos)) return;
+
         dgvPedidos.Rows.Clear();
         foreach (var p in pedidos)
         {

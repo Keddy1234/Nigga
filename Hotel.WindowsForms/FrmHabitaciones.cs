@@ -13,6 +13,11 @@ namespace Hotel.WindowsForms
         public FrmHabitaciones()
         {
             InitializeComponent();
+            TemaAdminRustico.AplicarEsteticaSubFormulario(
+                this,
+                "Gestión y Mapa de Habitaciones",
+                "Disponibilidad por pisos, estados operativos y mantenimiento",
+                TipoPaisajeAdmin.TerrazaModulos);
             ConfigurarEventos();
         }
 
@@ -60,6 +65,8 @@ namespace Hotel.WindowsForms
                 _habitaciones = CatalogoLocal.Habitaciones;
             }
 
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbTipo, dgvHabitaciones, flpMapa)) return;
+
             cmbTipo.DataSource = null;
             cmbTipo.DataSource = _tipos;
             cmbTipo.DisplayMember = "Nombre";
@@ -72,6 +79,8 @@ namespace Hotel.WindowsForms
 
         private async Task RenderizarMapaAsync()
         {
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, flpMapa)) return;
+
             flpMapa.Controls.Clear();
             foreach (var h in _habitaciones.OrderBy(x => x.Piso).ThenBy(x => x.Numero))
             {
@@ -113,6 +122,8 @@ namespace Hotel.WindowsForms
 
         private void RefrescarTabla()
         {
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvHabitaciones)) return;
+
             dgvHabitaciones.Rows.Clear();
             foreach (var h in _habitaciones)
             {

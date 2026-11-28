@@ -41,6 +41,11 @@ namespace Hotel.WindowsForms
         public FrmNuevaReservacion()
         {
             InitializeComponent();
+            TemaAdminRustico.AplicarEsteticaSubFormulario(
+                this,
+                "Nueva Reservación Administrativa",
+                "Asistente de fechas, huéspedes, cotización y plan de pago",
+                TipoPaisajeAdmin.PrincipalHero);
             InicializarCombosHuespedes();
             ConfigurarEventos();
         }
@@ -254,6 +259,12 @@ namespace Hotel.WindowsForms
             }
 
             _sincronizando = true;
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbTipoHabitacion, dgvDisponibles))
+            {
+                _sincronizando = false;
+                return;
+            }
+
             var opciones = new List<TipoHabitacion> { new() { Id = 0, Nombre = "Todos" } };
             opciones.AddRange(_tipos);
             cmbTipoHabitacion.DataSource = opciones;
@@ -262,6 +273,8 @@ namespace Hotel.WindowsForms
             _sincronizando = false;
 
             await BuscarDisponiblesAsync();
+            if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
+
             if (_disponibles.Count > 0)
                 AplicarPresetSegunTipo(_disponibles[0].Tipo, cambiarHuespedes: true);
         }
@@ -333,6 +346,17 @@ namespace Hotel.WindowsForms
                 }
             }
 
+            if (IsDisposed || Disposing || !IsHandleCreated || dgvDisponibles.IsDisposed || dgvDisponibles.Disposing)
+                return;
+
+            if (dgvDisponibles.Columns.Count == 0)
+            {
+                dgvDisponibles.Columns.AddRange(new DataGridViewColumn[]
+                {
+                    colHabId, colHabNumero, colHabPiso, colHabTipo, colHabCapacidad, colHabPrecio
+                });
+            }
+
             _sincronizando = true;
             dgvDisponibles.Rows.Clear();
             foreach (var h in _disponibles)
@@ -383,6 +407,9 @@ namespace Hotel.WindowsForms
             try
             {
                 var encontrados = await ApiClient.GetAsync<List<Cliente>>($"api/clientes?buscar={Uri.EscapeDataString(doc)}") ?? new();
+                if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbTipoDocumento, txtNumeroDocumento, txtNombres, txtApellidos))
+                    return;
+
                 _clienteActual = encontrados.FirstOrDefault(c => c.NumeroDocumento.Equals(doc, StringComparison.OrdinalIgnoreCase))
                     ?? encontrados.FirstOrDefault();
 
@@ -434,6 +461,9 @@ namespace Hotel.WindowsForms
             catch
             {
             }
+
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, lblNoches, lblTotal, lblDetallePlanPago))
+                return;
 
             cot ??= CalculadoraCosto.Calcular(new RangoFechas(entrada, salida), tarifaSegunPersonas, huespedes, false);
             _ultimoTotalCotizado = cot.Total;
@@ -509,6 +539,8 @@ namespace Hotel.WindowsForms
 
             var (entrada, salida) = ObtenerFechas();
             await ActualizarCotizacionAsync();
+            if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
+
             string planPago = ObtenerResumenPlanPago();
             string obsFinal = string.IsNullOrWhiteSpace(txtObservaciones.Text)
                 ? $"Modalidad: {planPago}"
@@ -547,6 +579,8 @@ namespace Hotel.WindowsForms
                     ApiClient.ReservacionesLocales.RemoveAll(r => r.Codigo == creada.Codigo);
                     ApiClient.ReservacionesLocales.Insert(0, creada);
                 }
+
+                if (TemaAdminRustico.EstaCerradoODispuesto(this)) return;
 
                 MessageBox.Show(
                     $"Reservación registrada con código {creada?.Codigo}.\nTotal: {lblTotal.Text} | {planPago}",

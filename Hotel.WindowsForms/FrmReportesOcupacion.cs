@@ -11,6 +11,11 @@ public partial class FrmReportesOcupacion : Form
     public FrmReportesOcupacion()
     {
         InitializeComponent();
+        TemaAdminRustico.AplicarEsteticaSubFormulario(
+            this,
+            "Reportes y Analítica Hotelera",
+            "Ocupación, ingresos, reservaciones y desempeño del restaurante",
+            TipoPaisajeAdmin.TerrazaModulos);
         dtpDesde.Value = DateTime.Today.AddDays(-7);
         dtpHasta.Value = DateTime.Today.AddDays(7);
         if (cmbTipoReporte.Items.Count > 0) cmbTipoReporte.SelectedIndex = 0;
@@ -83,6 +88,8 @@ public partial class FrmReportesOcupacion : Form
             }).ToList();
         }
 
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvReporte, chartReporte)) return;
+
         ConfigurarColumnas("Fecha", "Ocupadas", "Disponibles", "Mantenimiento");
         serie.ChartType = SeriesChartType.Column;
 
@@ -104,6 +111,8 @@ public partial class FrmReportesOcupacion : Form
         {
             datos = ApiClient.ReservacionesLocales.ToList();
         }
+
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvReporte, chartReporte)) return;
 
         ConfigurarColumnas("Código", "Entrada", "Salida", "Estado", "Total");
         serie.ChartType = SeriesChartType.Pie;
@@ -141,6 +150,8 @@ public partial class FrmReportesOcupacion : Form
             };
         }
 
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvReporte, chartReporte)) return;
+
         ConfigurarColumnas("Período", "Método de Pago", "Cant. Pagos", "Total Recaudado");
         serie.ChartType = SeriesChartType.Column;
 
@@ -162,6 +173,8 @@ public partial class FrmReportesOcupacion : Form
         {
             datos = ApiClient.PedidosLocales.ToList();
         }
+
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvReporte, chartReporte)) return;
 
         ConfigurarColumnas("Pedido #", "Fecha", "Modalidad", "Estado", "Total");
         serie.ChartType = SeriesChartType.Column;
@@ -200,6 +213,8 @@ public partial class FrmReportesOcupacion : Form
                 new PlatilloSolicitadoDto { PlatilloId = 4, Nombre = "Sidra Especiada", CantidadVendida = 9, Total = 58500m }
             };
         }
+
+        if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvReporte, chartReporte)) return;
 
         ConfigurarColumnas("Platillo", "Unidades Vendidas", "Ingreso Generado");
         serie.ChartType = SeriesChartType.Bar;

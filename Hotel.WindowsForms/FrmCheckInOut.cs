@@ -22,6 +22,11 @@ namespace Hotel.WindowsForms
         public FrmCheckInOut()
         {
             InitializeComponent();
+            TemaAdminRustico.AplicarEsteticaSubFormulario(
+                this,
+                "Recepción: Check-In y Check-Out",
+                "Ingreso de huéspedes, consumos, pagos y emisión de facturas",
+                TipoPaisajeAdmin.TerrazaModulos);
             ConfigurarEventos();
         }
 
@@ -80,6 +85,8 @@ namespace Hotel.WindowsForms
             catch
             {
             }
+
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, cmbPendientesCheckIn, dgvConsumos)) return;
 
             _listaPendientes = ApiClient.ReservacionesLocales
                 .Where(r => r.Estado == EstadoReservacion.Confirmada
@@ -154,6 +161,7 @@ namespace Hotel.WindowsForms
             try
             {
                 var lista = await ApiClient.GetAsync<List<Reservacion>>($"api/reservaciones/documento/{Uri.EscapeDataString(criterio)}") ?? new();
+                if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvConsumos)) return;
                 _reservacion = lista.FirstOrDefault();
 
                 if (_reservacion != null)
@@ -165,6 +173,8 @@ namespace Hotel.WindowsForms
             catch
             {
             }
+
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvConsumos)) return;
 
             var encontradaLocal = ApiClient.ReservacionesLocales.FirstOrDefault(r =>
                 r.Cliente?.NumeroDocumento == criterio ||
@@ -202,12 +212,14 @@ namespace Hotel.WindowsForms
             {
             }
 
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvConsumos)) return;
+
             MostrarEnPantalla();
         }
 
         private void MostrarEnPantalla()
         {
-            if (_reservacion == null) return;
+            if (_reservacion == null || TemaAdminRustico.EstaCerradoODispuesto(this, dgvConsumos)) return;
 
             lblCodigo.Text = _reservacion.Codigo;
             lblCliente.Text = _reservacion.Cliente != null

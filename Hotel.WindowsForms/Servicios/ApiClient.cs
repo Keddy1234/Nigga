@@ -76,7 +76,7 @@ namespace Hotel.WindowsForms.Servicios
             _http = new HttpClient
             {
                 BaseAddress = new Uri("http://localhost:5158/"),
-                Timeout = TimeSpan.FromSeconds(15)
+                Timeout = TimeSpan.FromSeconds(5)
             };
 
             _jsonOptions = new JsonSerializerOptions

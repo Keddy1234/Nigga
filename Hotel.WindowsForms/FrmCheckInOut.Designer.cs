@@ -87,7 +87,7 @@ namespace Hotel.WindowsForms
             txtBuscar.Location = new Point(195, 19);
             txtBuscar.MaxLength = 10;
             txtBuscar.Name = "txtBuscar";
-            txtBuscar.Size = new Size(210, 21);
+            txtBuscar.Size = new Size(185, 21);
             txtBuscar.TabIndex = 1;
             // 
             // btnBuscar

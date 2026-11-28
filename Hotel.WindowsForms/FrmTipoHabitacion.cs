@@ -29,6 +29,11 @@ namespace Hotel.WindowsForms
         public FrmTipoHabitacion()
         {
             InitializeComponent();
+            TemaAdminRustico.AplicarEsteticaSubFormulario(
+                this,
+                "Tipos de Habitación y Tarifas",
+                "Configuración de categorías, capacidades y precios por noche",
+                TipoPaisajeAdmin.TerrazaModulos);
             InicializarCombos();
             ConfigurarEventos();
         }
@@ -138,11 +143,15 @@ namespace Hotel.WindowsForms
                 }
             }
 
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvTipos)) return;
+
             RefrescarTabla();
         }
 
         private void RefrescarTabla()
         {
+            if (TemaAdminRustico.EstaCerradoODispuesto(this, dgvTipos)) return;
+
             dgvTipos.Rows.Clear();
             foreach (var t in _lista)
             {
