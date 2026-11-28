@@ -1738,6 +1738,17 @@
       localStorage.setItem("hotel_clientes", JSON.stringify(clientes));
     }
 
+    function actualizarClienteStorage(actualizado) {
+      const clientes = obtenerClientesStorage();
+      const idx = clientes.findIndex(c => c.id === actualizado.id);
+      if (idx >= 0) {
+        clientes[idx] = actualizado;
+      } else {
+        clientes.push(actualizado);
+      }
+      localStorage.setItem("hotel_clientes", JSON.stringify(clientes));
+    }
+
     function obtenerReservacionesStorage() {
       const guardadas = localStorage.getItem("hotel_reservaciones");
       if (guardadas) {
@@ -2062,16 +2073,36 @@
         }
 
         const existentes = obtenerClientesStorage();
-        if (existentes.some(c => c.numeroDocumento === numeroDocumento)) {
-          const msg = "Ya existe una cuenta registrada con ese número de documento.";
-          mostrarErrorCampo("txtRegDocumento", "errRegDocumento", msg);
+        const existenteDoc = existentes.find(c => c.numeroDocumento === numeroDocumento);
+        const existenteEmail = existentes.find(c => (c.email || "").trim().toLowerCase() === email);
+
+        if (existenteDoc && existenteEmail && existenteDoc.id !== existenteEmail.id) {
+          const msg = "El número de documento y el correo electrónico ya pertenecen a cuentas distintas.";
+          mostrarErrorCampo("txtRegEmail", "errRegEmail", msg);
           mostrarAlerta(msg, true);
           return;
         }
-        if (existentes.some(c => (c.email || "").trim().toLowerCase() === email)) {
-          const msg = "Ya existe una cuenta registrada con ese correo electrónico.";
-          mostrarErrorCampo("txtRegEmail", "errRegEmail", msg);
-          mostrarAlerta(msg, true);
+
+        const existente = existenteEmail || existenteDoc;
+        if (existente) {
+          if (clienteTieneReservacionesStorage(existente)) {
+            if (existenteEmail) {
+              const msg = "Ya existe una cuenta registrada con ese correo electrónico. Como ya tiene reservaciones, ingrese desde 'Iniciar Sesión'.";
+              mostrarErrorCampo("txtRegEmail", "errRegEmail", msg);
+              mostrarAlerta(msg, true);
+            } else {
+              const msg = "Ya existe una cuenta registrada con ese número de documento. Inicie sesión con su correo electrónico registrado.";
+              mostrarErrorCampo("txtRegDocumento", "errRegDocumento", msg);
+              mostrarAlerta(msg, true);
+            }
+            return;
+          }
+
+          const clienteActualizado = { ...existente, ...payloadApi };
+          actualizarClienteStorage(clienteActualizado);
+          limpiarFormularioRegistro();
+          mostrarAlerta("Perfil actualizado. Complete su primera reservación para activar su inicio de sesión por correo.");
+          await entrarAlPortal(clienteActualizado, true);
           return;
         }
 

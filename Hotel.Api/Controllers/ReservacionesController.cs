@@ -8,7 +8,7 @@ namespace Hotel.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ReservacionesController : ControllerBase
+public class ReservacionesController : ApiControllerBase
 {
     private readonly IReservacionServicio _servicio;
 
@@ -19,58 +19,63 @@ public class ReservacionesController : ControllerBase
 
     [HttpGet]
     public async Task<IActionResult> Buscar([FromQuery] FiltroReservacionDto filtro)
-        => Ok(await _servicio.BuscarAsync(filtro));
+        => await EjecutarAsync(async () => Ok(await _servicio.BuscarAsync(filtro)));
 
     [HttpGet("{id:int}")]
-    public async Task<IActionResult> Obtener(int id) => Ok(await _servicio.ObtenerAsync(id));
+    public async Task<IActionResult> Obtener(int id)
+        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerAsync(id)));
 
     [HttpGet("codigo/{codigo}")]
     public async Task<IActionResult> ObtenerPorCodigo(string codigo)
-        => Ok(await _servicio.ObtenerPorCodigoAsync(codigo));
+        => await EjecutarAsync(async () => Ok(await _servicio.ObtenerPorCodigoAsync(codigo)));
 
     [HttpGet("documento/{numeroDocumento}")]
     public async Task<IActionResult> PorDocumento(string numeroDocumento)
-        => Ok(await _servicio.ActivasPorDocumentoAsync(numeroDocumento));
+        => await EjecutarAsync(async () => Ok(await _servicio.ActivasPorDocumentoAsync(numeroDocumento)));
 
     [HttpPost("cotizar")]
     public async Task<IActionResult> Cotizar(CotizarReservacionDto dto)
-        => Ok(await _servicio.CotizarAsync(dto));
+        => await EjecutarAsync(async () => Ok(await _servicio.CotizarAsync(dto)));
 
     [HttpPost]
     public async Task<IActionResult> Crear(CrearReservacionDto dto)
-    {
-        var creada = await _servicio.CrearAsync(dto);
-        return CreatedAtAction(nameof(Obtener), new { id = creada.Id }, creada);
-    }
+        => await EjecutarAsync(async () =>
+        {
+            var creada = await _servicio.CrearAsync(dto);
+            return CreatedAtAction(nameof(Obtener), new { id = creada.Id }, creada);
+        });
 
     [HttpPut("{id:int}")]
     public async Task<IActionResult> Modificar(int id, CrearReservacionDto dto)
-    {
-        await _servicio.ModificarAsync(id, dto);
-        return NoContent();
-    }
+        => await EjecutarAsync(async () =>
+        {
+            await _servicio.ModificarAsync(id, dto);
+            return NoContent();
+        });
 
     [HttpPost("{id:int}/cancelar")]
     public async Task<IActionResult> Cancelar(int id)
-    {
-        await _servicio.CancelarAsync(id);
-        return NoContent();
-    }
+        => await EjecutarAsync(async () =>
+        {
+            await _servicio.CancelarAsync(id);
+            return NoContent();
+        });
 
     [HttpPost("{id:int}/checkin")]
     public async Task<IActionResult> CheckIn(int id, CheckInDto dto)
-    {
-        await _servicio.CheckInAsync(id, dto);
-        return NoContent();
-    }
+        => await EjecutarAsync(async () =>
+        {
+            await _servicio.CheckInAsync(id, dto);
+            return NoContent();
+        });
 
     [HttpPost("{id:int}/checkout")]
     public async Task<IActionResult> CheckOut(int id)
-        => Ok(await _servicio.CheckOutAsync(id));
+        => await EjecutarAsync(async () => Ok(await _servicio.CheckOutAsync(id)));
 
     [HttpGet("{id:int}/cuenta")]
     public async Task<IActionResult> EstadoCuenta(int id)
-        => Ok(await _servicio.EstadoCuentaAsync(id));
+        => await EjecutarAsync(async () => Ok(await _servicio.EstadoCuentaAsync(id)));
 
     [HttpGet("tipo-cambio")]
     public IActionResult ObtenerTipoCambio()
@@ -84,12 +89,12 @@ public class ReservacionesController : ControllerBase
 
     [HttpGet("{id:int}/factura")]
     public async Task<IActionResult> Factura(int id, [FromQuery] Moneda? moneda)
-        => Ok(await _servicio.GenerarFacturaAsync(id, moneda));
+        => await EjecutarAsync(async () => Ok(await _servicio.GenerarFacturaAsync(id, moneda)));
 }
 
 [ApiController]
 [Route("api/[controller]")]
-public class PagosController : ControllerBase
+public class PagosController : ApiControllerBase
 {
     private readonly IPagoServicio _servicio;
 
@@ -100,9 +105,9 @@ public class PagosController : ControllerBase
 
     [HttpGet("reservacion/{reservacionId:int}")]
     public async Task<IActionResult> ListarPorReservacion(int reservacionId)
-        => Ok(await _servicio.ListarPorReservacionAsync(reservacionId));
+        => await EjecutarAsync(async () => Ok(await _servicio.ListarPorReservacionAsync(reservacionId)));
 
     [HttpPost]
     public async Task<IActionResult> Registrar(RegistrarPagoDto dto)
-        => Ok(await _servicio.RegistrarAsync(dto));
+        => await EjecutarAsync(async () => Ok(await _servicio.RegistrarAsync(dto)));
 }

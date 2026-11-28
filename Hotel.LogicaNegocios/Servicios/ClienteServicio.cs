@@ -34,10 +34,34 @@ public class ClienteServicio : IClienteServicio
     public async Task<Cliente> CrearAsync(Cliente cliente)
     {
         Validar(cliente);
-        if (await _uow.Clientes.ExisteDocumentoAsync(cliente.NumeroDocumento))
-            throw new ConflictoException("Ya existe una cuenta registrada con ese número de documento.");
-        if (await _uow.Clientes.ExisteEmailAsync(cliente.Email!))
-            throw new ConflictoException("Ya existe una cuenta registrada con ese correo electrónico.");
+        var existenteDoc = await _uow.Clientes.ObtenerPorDocumentoAsync(cliente.NumeroDocumento);
+        var existenteEmail = await _uow.Clientes.ObtenerPorEmailAsync(cliente.Email!);
+
+        if (existenteDoc != null && existenteEmail != null && existenteDoc.Id != existenteEmail.Id)
+            throw new ConflictoException("El número de documento y el correo electrónico ya pertenecen a cuentas distintas.");
+
+        var existente = existenteEmail ?? existenteDoc;
+        if (existente != null)
+        {
+            if (await _uow.Clientes.TieneReservacionesAsync(existente.Id))
+            {
+                if (existenteEmail != null)
+                    throw new ConflictoException("Ya existe una cuenta registrada con ese correo electrónico. Como ya tiene reservaciones, ingrese desde 'Iniciar Sesión'.");
+                throw new ConflictoException("Ya existe una cuenta registrada con ese número de documento. Inicie sesión con su correo electrónico registrado.");
+            }
+
+            // Si la cuenta existe pero aún tiene 0 reservaciones, se actualiza su perfil para que pueda completar su primera reserva.
+            var rastreado = await _uow.Clientes.ObtenerPorIdAsync(existente.Id)
+                            ?? throw new NoEncontradoException("Cliente no encontrado.");
+            rastreado.TipoDocumento = cliente.TipoDocumento;
+            rastreado.NumeroDocumento = cliente.NumeroDocumento;
+            rastreado.Nombres = cliente.Nombres;
+            rastreado.Apellidos = cliente.Apellidos;
+            rastreado.Telefono = cliente.Telefono;
+            rastreado.Email = cliente.Email;
+            await _uow.GuardarAsync();
+            return rastreado;
+        }
 
         cliente.Id = 0;
         cliente.FechaRegistro = DateTime.Now;
